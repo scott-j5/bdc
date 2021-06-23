@@ -11,24 +11,28 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')y-a9*j#i#s-ll@d%%j_um_$q%=+tz4au!(4&fihpch$@j&-v8'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('DJANGO_DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Application definition
+SITE_ID = 1
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,114 +41,30 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
-    # AllAuth components
+    'accounts',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    # ... include the providers you want to enable:
-    'allauth.socialaccount.providers.agave',
-    'allauth.socialaccount.providers.amazon',
-    'allauth.socialaccount.providers.amazon_cognito',
-    'allauth.socialaccount.providers.angellist',
-    'allauth.socialaccount.providers.apple',
-    'allauth.socialaccount.providers.asana',
-    'allauth.socialaccount.providers.auth0',
-    'allauth.socialaccount.providers.authentiq',
-    'allauth.socialaccount.providers.azure',
-    'allauth.socialaccount.providers.baidu',
-    'allauth.socialaccount.providers.basecamp',
-    'allauth.socialaccount.providers.battlenet',
-    'allauth.socialaccount.providers.bitbucket',
-    'allauth.socialaccount.providers.bitbucket_oauth2',
-    'allauth.socialaccount.providers.bitly',
-    'allauth.socialaccount.providers.box',
-    'allauth.socialaccount.providers.cern',
-    'allauth.socialaccount.providers.coinbase',
-    'allauth.socialaccount.providers.dataporten',
-    'allauth.socialaccount.providers.daum',
-    'allauth.socialaccount.providers.digitalocean',
-    'allauth.socialaccount.providers.discord',
-    'allauth.socialaccount.providers.disqus',
-    'allauth.socialaccount.providers.douban',
-    'allauth.socialaccount.providers.doximity',
-    'allauth.socialaccount.providers.draugiem',
-    'allauth.socialaccount.providers.dropbox',
-    'allauth.socialaccount.providers.dwolla',
-    'allauth.socialaccount.providers.edmodo',
-    'allauth.socialaccount.providers.edx',
-    'allauth.socialaccount.providers.eventbrite',
-    'allauth.socialaccount.providers.eveonline',
-    'allauth.socialaccount.providers.evernote',
-    'allauth.socialaccount.providers.exist',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.feedly',
-    'allauth.socialaccount.providers.figma',
-    'allauth.socialaccount.providers.fivehundredpx',
-    'allauth.socialaccount.providers.flickr',
-    'allauth.socialaccount.providers.foursquare',
-    'allauth.socialaccount.providers.fxa',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.gitlab',
-    'allauth.socialaccount.providers.globus',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.hubic',
-    'allauth.socialaccount.providers.instagram',
-    'allauth.socialaccount.providers.jupyterhub',
-    'allauth.socialaccount.providers.kakao',
-    'allauth.socialaccount.providers.keycloak',
-    'allauth.socialaccount.providers.line',
-    'allauth.socialaccount.providers.linkedin',
-    'allauth.socialaccount.providers.linkedin_oauth2',
-    'allauth.socialaccount.providers.mailchimp',
-    'allauth.socialaccount.providers.mailru',
-    'allauth.socialaccount.providers.meetup',
-    'allauth.socialaccount.providers.microsoft',
-    'allauth.socialaccount.providers.naver',
-    'allauth.socialaccount.providers.nextcloud',
-    'allauth.socialaccount.providers.odnoklassniki',
-    'allauth.socialaccount.providers.openid',
-    'allauth.socialaccount.providers.openstreetmap',
-    'allauth.socialaccount.providers.orcid',
-    'allauth.socialaccount.providers.patreon',
-    'allauth.socialaccount.providers.paypal',
-    'allauth.socialaccount.providers.persona',
-    'allauth.socialaccount.providers.pinterest',
-    'allauth.socialaccount.providers.quickbooks',
-    'allauth.socialaccount.providers.reddit',
-    'allauth.socialaccount.providers.robinhood',
-    'allauth.socialaccount.providers.salesforce',
-    'allauth.socialaccount.providers.sharefile',
-    'allauth.socialaccount.providers.shopify',
-    'allauth.socialaccount.providers.slack',
-    'allauth.socialaccount.providers.soundcloud',
-    'allauth.socialaccount.providers.spotify',
-    'allauth.socialaccount.providers.stackexchange',
-    'allauth.socialaccount.providers.steam',
-    'allauth.socialaccount.providers.stocktwits',
-    'allauth.socialaccount.providers.strava',
-    'allauth.socialaccount.providers.stripe',
-    'allauth.socialaccount.providers.telegram',
-    'allauth.socialaccount.providers.trello',
-    'allauth.socialaccount.providers.tumblr',
-    'allauth.socialaccount.providers.twentythreeandme',
-    'allauth.socialaccount.providers.twitch',
-    'allauth.socialaccount.providers.twitter',
-    'allauth.socialaccount.providers.untappd',
-    'allauth.socialaccount.providers.vimeo',
-    'allauth.socialaccount.providers.vimeo_oauth2',
-    'allauth.socialaccount.providers.vk',
-    'allauth.socialaccount.providers.weibo',
-    'allauth.socialaccount.providers.weixin',
-    'allauth.socialaccount.providers.windowslive',
-    'allauth.socialaccount.providers.xing',
-    'allauth.socialaccount.providers.yahoo',
-    'allauth.socialaccount.providers.yandex',
-    'allauth.socialaccount.providers.ynab',
-    'allauth.socialaccount.providers.zoho',
-    'allauth.socialaccount.providers.zoom',
-    'allauth.socialaccount.providers.okta'
+	'crispy_forms',
+	'crispy_bootstrap5',
+    'core',
 ]
+
+'''
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '123',
+            'secret': '456',
+            'key': ''
+        }
+    }
+}
+'''
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -160,8 +80,7 @@ ROOT_URLCONF = 'bdc.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',   
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -169,8 +88,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # `allauth` needs this from django
-                'django.template.context_processors.request',
             ],
         },
     },
@@ -184,11 +101,24 @@ WSGI_APPLICATION = 'bdc.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': '5432'
     }
 }
+DATABASE_SIZE = "40GB"
 
+#Auth backends
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -223,7 +153,26 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Crispy forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4', 'crispy-bootstrap5', )
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# Where to look for static files during collect static
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'dist'),
+]
+
+#Where 'collectstatic' dumps static files
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
+
+#URL prefix used by static template tags
+STATIC_URL = '/dist/'
+
+if not DEBUG:
+# S3 folder to upload static files to
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'static_storages.StaticStorage'
