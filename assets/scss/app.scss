@@ -1,15 +1,21 @@
-//Custom
-//@import "custom/variables.scss";
+// Bootstrap functions (used in variables)
+@import "~bootstrap/scss/functions";
 
 
+//Variables
+// Custom Variables
+@import "soft-design-system-pro/custom/variables";
+@import "custom/variables.scss";
+
+// Theme Variables
+@import "soft-design-system-pro/variables";
+@import "~bootstrap/scss/variables";
 
 //Plugins
 @import "plugins/feather.scss";
 
 
-// Bootstrap
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
+//Bootstrap
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/root";
@@ -35,5 +41,10 @@
 @import "~bootstrap/scss/helpers";
 @import "~bootstrap/scss/utilities/api";
 
-//Paper Kit
-@import "paper-kit.scss";
+
+//Soft UI
+@import "soft-design-system-pro.scss";
+
+
+//Custom Styles
+@import "custom/custom.scss";
