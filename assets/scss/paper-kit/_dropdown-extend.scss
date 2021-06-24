@@ -1,42 +1,4 @@
-.dropdown,
-.dropup,
-.bootstrap-select{
-  > .dropdown-menu:first-of-type {
-    display: block;
-    transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) 0s, opacity 0.3s ease 0s, height 0s linear 0.35s;
-  }
-  .dropdown-menu{
-      @include opacity(0);
-      @include box-shadow($dropdown-shadow);
-      visibility: hidden;
-      position: absolute;
 
-      &[x-placement="top-start"]{
-          @include transform-translate-y-dropdown(0px);
-
-      }
-      &[x-placement="bottom-start"]{
-          @include transform-translate-y-dropdown(0px);
-      }
-  }
-
-  &.show .dropdown-menu{
-      @include opacity(1);
-      visibility: visible;
-
-      &[x-placement="top-start"]{
-          @include transform-translate-y-dropdown(-50px);
-          top: auto !important;
-          bottom: 0 !important;
-
-      }
-      &[x-placement="bottom-start"]{
-          @include transform-translate-y-dropdown(40px);
-          bottom: auto !important;
-          top: 0 !important;
-      }
-  }
-}
 
 .dropdown-menu{
     background-color: $white-color;
