@@ -5,6 +5,52 @@
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
+<div class="wrapper">
+	<div class="page-header min-vh-100" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+		<div class="filter"></div>
+		<div class="container">
+			<div class="row justify-content-center align-items-center">
+				<div class="col-12 col-lg-5 ">
+					<div class="card p-5">
+				
+						<div class="text-center mt-4">
+							<h1 class="h3">{% trans "Sign Up" %}</h1>
+							<p class="text-black-50">
+								{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+							</p>
+						</div>
+
+	
+						<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+							{% csrf_token %}
+							{{ form|crispy }}
+							{% if redirect_field_value %}
+								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+							{% endif %}
+							<div class="row mt-4">
+								<div class="col text-end">
+									<button type="submit" class="btn btn-primary rounded-pill py-2 px-5">{% trans "Sign Up" %}</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
 <div class="m-3 m-lg-5">
 	<div class="text-center mt-4">
 		<h1 class="h3">{% trans "Sign Up" %}</h1>
