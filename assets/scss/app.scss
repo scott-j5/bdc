@@ -14,7 +14,6 @@
 //Plugins
 @import "plugins/icons.scss";
 
-
 //Bootstrap
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
@@ -39,7 +38,6 @@
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/close";
 @import "~bootstrap/scss/helpers";
-@import "~bootstrap/scss/utilities/api";
 
 //BOOTSRAP ICONS
 @import "~bootstrap-icons/font/bootstrap-icons.css";
@@ -47,6 +45,8 @@
 //Soft UI
 @import "soft-design-system-pro.scss";
 
-
 //Custom Styles
 @import "custom/custom.scss";
+
+//Bootstrap utility api -Ensures custom utilities are applied
+@import "~bootstrap/scss/utilities/api";

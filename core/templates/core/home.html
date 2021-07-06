@@ -46,32 +46,32 @@
 <!-- INTRO -->
 <div class="section">
 	<div class="container">
-		<div class="row py-10">
+		<div class="row py-8">
 			<div class="col position-relative">
 				<!-- Road -->
-				<div class="row position-absolute w-100 h-100">
-					<div class="d-flex flex-column align-items-end align-items-md-center h-100">
+				<div class="row position-absolute justify-content-end justify-content-md-center w-100 h-100">
+					<div class="d-flex flex-column align-items-center h-100 w-auto">
 						<div class="pixel p-2 rounded-circle bg-danger"></div>
 						<div class="pixel-2  h-100 dashed-line"></div>
 						<div class="pixel p-2 rounded-circle bg-danger"></div>
-						<div class="position-absolute w-5" id="moving-van">
+						<div class="position-absolute w-10 w-md-5 rellax" id="moving-van" data-rellax-speed="-3">
 							<img src="{% static 'img/van-top.svg' %}">
 						</div>
 					</div>
 				</div>
-				<div class="position-relative over-filter">
-					<div class="row justify-content-start pb-4 pb-md-5">
-						<div class="col-11 col-md-5 d-flex justify-content-md-end">
+				<div class="position-relative over-filter pt-5">
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
 							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="map-pin"></i>
 							<div class="order-md-1 text-md-end">
 								<strong>Located in Scotland</strong>
-								<p>The Van will drive down as you scroll</p>
+								<p>sub text</p>
 							</div>
 						</div>
 					</div>
 	
-					<div class="row justify-content-start justify-content-md-end pb-4 pb-md-5">
-						<div class="col-11 col-md-5 d-flex">
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
 							<i class="icon-150 mx-3 text-danger" data-feather="dollar-sign"></i>
 							<div class="">
 								<strong>All Inclusive</strong>
@@ -80,27 +80,27 @@
 						</div>
 					</div>
 	
-					<div class="row justify-content-start pb-4 pb-md-5">
-						<div class="col-11 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="user"></i>
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
 							<div class="order-md-1 text-md-end">
-								<strong>Selling point 1</strong>
-								<p>Sub Text</p>
+								<strong>Standing-height Ceilings</strong>
+								<p>sub text</p>
 							</div>
 						</div>
 					</div>
 	
-					<div class="row justify-content-start justify-content-md-end pb-4 pb-md-5">
-						<div class="col-11 col-md-5 d-flex">
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
 							<i class="icon-150 mx-3 text-danger" data-feather="user"></i>
 							<div class="">
-								<strong>Selling point 2</strong>
+								<strong>In-van kitchen</strong>
 								<p>Sub Text</p>
 							</div>
 						</div>
 					</div>
-					<div class="row justify-content-start pb-4 pb-md-5">
-						<div class="col-11 col-md-5 d-flex justify-content-md-end">
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
 							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="user"></i>
 							<div class="order-md-1 text-md-end">
 								<strong>Heading</strong>
@@ -109,8 +109,8 @@
 						</div>
 					</div>
 	
-					<div class="row justify-content-start justify-content-md-end pb-4 pb-md-5">
-						<div class="col-11 col-md-5 d-flex">
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
 							<i class="icon-150 mx-3 text-danger" data-feather="user"></i>
 							<div class="">
 								<strong>Heading</strong>
@@ -201,54 +201,69 @@
 			<div class="col-md-8 mx-auto text-center">
 				<h2 class="title text-light text-dark">Want more details?</h2>
 			</div>
-			<div class="row py-7">
-				<div class="col-sm-3">
-					<div class="card bg-gold">
-						<div class="card-body text-center">
-							<div class="card-icon">
-								<i class="fa fa-5x fa-shuttle-van"></i>
-							</div>
-							<h4 class="card-title text-light text-dark">Vans</h4>
-							<p class="card-description">Creating your design from scratch with dedicated designers can be very expensive. Using a kit is the best option to start your development.</p>
+		</div>
+		<div class="row py-5 py-md-7 align-content-stretch">
+			<div class="col-sm-3 pb-5">
+				<div class="card bg-green h-100">
+					<div class="card-body text-center d-flex flex-column">
+						<div class="card-icon py-4">
+							<i class="bi-currency-dollar icon-300 text-white"></i>
+						</div>
+						<h4 class="card-title text-normal text-white pb-2">Pricing</h4>
+						<div class="flex-grow-1 d-flex align-items-center">
+							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3">
-					<div class="card bg-primary">
-						<div class="card-body text-center">
-							<div class="card-icon">
-								<i class="bi-currency-dollar icon-300"></i>
-							</div>
-							<h4 class="card-title text-light text-dark">Pricing</h4>
-							<p class="card-description">Creating your design from scratch with dedicated designers can be very expensive. Using a kit is the best option to start your development.</p>
+			</div>
+			<div class="col-sm-3 pb-5">
+				<div class="card bg-blue h-100">
+					<div class="card-body text-center d-flex flex-column">
+						<div class="card-icon py-4">
+							<i class="bi-question-circle icon-300 text-white"></i>
+						</div>
+						<h4 class="card-title text-normal text-white pb-2">FAQ's</h4>
+						<div class="flex-grow-1 d-flex align-items-center">
+							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3">
-					<div class="card bg-secondary">
-						<div class="card-body text-center">
-							<div class="card-icon">
-								<i class="bi-question-circle icon-300"></i>
-							</div>
-							<h4 class="card-title text-light text-dark">FAQ's</h4>
-							<p class="card-description">Creating your design from scratch with dedicated designers can be very expensive. Using a kit is the best option to start your development.</p>
+			</div>
+			<div class="col-sm-3 pb-5">
+				<div class="card bg-purple h-100">
+					<div class="card-body text-center d-flex flex-column">
+						<div class="card-icon py-4">
+							<i class="bi-chat-left-quote icon-300 text-white"></i>
+						</div>
+						<h4 class="card-title text-normal text-white pb-2">Testimonials</h4>
+						<div class="flex-grow-1 d-flex align-items-center">
+							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-3">
-					<div class="card bg-danger">
-						<div class="card-body text-center">
-							<div class="card-icon">
-								<i class="bi-chat-left-quote icon-300"></i>
-							</div>
-							<h4 class="card-title text-light text-dark">Testamonials</h4>
-							<p class="card-description">Creating your design from scratch with dedicated designers can be very expensive. Using a kit is the best option to start your development.</p>
+			</div>
+			<div class="col-sm-3 pb-5">
+				<div class="card bg-brown h-100">
+					<div class="card-body text-center d-flex flex-column">
+						<div class="card-icon py-4">
+							<i class="bi-megaphone icon-300 text-white"></i>
+						</div>
+						<h4 class="card-title text-normal text-white pb-2">Contact Us</h4>
+						<div class="flex-grow-1 d-flex align-items-center">
+							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development. This has a long desc Creating your start your development.</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
     </div>
-  </div>
+</div>
 <!-- END MORE INFO -->
+
+<!-- CONTACT US -->
+<div class="section">
+
+</div>
+
+<!-- END CONTACT US -->
 {% endblock content %}

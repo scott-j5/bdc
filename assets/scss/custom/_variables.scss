@@ -1,5 +1,11 @@
 //TYPOGRAPHY
-$font-family-sans-serif:     'Montserrat', "Helvetica", Arial, sans-serif;
+$font-family-sans-serif: 'Montserrat', "Helvetica", Arial, sans-serif;
+
+$font-weight-lighter:         lighter;
+$font-weight-light:           300;
+$font-weight-normal:          400;
+$font-weight-bold:            700;
+$font-weight-bolder:          bolder;
 
 
 //COLORS
@@ -9,6 +15,18 @@ $info:          #51bcda !default;
 $success:       #6bd098 !default;
 $warning:       #fbc658 !default;
 $danger:        #f5593d !default;
+
+$green: #86d9ab !default;
+$blue: #6ec7e0 !default;
+$purple: #cc90cc !default;
+$brown: #e4c4a1 !default;
+
+/*$primary:       #51cbce !default;
+$secondary:     #8392AB !default;
+$info:          #51bcda !default;
+$success:       #6bd098 !default;
+$warning:       #fbc658 !default;
+$danger:        #f5593d !default;*/
 
 //Custom colors
 $dark: #151f20;

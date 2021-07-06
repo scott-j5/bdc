@@ -1,5 +1,7 @@
 // Custom variables are imported independently in app.scss
 
+@import 'utilities.scss';
+@import 'dropdown.scss';
 @import 'typography.scss';
 
 .filter::after{
