@@ -3,6 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.layout import (
 	Layout,
+	Field,
 	Div,
 	Submit
 )
@@ -12,7 +13,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from.layout import SpinnerSubmit
-from .widgets import DateRangePicker
+from .widgets import DatePicker, DateRangePicker
 
 class ContactForm(forms.Form):
 	full_name = forms.CharField(required=True)
@@ -53,7 +54,7 @@ class ContactForm(forms.Form):
 						css_class="col-12 col-md-6"
 					),
 					Div(
-						Submit("send", "Send Message", css_class='crispy-btn mb-0'),
+						SpinnerSubmit("send", "Send Message", css_class='crispy-btn mb-0'),
 						css_class="col-12 col-md-6 d-flex justify-content-center"
 					),
 					css_class="row align-items-center"
@@ -64,54 +65,95 @@ class ContactForm(forms.Form):
 
 
 class DateRangeForm(forms.Form):
-	start_date = forms.DateField()
-	end_date = forms.DateField()
-
 	def __init__(self, *args, **kwargs):
+		#Set Default attrs for the flatpickr input
+		widget_attrs = {
+			"placeholder": "Check In",
+			"class": "datepicker",
+		}
+		flatpickr_args = {}
+		
 		# Allow custom form action to be set on init defaults to #
-		if kwargs.get('action') is not None:
-			action = kwargs.pop('action')
-		else:
-			action = '#'
+		action = kwargs.pop('action') if kwargs.get('action') is not None else '#'
 
-		#Set Default attrs for the date input
-		attrs = {'placeholder': 'Date', "class": "datepicker"}
+		#Allow custom submit button value
+		self.submit_value = kwargs.pop('submit_text') if kwargs.get('submit_text') is not None else "Search"
 
-		#Set args for flatpickr date selector
-		if kwargs.get('flatpickr_args') is not None:
-			if type(kwargs.get('flatpickr_args')) is dict:
-				attrs.update({'data-flatpickr_args': kwargs.pop('flatpickr_args')})
+		#Set Widget args from kwargs
+		if kwargs.get('widget_attrs') is not None:
+			if not type(kwargs.get('widget_attrs')) is dict:
+				raise ImproperlyConfigured(_("Widget atrributes must be passed as a dict object"))
 			else:
+				widget_attrs.update(kwargs.pop('widget_attrs'))
+
+		#Set Flatpickr args from kwargs
+		if kwargs.get('flatpickr_args') is not None:
+			if not type(kwargs.get('flatpickr_args')) is dict:
 				raise ImproperlyConfigured(_("Flatpicker arguments must be passed as a dict object"))
-			
+			else:
+				flatpickr_args.update(kwargs.pop('flatpickr_args'))
 
 		super().__init__(*args, **kwargs)
 
-		self.fields['date_range'] = forms.CharField(widget=DateRangePicker(attrs=attrs))
-		self.fields['date_range'].label = False
+		widget_attrs.update({"data-flatpickr_args": flatpickr_args})
+		self.fields['stay'] = forms.CharField(widget=DateRangePicker(attrs=widget_attrs), required=True)
+		self.fields['stay'].label = False
 		self.helper = FormHelper()
 		self.helper.form_method = 'GET'
-		self.helper.form_action = reverse_lazy(action)
+		self.helper.form_action = action
 		self.helper.form_id = 'date-search-form'
 		self.helper.html5_required = True
+		self._layout()
+
+	def _layout(self):
 		self.helper.layout = Layout (
 			Div(
 				Div(
 					Div(
-						'date_range',
-						css_class="col-12 col-md-6"
+						'stay',
+						css_class="col-12 col-md-6",
 					),
 					Div(
-						SpinnerSubmit("search", "Search", css_class='crispy-btn mb-0 spinner-btn'),
-						css_class="col-12 col-md-6"
+						SpinnerSubmit("search", self.submit_value, css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="search"></i>'),
+						css_class="d-grid col-12 col-md-6"
 					),
 					css_class="row"
 				),
-				css_class=""
 			)
 		)
-	
-	def clean(self):
-		cleaned_data = super().clean()
 
-		return cleaned_data
+
+class DateRangeFormMulti(DateRangeForm):
+	check_out = forms.DateField(widget=DatePicker(attrs={"placeholder": "Check Out"}), label=False)
+
+	def __init__(self, *args, **kwargs):
+		#Set Default attrs for the flatpickr input
+		widget_attrs = {
+			"data-range_second_input": "#check_out_date"
+		}
+
+		#Set Flatpickr args from kwargs
+		if kwargs.get('widget_attrs') is not None and type(flatpickr_args) is dict:
+			widget_attrs.update(kwargs.pop('widget_attrs'))
+		super().__init__(*args, **kwargs, widget_attrs=widget_attrs)
+
+	def _layout(self):
+		self.helper.layout = Layout (
+			Div(
+				Div(
+					Div(
+						'stay',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						Field('check_out', id="check_out_date"),
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						SpinnerSubmit("search", "Search", css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="search"></i>'),
+						css_class="d-grid col-12 col-md-4"
+					),
+					css_class="row"
+				),
+			)
+		)

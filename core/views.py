@@ -1,11 +1,11 @@
 from django.shortcuts import render
 
-from .forms import ContactForm, DateRangeForm
+from .forms import ContactForm, DateRangeForm, DateRangeFormMulti
 
 # Create your views here.
 def home_view(request):
     context = {
-		"date_range_form": DateRangeForm(action="home", flatpickr_args={"disable":["2021-07-20", "2021-07-21"]}),
+		"date_range_form": DateRangeFormMulti(action="van-list", flatpickr_args={"disable":["2021-07-20", "2021-07-21"]}),
 		"contact_form": ContactForm()
 	}
     return render(request, 'core/home.html', context)

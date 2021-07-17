@@ -1,14 +1,131 @@
 {% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
+<div class="container-fluid p-0 position-relative min-vh-100">
+	<div class="d-flex justify-content-center page-header min-vh-100 min-vw-100 position-absolute top-0" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+		<div class="filter"></div>
+	</div>
+	<div class="container position-relative over-filter h-100">
+		<div class="row">
+			<!--PAGE CONTENT-->
+			<div class="col-12 col-md-8">
+
+				<div class="row align-items-center min-vh-100">
+					<div class="col">
+						<h1 class="title text-white text-light">{{ van.name }}</h1>
+						<h5 class="description text-white text-light">{{ van.description }}</h5>
+						<br/>
+					</div>				
+				</div>
+				<div class="row">
+					<div class="section py-4">
+						<div class="container">
+							<div class="row justify-content-center">
+								<div class="col-4 col-md-2">
+									<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+								</div>
+								<div class="col-4 col-md-2">
+									<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+								</div>
+								<div class="col-4 col-md-2">
+									<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+								</div>
+								<div class="col-4 col-md-2">
+									<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
+				</div>
+			</div>
+			<!--END PAGE CONTENT-->
+
+
+			<!--MOBILE FIXED-BOTTOM-->
+			<div class="d-md-none col-12">
+				<div class="fixed-bottom">
+					<div class="row">
+						{% crispy form %}
+					</div>
+					<div class="row">
+						{% if not booking %}
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<h3>Your trip</h3>
+									<div class="row">
+										<div class="col-8">
+											<p class="m-0 p-0">4 Day rental</p>
+											<small class="text-black-50">(12/08/21 - 16-08-21)</small>
+										</div>
+										<div class="col-4 text-end">$122.90</div>
+									</div>
+									<div class="row py-2">
+										<hr>
+										<div class="col text-end">$122.90</div>
+									</div>
+									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<!--MOBILE FIXED-BOTTOM-->
+
+
+			<!--SIDEBAR-->
+			<div class="d-none d-md-block col-12 col-md-4 mt-vh-35">
+				<div class="sticky-top top-3">
+					<div class="row">
+						{% crispy form %}
+					</div>
+					<div class="row">
+						{% if not booking %}
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<h3>Your trip</h3>
+									<div class="row">
+										<div class="col-8">
+											<p class="m-0 p-0">{{ reservation.length_days }} Day rental</p>
+											<small class="text-black-50">({{ reservation.check_in }} - {{ reservation.check_out }})</small>
+										</div>
+										<div class="col-4 text-end">$122.90</div>
+									</div>
+									<div class="row py-2">
+										<hr>
+										<div class="col text-end">$122.90</div>
+									</div>
+									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<!--END SIDEBAR-->
+		</div>
+	</div>
+</div>
+
+
+
+<div class="sticky-top top-50"><div class="position-absolute translate-middle-y">THIST IS STICKY</div></div>
 <header class="">
 	<div class="d-flex justify-content-center page-header min-vh-100 relative" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
 		<div class="filter"></div>
 		<div class="container over-filter">
 			<div class="row">
 				<div class="col-md-8">
-					<h1 class="title text-white text-light">{{ van.name }} Rudy</h1>
-					<h5 class="description text-white text-light">{{ van.description }} Description about rudy here</h5>
+					<h1 class="title text-white text-light">{{ van.name }}</h1>
+					<h5 class="description text-white text-light">{{ van.description }}</h5>
 					<br/>
 				</div>
 
@@ -31,7 +148,7 @@
 							</div>
 						</div>
 					</div>
-				
+				{% crispy form %}
 				{% if not booking %}
 					<div class="col-md-4">
 						<div class="card">
@@ -120,23 +237,4 @@
 		</div>
 	</div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-{{ block.super }}
-<script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", () => {
-		let element = document.getElementById('datepicker');
-		let args = {
-			mode: "range",
-			minDate: "today",
-			position: "auto center",
-			altInput: true,
-			altFormat: "F j, Y",
-			dateFormat: "Y-m-d",
-		};
-
-		flatpickr(element, args);
-	});
-</script>
 {% endblock %}

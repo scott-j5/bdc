@@ -3,18 +3,24 @@ from imageit.models import ScaleItImageField
 
 # Create your models here.
 class Van(models.Model):
-	slug = models.SlugField(blank=False, null=False)
+	slug = models.SlugField(blank=True, null=False)
 	name = models.CharField(max_length=50, blank=False, null=False)
-	Description = models.TextField(null=True, blank=True)
+	description = models.TextField(null=True, blank=True)
 	rate = models.IntegerField(default=0)
 	registration = models.CharField(max_length=10)
 	odo = models.IntegerField(default=0)
 	available = models.BooleanField(default=False)
 
-	def save(self, *args, **kwargs):
+	def __str__(self):
+		return self.name
+
+	def clean(self):
 		if not self.slug or self.slug == '':
-			self.slug = self.name.replace(' ', '-')
-		return super.save(self, *args, **kwargs)
+			self.slug = self.name.replace(' ', '-').lower()
+
+	#returns an array of unavailable days from today in format 'yyyy-mm-dd'
+	def unavailable(self):
+		return ['2021-07-25', '2021-07-26']
 
 
 class VanPhotos(models.Model):

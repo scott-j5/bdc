@@ -14,9 +14,9 @@
 						your own agency or web studio.</h5>
 					<br/>
 				</div>
-				<div class="col-md-10">
+				<div class="col-md-9">
 					<div class="card card-raised card-form-horizontal no-transition">
-						<div class="card-body">
+						<div class="card-body p-3 pb-0"><!--
 						<form method="" action="">
 							<div class="row">
 		
@@ -34,7 +34,7 @@
 									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="search"></i> &nbsp; Search</button>
 								</div>
 							</div>
-						</form>
+						</form>-->
 						{% crispy date_range_form %}
 						</div>
 					</div>
@@ -322,20 +322,3 @@
 <!-- END CONTACT US -->
 
 {% endblock content %}
-
-
-{% block scripts %}
-	{{ block.super }}
-	<script type="text/javascript">
-		document.addEventListener("DOMContentLoaded", () => {
-			let element = document.getElementById('datepicker');
-			let args = {
-				mode: "range",
-				position: "auto center",
-			};
-
-			flatpickr(element, args);
-		});
-		
-	</script>
-{% endblock %}

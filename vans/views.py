@@ -1,12 +1,48 @@
+from core.forms import DateRangeForm
+from core.utils import parse_date_range
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView
+from reservations.models import Reservation
 
 from .models import (
-	Van
+	Van,
 )
 
 # Create your views here.
+class VanListView(ListView):
+	model = Van
+	template = 'vans/van_list.html'
+
+	def get_queryset(self):
+		qs = Van.objects.filter()
+		return qs
+
+	#get nearby stays of similar length
+	def get_context_data(self, **kwargs):
+		pass
+
+class VanDetailView(DetailView):
+	model = Van
+	template = 'vans/van_list.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		unavailable = self.object.unavailable()
+		if self.request.GET:
+			context["form"] = DateRangeForm(initial=self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
+			dates = parse_date_range(self.request.GET.get('stay'))
+			context["reservation"] = Reservation(user=self.request.user, check_in=dates[0], check_out=dates[1])
+		else:
+			context["form"] = DateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
+		return context
+
+
+
 def van_list(request):
-	context = {}
+	context = {
+		"form" : DateRangeForm(action=revere_lazy("van-list", kwargs={'pk': 1}), flatpickr_args={"disable":["2021-07-20", "2021-07-21"]})
+	}
 	return render(request, 'vans/van_list.html', context)
 
 def van_detail(request, slug):

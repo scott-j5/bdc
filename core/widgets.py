@@ -1,5 +1,5 @@
 import json
-from django.forms.widgets import TextInput
+from django.forms.widgets import TextInput, MultiWidget
 
 
 class DatePicker(TextInput):

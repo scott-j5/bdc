@@ -58,13 +58,18 @@ module.exports = {
         rules: [
             // Babel-loader
             {
-                test: /\.m?js$/,
+                test: /\.m?(js|ts)$/,
                 exclude: /node_modules/,
                 use: {
 					loader: 'babel-loader?cacheDirectory=true',
                 }
-            },
-            
+			},
+			//TS Loader
+            {
+				test: /\.ts$/,
+				loader: 'ts-loader'
+			},
+
             // Css-loader & sass-loader
             {
                 test: /\.(sa|sc|c)ss$/,
