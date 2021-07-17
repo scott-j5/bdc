@@ -1,6 +1,8 @@
 // Global
 import "./modules/bootstrap";
 import "./modules/feather";
+import "./modules/flatpickr";
+import "./modules/spinners.js";
 
 //Styles
 import "../scss/app.scss";

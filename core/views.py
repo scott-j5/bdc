@@ -1,10 +1,42 @@
 from django.shortcuts import render
 
+from .forms import ContactForm, DateRangeForm
+
 # Create your views here.
 def home_view(request):
-    context = {}
+    context = {
+		"date_range_form": DateRangeForm(action="home", flatpickr_args={"disable":["2021-07-20", "2021-07-21"]}),
+		"contact_form": ContactForm()
+	}
     return render(request, 'core/home.html', context)
 
-def vans_view(request):
+def contact_view(request):
+	context = {
+		"contact_form": ContactForm()
+	}
+	return render(request, 'core/home.html', context)
+
+def pricing_view(request):
     context = {}
-    return render(request, 'core/vans.html', context)
+    return render(request, 'core/pricing.html', context)
+
+def faqs_view(request):
+    context = {}
+    return render(request, 'core/faqs.html', context)
+
+def testimonials_view(request):
+    context = {}
+    return render(request, 'core/testimonials.html', context)
+
+def error_403(request, exception):
+    context = {}
+    return render(request, 'core/403.html', context)
+
+
+def error_404(request, exception):
+    context = {}
+    return render(request, 'core/404.html', context)
+
+def error_500(request):
+    context = {}
+    return render(request, 'core/500.html', context)

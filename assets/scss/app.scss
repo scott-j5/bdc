@@ -11,8 +11,13 @@
 @import "soft-design-system-pro/variables";
 @import "~bootstrap/scss/variables";
 
+//3rd party plugins
+@import "~flatpickr/dist/flatpickr.min.css";
+
 //Plugins
+@import "plugins/flatpickr.scss";
 @import "plugins/icons.scss";
+@import "plugins/spinners.scss";
 
 //Bootstrap
 @import "~bootstrap/scss/mixins";

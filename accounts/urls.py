@@ -5,5 +5,5 @@ from core.views import (
 )
 
 urlpatterns = [
-    path('/profile/', home_view, name='profile'),
+    path('profile/', home_view, name='profile'),
 ]

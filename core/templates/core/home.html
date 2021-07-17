@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <header class="">
@@ -21,7 +22,7 @@
 		
 								<div class="col-md-4">
 									<div class="form-group mb-md-0">
-									<input type="text" value="" placeholder="Date" class="form-control" />
+									<input id="datepicker" type="text" value="" placeholder="Date" class="form-control" />
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -34,6 +35,7 @@
 								</div>
 							</div>
 						</form>
+						{% crispy date_range_form %}
 						</div>
 					</div>
 				</div>
@@ -204,56 +206,64 @@
 		</div>
 		<div class="row py-5 py-md-7 align-content-stretch">
 			<div class="col-sm-3 pb-5">
-				<div class="card bg-green h-100">
-					<div class="card-body text-center d-flex flex-column">
-						<div class="card-icon py-4">
-							<i class="bi-currency-dollar icon-300 text-white"></i>
-						</div>
-						<h4 class="card-title text-normal text-white pb-2">Pricing</h4>
-						<div class="flex-grow-1 d-flex align-items-center">
-							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
+				<a href="{% url 'pricing' %}">
+					<div class="card bg-green h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-currency-dollar icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">Pricing</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
+							</div>
 						</div>
 					</div>
-				</div>
+				</a>
 			</div>
 			<div class="col-sm-3 pb-5">
-				<div class="card bg-blue h-100">
-					<div class="card-body text-center d-flex flex-column">
-						<div class="card-icon py-4">
-							<i class="bi-question-circle icon-300 text-white"></i>
-						</div>
-						<h4 class="card-title text-normal text-white pb-2">FAQ's</h4>
-						<div class="flex-grow-1 d-flex align-items-center">
-							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
+				<a href="{% url 'faqs' %}">
+					<div class="card bg-blue h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-question-circle icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">FAQ's</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
+							</div>
 						</div>
 					</div>
-				</div>
+				</a>
 			</div>
 			<div class="col-sm-3 pb-5">
-				<div class="card bg-purple h-100">
-					<div class="card-body text-center d-flex flex-column">
-						<div class="card-icon py-4">
-							<i class="bi-chat-left-quote icon-300 text-white"></i>
-						</div>
-						<h4 class="card-title text-normal text-white pb-2">Testimonials</h4>
-						<div class="flex-grow-1 d-flex align-items-center">
-							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
+				<a href="{% url 'testimonials' %}">
+					<div class="card bg-purple h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-chat-left-quote icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">Testimonials</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development.</p>
+							</div>
 						</div>
 					</div>
-				</div>
+				</a>
 			</div>
 			<div class="col-sm-3 pb-5">
-				<div class="card bg-brown h-100">
-					<div class="card-body text-center d-flex flex-column">
-						<div class="card-icon py-4">
-							<i class="bi-megaphone icon-300 text-white"></i>
-						</div>
-						<h4 class="card-title text-normal text-white pb-2">Contact Us</h4>
-						<div class="flex-grow-1 d-flex align-items-center">
-							<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development. This has a long desc Creating your start your development.</p>
+				<a href="#contact-us">
+					<div class="card bg-brown h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-megaphone icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">Contact Us</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">Creating your design from scratch with dedicated designit is the best option to start your development. This has a long desc Creating your start your development.</p>
+							</div>
 						</div>
 					</div>
-				</div>
+				</a>
 			</div>
 		</div>
     </div>
@@ -261,9 +271,71 @@
 <!-- END MORE INFO -->
 
 <!-- CONTACT US -->
-<div class="section">
+<div class="section" id="contact-us">
 
+	<div id="" class="big-map"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="card card-contact card-raised">
+					<div class="card-header header-raised header-primary text-center">
+						<h4 class="card-title">Contact Us</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="info info-horizontal">
+									<div class="icon icon-info">
+									<i class="nc-icon nc-badge" aria-hidden="true"></i>
+									</div>
+									<div class="description">
+									<h5 class="info-title">Give us a call</h5>
+									<p> Michael Jordan<br>
+										+40 762 321 762<br>
+										Mon - Fri, 8:00-22:00
+									</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="info info-horizontal">
+									<div class="icon icon-danger">
+									<i class="nc-icon nc-pin-3" aria-hidden="true"></i>
+									</div>
+									<div class="description">
+									<h5 class="info-title">Find us at the office</h5>
+									<p> Bld Mihail Kogalniceanu<br>
+										7652 Bucharest
+									</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					  	{% crispy contact_form %}
+					</div>
+			  	</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- END CONTACT US -->
+
 {% endblock content %}
+
+
+{% block scripts %}
+	{{ block.super }}
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", () => {
+			let element = document.getElementById('datepicker');
+			let args = {
+				mode: "range",
+				position: "auto center",
+			};
+
+			flatpickr(element, args);
+		});
+		
+	</script>
+{% endblock %}

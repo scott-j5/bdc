@@ -45,9 +45,12 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+	'captcha',
 	'crispy_forms',
 	'crispy_bootstrap5',
     'core',
+	'imageit',
+	'vans',
 ]
 
 '''
@@ -80,7 +83,8 @@ ROOT_URLCONF = 'bdc.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',   
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': ['core/templates'],   
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,6 +92,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+				'core.context_processors.vans',
             ],
         },
     },
@@ -154,7 +159,7 @@ USE_TZ = True
 
 
 # Crispy forms
-CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4', 'crispy-bootstrap5', )
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4', 'bootstrap5', )
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
@@ -176,3 +181,8 @@ if not DEBUG:
 # S3 folder to upload static files to
     STATICFILES_LOCATION = 'static'
     STATICFILES_STORAGE = 'static_storages.StaticStorage'
+
+
+# RECAPTCHA SETTINGS
+RECAPTCHA_PUBLIC_KEY = 'MyRecaptchaKey123'
+RECAPTCHA_PRIVATE_KEY = 'MyRecaptchaPrivateKey456'

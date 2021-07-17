@@ -1,0 +1,142 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<header class="">
+	<div class="d-flex justify-content-center page-header min-vh-100 relative" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+		<div class="filter"></div>
+		<div class="container over-filter">
+			<div class="row">
+				<div class="col-md-8">
+					<h1 class="title text-white text-light">{{ van.name }} Rudy</h1>
+					<h5 class="description text-white text-light">{{ van.description }} Description about rudy here</h5>
+					<br/>
+				</div>
+
+					<div>
+						<div class="card card-raised card-form-horizontal no-transition">
+							<div class="card-body">
+							<form method="" action="">
+								<div class="row">
+			
+									<div class="col-md-6">
+										<div class="form-group mb-md-0">
+										<input type="text" value="" placeholder="Date" class="form-control" id="datepcker"/>
+										</div>
+									</div>
+									<div class="d-grid gap-2 col-md-6">
+										<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="search"></i> &nbsp; Check Pricing</button>
+									</div>
+								</div>
+							</form>
+							</div>
+						</div>
+					</div>
+				
+				{% if not booking %}
+					<div class="col-md-4">
+						<div class="card">
+							<div class="card-body">
+								<h3>Your trip</h3>
+								<div class="row">
+									<div class="col-8">
+										<p class="m-0 p-0">4 Day rental</p>
+										<small class="text-black-50">(12/08/21 - 16-08-21)</small>
+									</div>
+									<div class="col-4 text-end">$122.90</div>
+								</div>
+								<div class="row py-2">
+									<hr>
+									<div class="col text-end">$122.90</div>
+								</div>
+								<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="container bg-white sticky-top py-3">
+		<form method="" action="">
+			<div class="row mb-3">
+				<div class="col-12">
+					<div class="form-group mb-0">
+						<input type="text" value="" placeholder="Date" class="form-control text-center" id="datepicker"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="d-grid gap-2 col-12">
+					<button type="button" class="btn btn-danger m-0">Check Pricing</button>
+				</div>
+			</div>
+		</form>
+</div>
+
+<div class="section section-dark py-4">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-4 col-md-2">
+				<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+			<div class="col-4 col-md-2">
+				<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+			<div class="col-4 col-md-2">
+				<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+			<div class="col-4 col-md-2">
+				<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="section section-dark py-4">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col">
+				<h2 class="text-light">What makes Rudy {{ van.name }} special</h2>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", () => {
+		let element = document.getElementById('datepicker');
+		let args = {
+			mode: "range",
+			minDate: "today",
+			position: "auto center",
+			altInput: true,
+			altFormat: "F j, Y",
+			dateFormat: "Y-m-d",
+		};
+
+		flatpickr(element, args);
+	});
+</script>
+{% endblock %}

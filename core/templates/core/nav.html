@@ -24,13 +24,15 @@
 					</a>
 					<div class="dropdown-menu dropdown-menu-animation dropdown-md dropdown-menu-end dropdown-menu-md-start p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
 						<div class="">
-							<a href="javascript:;" class="dropdown-item border-radius-md">
+							<a href="{% url 'van-list' %}" class="dropdown-item border-radius-md">
 								<strong>All Vans</strong>
 							</a>
-							<a href="javascript:;" class="dropdown-item border-radius-md">
-								Rudy
-							</a>
-							<a href="javascript:;" class="dropdown-item border-radius-md">
+							{% for van in vans %}
+								<a href="{% url 'van-detail' van.slug %}" class="dropdown-item border-radius-md">
+									{{ van.name|capfirst }}
+								</a>
+							{% endfor %}
+							<a href="#" class="dropdown-item border-radius-md">
 								Coming soon...
 							</a>
 						</div>
@@ -152,7 +154,7 @@
 					<ul class="dropdown-menu dropdown-menu-animation dropdown-lg dropdown-menu-end dropdown-menu-md-start mt-0 mt-lg-3 p-3 border-radius-lg" aria-labelledby="dropdownMenuDocs">
 						<div class="d-none d-lg-block">
 							<li class="nav-item ">
-								<a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:;">
+								<a class="dropdown-item py-2 ps-3 border-radius-md" href="{% url 'pricing' %}">
 									<div class="d-flex">
 										<i class="icon icon-125 me-3 d-flex mt-1 bi-currency-dollar text-black-50"></i>
 										<div>
@@ -163,7 +165,7 @@
 								</a>
 							</li>
 							<li class="nav-item ">
-								<a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:;">
+								<a class="dropdown-item py-2 ps-3 border-radius-md" href="{% url 'faqs' %}">
 									<div class="d-flex">
 										<i class="icon icon-125 me-3 d-flex mt-1 bi-question-circle text-black-50"></i>
 										<div>
@@ -174,7 +176,7 @@
 								</a>
 							</li>
 							<li class="nav-item ">
-								<a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:;">
+								<a class="dropdown-item py-2 ps-3 border-radius-md" href="{% url 'testimonials' %}">
 									<div class="d-flex">
 										<i class="icon icon-125 me-3 d-flex mt-1 bi-chat-left-quote text-black-50"></i>
 										<div>

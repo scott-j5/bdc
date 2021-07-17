@@ -1,0 +1,81 @@
+.datepicker.flatpickr-input{
+	background-color: $white;
+  }
+  
+  .flatpickr-calendar {
+  
+	&.open {
+	  margin-left: 0px;
+	  margin-top: 4px;
+	}
+  
+	&.arrowBottom {
+	  margin-top: -20px;
+	}
+  
+	.flatpickr-innerContainer {
+	  margin-top: 15px !important;
+	}
+  
+	.numInputWrapper {
+	  span {
+		border: none;
+		border-bottom: 1px solid rgba(57, 57, 57, 0.15);
+	  }
+  
+	  &:hover {
+		.arrowUp,
+		.arrowDown {
+		  margin-top: 3px;
+		}
+	  }
+	}
+  
+	.flatpickr-day {
+	  &.today{
+		border: 1px solid $flatpickr-color !important;
+	  }
+
+	  &.selected,
+	  &.startRange,
+	  &.endRange {
+		background: $flatpickr-color !important;
+		color: $white;
+		border: none;
+	  }
+  
+	  &.inRange {
+		background: $flatpickr-range-color;
+		border: none;
+		-webkit-box-shadow: -5px 0 0 $flatpickr-range-color, 5px 0 0 $flatpickr-range-color;
+		box-shadow: -5px 0 0 $flatpickr-range-color, 5px 0 0 $flatpickr-range-color;
+	  }
+  
+	  &:not(.selected) {
+		&:hover,
+		&:focus {
+		  background: $flatpickr-range-color;
+		  border: none;
+		}
+	  }
+	}
+  
+	.flatpickr-time input:hover,
+	.flatpickr-time .flatpickr-am-pm:hover,
+	.flatpickr-time input:focus,
+	.flatpickr-time .flatpickr-am-pm:focus {
+	  background: $flatpickr-range-color;
+	}
+  }
+  
+  .flatpickr {
+	&.form-control {
+	  background: $white;
+	}
+  }
+  
+  .flatpickr-day.endRange.startRange+.endRange:not(:nth-child(7n+1)),
+  .flatpickr-day.selected.startRange+.endRange:not(:nth-child(7n+1)),
+  .flatpickr-day.startRange.startRange+.endRange:not(:nth-child(7n+1)){
+	box-shadow: -10px 0 0 $flatpickr-color;
+  }
