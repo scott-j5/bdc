@@ -68,7 +68,7 @@ class DateRangeForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		#Set Default attrs for the flatpickr input
 		widget_attrs = {
-			"placeholder": "Check In",
+			"placeholder": "Check In - Check Out",
 			"class": "datepicker",
 		}
 		flatpickr_args = {}
@@ -129,6 +129,7 @@ class DateRangeFormMulti(DateRangeForm):
 	def __init__(self, *args, **kwargs):
 		#Set Default attrs for the flatpickr input
 		widget_attrs = {
+			"placeholder": "Check In",
 			"data-range_second_input": "#check_out_date"
 		}
 

@@ -38,10 +38,51 @@
 	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='#{$dark}' stroke-width='4' stroke-dasharray='15%2c 30' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 
-.mt-vh-35{
-	margin-top: 35vh;
+.mt-vh-50{
+	margin-top: 50vh;
 }
 
 .z-index-5{
 	z-index:5 !important;
+}
+
+.overflow-x-scroll{
+	overflow-x: auto;
+}
+
+.overflow-y-visible{
+	overflow-y: visible;
+}
+
+.min-vh-60{
+	min-height: 60vh;
+}
+
+.fs-x2{
+	font-size: 6rem;
+}
+
+//FAQ's
+#faqs-tabs-container{
+	background-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.1) 15%, rgba(0,0,0,0) 75%);
+}
+
+
+#faqs-tabs{
+	border: 0px;
+}
+
+#faqs-tabs li button{
+	background-color:$white;
+	border-radius: 4px;
+	border: 1px solid $dark;
+	min-width: 12em;
+}
+
+#faqs-tabs li .active{
+	border: 2px solid $danger;
+
+	& *{
+		color: $danger;
+	}
 }

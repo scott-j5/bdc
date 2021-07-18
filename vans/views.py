@@ -30,7 +30,7 @@ class VanDetailView(DetailView):
 		context = super().get_context_data(**kwargs)
 		unavailable = self.object.unavailable()
 		if self.request.GET:
-			context["form"] = DateRangeForm(initial=self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
+			context["form"] = DateRangeForm(initial=self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":unavailable})
 			dates = parse_date_range(self.request.GET.get('stay'))
 			context["reservation"] = Reservation(user=self.request.user, check_in=dates[0], check_out=dates[1])
 		else:

@@ -420,6 +420,11 @@
 												<span>Change Password</span>
 											</a>
 										</li>
+										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+											<a class="border-radius-md pe-3" href="{% url 'account_logout' %}">
+												<span>Sign Out</span>
+											</a>
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -438,6 +443,9 @@
 									</a>
 									<a href="#" class="dropdown-item p-2 ps-0">
 										Change Password
+									</a>
+									<a href="{% url 'account_logout' %}" class="dropdown-item p-2 ps-0">
+										Sign Out
 									</a>
 								</div>
 							</div>

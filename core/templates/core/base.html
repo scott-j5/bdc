@@ -28,7 +28,7 @@
 		<link id="pagestyle" href="{% static 'app.css' %}" rel="stylesheet" />
 	{% endblock styles %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock body_class %}">
 	{% block nav %}
 	  {% include 'core/nav.html' %}
 	{% endblock nav %}

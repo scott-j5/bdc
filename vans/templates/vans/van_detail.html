@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container-fluid p-0 position-relative min-vh-100">
-	<div class="d-flex justify-content-center page-header min-vh-100 min-vw-100 position-absolute top-0" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+	<div class="d-flex justify-content-center page-header h-100 min-vh-100 min-vw-100 position-absolute top-0" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
 		<div class="filter"></div>
 	</div>
 	<div class="container position-relative over-filter h-100">
@@ -16,6 +16,9 @@
 						<h1 class="title text-white text-light">{{ van.name }}</h1>
 						<h5 class="description text-white text-light">{{ van.description }}</h5>
 						<br/>
+						{% if not reservation %}
+							{% crispy form %}
+						{% endif %}
 					</div>				
 				</div>
 				<div class="row">
@@ -49,7 +52,7 @@
 			<div class="d-md-none col-12">
 				<div class="fixed-bottom">
 					<div class="row">
-						{% crispy form %}
+						
 					</div>
 					<div class="row">
 						{% if not booking %}
@@ -59,16 +62,25 @@
 									<h3>Your trip</h3>
 									<div class="row">
 										<div class="col-8">
-											<p class="m-0 p-0">4 Day rental</p>
-											<small class="text-black-50">(12/08/21 - 16-08-21)</small>
+											<a class="" data-bs-toggle="collapse" href="#mobile-change-date" role="button" aria-expanded="false" aria-controls="mobile-change-date">
+												<p class="m-0 p-0">{{ reservation.length_days }} Day rental</p>
+												<small class="text-black-50">({{ reservation.check_in|date:"d/m/y" }} - {{ reservation.check_out|date:"d/m/y" }}) <i class="collapse-closed bi bi-pencil-square"></i></small>
+											</a>
 										</div>
 										<div class="col-4 text-end">$122.90</div>
 									</div>
+									<div class="row collapse" id="mobile-change-date">
+										<div class="col">
+											{% crispy form %}
+										</div>
+									</div>
 									<div class="row py-2">
 										<hr>
-										<div class="col text-end">$122.90</div>
+										<div class="col-6">
+											<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+										</div>
+										<div class="col-6 text-end">$122.90</div>
 									</div>
-									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
 								</div>
 							</div>
 						</div>
@@ -80,13 +92,13 @@
 
 
 			<!--SIDEBAR-->
-			<div class="d-none d-md-block col-12 col-md-4 mt-vh-35">
-				<div class="sticky-top top-3">
+			{% if reservation %}
+			<div class="d-none d-md-block col-md-4 mt-vh-50">
+				<div class="sticky-top translate-middle-y sticky-sidebar pt-3">
 					<div class="row">
 						{% crispy form %}
 					</div>
 					<div class="row">
-						{% if not booking %}
 						<div class="col-12">
 							<div class="card">
 								<div class="card-body">
@@ -106,10 +118,10 @@
 								</div>
 							</div>
 						</div>
-						{% endif %}
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			<!--END SIDEBAR-->
 		</div>
 	</div>

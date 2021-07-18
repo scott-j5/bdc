@@ -21,7 +21,9 @@ def pricing_view(request):
     return render(request, 'core/pricing.html', context)
 
 def faqs_view(request):
-    context = {}
+    context = {
+		"form": ContactForm()
+	}
     return render(request, 'core/faqs.html', context)
 
 def testimonials_view(request):
