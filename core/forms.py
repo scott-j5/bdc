@@ -8,7 +8,7 @@ from crispy_forms.layout import (
 	Submit
 )
 from django import forms
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -121,6 +121,12 @@ class DateRangeForm(forms.Form):
 				),
 			)
 		)
+	
+	def clean_stay(self):
+		data = self.cleaned_data['stay']
+		if len(data.split(" to ")) != 2:
+			raise ValidationError(_("Please provide a check out date."))
+		return data
 
 
 class DateRangeFormMulti(DateRangeForm):

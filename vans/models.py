@@ -1,22 +1,18 @@
 from django.db import models
 from imageit.models import ScaleItImageField
+from products.models import Product
 
 # Create your models here.
-class Van(models.Model):
-	slug = models.SlugField(blank=True, null=False)
-	name = models.CharField(max_length=50, blank=False, null=False)
-	description = models.TextField(null=True, blank=True)
-	rate = models.IntegerField(default=0)
+class Van(Product):
 	registration = models.CharField(max_length=10)
 	odo = models.IntegerField(default=0)
-	available = models.BooleanField(default=False)
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.qty = 1;
 
 	def __str__(self):
 		return self.name
-
-	def clean(self):
-		if not self.slug or self.slug == '':
-			self.slug = self.name.replace(' ', '-').lower()
 
 	#returns an array of unavailable days from today in format 'yyyy-mm-dd'
 	def unavailable(self):

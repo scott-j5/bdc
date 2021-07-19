@@ -3,7 +3,9 @@ from core.utils import parse_date_range
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
-from reservations.models import Reservation
+from rentals.models import Reservation
+
+from rentals.models import ProductRental
 
 from .models import (
 	Van,
@@ -12,7 +14,7 @@ from .models import (
 # Create your views here.
 class VanListView(ListView):
 	model = Van
-	template = 'vans/van_list.html'
+	template_name = 'vans/van_list.html'
 
 	def get_queryset(self):
 		qs = Van.objects.filter()
@@ -24,15 +26,16 @@ class VanListView(ListView):
 
 class VanDetailView(DetailView):
 	model = Van
-	template = 'vans/van_list.html'
+	template_name = 'vans/van_detail.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		unavailable = self.object.unavailable()
 		if self.request.GET:
-			context["form"] = DateRangeForm(initial=self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":unavailable})
-			dates = parse_date_range(self.request.GET.get('stay'))
-			context["reservation"] = Reservation(user=self.request.user, check_in=dates[0], check_out=dates[1])
+			context["form"] = DateRangeForm(self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":unavailable})
+			if context["form"].is_valid():
+				dates = parse_date_range(self.request.GET.get('stay'))
+				context["rental"] = ProductRental(user=self.request.user, product=self.object, rental_start=dates[0], rental_end=dates[1])
 		else:
 			context["form"] = DateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
 		return context

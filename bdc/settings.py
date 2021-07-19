@@ -50,7 +50,8 @@ INSTALLED_APPS = [
 	'crispy_bootstrap5',
     'core',
 	'imageit',
-	'reservations',
+	'products',
+	'rentals',
 	'vans',
 ]
 

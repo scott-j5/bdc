@@ -1,10 +1,9 @@
 from django.urls import path, include
 
 from .views import (
-	VanDetailView,
 	VanListView,
+	VanDetailView,
     van_list,
-	van_detail,
 )
 
 urlpatterns = [
