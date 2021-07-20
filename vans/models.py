@@ -14,9 +14,9 @@ class Van(Product):
 	def __str__(self):
 		return self.name
 
-	#returns an array of unavailable days from today in format 'yyyy-mm-dd'
+	#Returns an array of unavailable days from today in format 'yyyy-mm-dd'
 	def unavailable(self):
-		return ['2021-07-25', '2021-07-26']
+		return []
 
 
 class VanPhotos(models.Model):

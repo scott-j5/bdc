@@ -131,15 +131,25 @@
 									<h3>Your trip</h3>
 									<div class="row">
 										<div class="col-8">
-											<p class="m-0 p-0">{{ rental.duration }} Day rental</p>
+											<p class="m-0 p-0">{{ rental.duration }} rental</p>
 											<small class="text-black-50">({{ rental.rental_start }} - {{ rental.rental_end }})</small>
+											{% for pa in rental.product.active_sales %}
+											<p class="p-0 m-0">
+												<small class="text-danger">
+													{{ pa.amount_humanize }}
+												</small>
+											</p>
+											{% endfor %}
 										</div>
-										<div class="col-4 text-end">${{ rental.rental_price }}</div>
+										<div class="col-4 text-end">${{ rental.total_price }}</div>
 									</div>
 									<div class="row py-2">
 										<hr>
 										<div class="col text-end">$122.90</div>
 									</div>
+									{% if request.user.is_staff %}
+										<a href="{% url 'product-rental-detail' %}" type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+									{% endif  %}
 									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
 								</div>
 							</div>

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-
+from invoicing.models import PriceAdjustment
 
 # Create your models here.
 def get_sentinel_product():
@@ -35,10 +35,17 @@ class Product(models.Model):
 			self.available = False
 	
 	@property
+	def active_price_adjustments(self):
+		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now())
+
+	@property
+	def active_sales(self):
+		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now(), sale=True)
+
+	@property
 	def fulfilment_price(self):
 		fulfilment_price = self.base_price
-		price_adjustments = self.priceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now())
-		for adj in price_adjustments:
+		for adj in self.active_price_adjustments:
 			#Apply Additions (additions are non-compounding)
 			if adj.adj_amount > 0:
 				if adj.adj_type == 'PER':
@@ -46,30 +53,16 @@ class Product(models.Model):
 				elif adj.adj_type == 'DOL':
 					fulfilment_price = fulfilment_price + adj.adj_amount
 
-		for adj in price_adjustments:
+		for adj in self.active_price_adjustments:
 			#Apply Deductions (deductions are negatively compounding)
 			if adj.adj_amount < 0:
 				if adj.adj_type == 'PER':
-					fulfilment_price = fulfilment_price - ((fulfilment_price * adj.adj_amount) / 100)
+					fulfilment_price = fulfilment_price + ((fulfilment_price * adj.adj_amount) / 100)
 				elif adj.adj_type == 'DOL':
-					fulfilment_price = fulfilment_price - adj.adj_amount
+					fulfilment_price = fulfilment_price + adj.adj_amount
 		return fulfilment_price
 
 
-class PriceAdjustment(models.Model):
-	ADJ_TYPES = [('PER', '%'), ('DOL', '$')]
-	slug = models.SlugField(blank=True, null=False)
-	name = models.CharField(max_length=50, blank=False, null=False)
-	products = models.ManyToManyField(Product)
-	description = models.TextField()
-	period_start = models.DateTimeField(blank=False, null=False)
-	period_end = models.DateTimeField(blank=False, null=False)
-	adj_type = models.CharField(max_length=3, choices=ADJ_TYPES, default='PER', blank=False, null=False)
-	adj_amount = models.IntegerField(blank=True, null=True)
-
-	def __str__(self):
-		return f"{self.name} {self.start}-{self.end}({self.adj_amount}{self.adj_type})"
-
-	def clean(self):
-		if not self.slug or self.slug == '':
-			self.slug = self.name.replace(' ', '-').lower()
+class ProductPriceAdjustment(PriceAdjustment):
+	products = models.ManyToManyField(Product, blank=True)
+	sale = models.BooleanField(default=False)
