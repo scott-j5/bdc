@@ -29,6 +29,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 	path('accounts/', include('accounts.urls')),
 	path('vans/', include('vans.urls')),
+	path('rentals/', include('rentals.urls')),
 ]
 
 handler403 = error_403

@@ -130,7 +130,7 @@ class DateRangeForm(forms.Form):
 
 
 class DateRangeFormMulti(DateRangeForm):
-	check_out = forms.DateField(widget=DatePicker(attrs={"placeholder": "Check Out"}), label=False)
+	check_out = forms.DateField(widget=DatePicker(attrs={"placeholder": "Check Out"}), label=False, required=False)
 
 	def __init__(self, *args, **kwargs):
 		#Set Default attrs for the flatpickr input

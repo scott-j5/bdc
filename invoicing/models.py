@@ -12,17 +12,28 @@ class PriceAdjustment(models.Model):
 	adj_amount = models.IntegerField(blank=True, null=True)
 
 	def __str__(self):
-		return f"{self.name} {self.period_start}-{self.period_end}({self.adj_amount}{self.adj_type})"
+		return f"{self.name} - ({self.adj_amount}{self.adj_type}) Valid:{self.period_start}-{self.period_end}"
 
 	@property
-	def amount_humanize(self):
+	def amount_humanize_long(self):
 		if self.adj_amount < 0:
 			adj_value = str(self.adj_amount).strip("-")
 			human_type = "off"
 		else:
 			adj_value = str(self.adj_amount)
 			human_type = "increase"
-		return f"{self.name} - {adj_value}% {human_type}" if self.adj_type == "PER" else f"{self.name} - ${adj_value} {human_type}" 
+		return f"{self.name} - {adj_value}% {human_type}" if self.adj_type == "PER" else f"{self.name} - ${adj_value} {human_type}"
+
+
+	@property
+	def amount_humanize(self):
+		if self.adj_amount < 0:
+			adj_value = str(self.adj_amount).strip("-")
+			human_type = "-"
+		else:
+			adj_value = str(self.adj_amount)
+			human_type = "+"
+		return f"{human_type} {adj_value}%" if self.adj_type == "PER" else f"{human_type} ${adj_value}"
 
 	def clean(self):
 		if not self.slug or self.slug == '':

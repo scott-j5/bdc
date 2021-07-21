@@ -3,7 +3,6 @@ from core.utils import parse_date_range
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
-from rentals.models import Reservation
 
 from rentals.models import ProductRental
 
@@ -35,7 +34,7 @@ class VanDetailView(DetailView):
 			context["form"] = DateRangeForm(self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":unavailable})
 			if context["form"].is_valid():
 				dates = parse_date_range(self.request.GET.get('stay'))
-				context["rental"] = ProductRental(user=self.request.user, product=self.object, rental_start=dates[0], rental_end=dates[1])
+				context["rental"] = ProductRental(user=self.request.user, rental_product=self.object, rental_start=dates[0], rental_end=dates[1])
 		else:
 			context["form"] = DateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
 		return context

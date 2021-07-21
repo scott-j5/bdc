@@ -136,21 +136,29 @@
 											{% for pa in rental.product.active_sales %}
 											<p class="p-0 m-0">
 												<small class="text-danger">
-													{{ pa.amount_humanize }}
+													{{ pa.amount_humanize_long }}
 												</small>
 											</p>
 											{% endfor %}
 										</div>
-										<div class="col-4 text-end">${{ rental.total_price }}</div>
+										<div class="col-4 text-end">${{ rental.fulfilment_price }}</div>
 									</div>
 									<div class="row py-2">
 										<hr>
-										<div class="col text-end">$122.90</div>
+										<div class="col text-end">${{ rental.fulfilment_price }}</div>
 									</div>
-									{% if request.user.is_staff %}
-										<a href="{% url 'product-rental-detail' %}" type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
-									{% endif  %}
-									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+									<div class="row">
+										{% if request.user.is_staff %}
+										<div class="col-6 d-grid">
+											<a href="{% url 'rental-price-detail' object.slug %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+										</div>
+										<div class="col-6 d-grid">
+										{% endif  %}
+										<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+										{% if request.user.is_staff %}
+										</div>
+										{% endif %}
+									</div>
 								</div>
 							</div>
 						</div>

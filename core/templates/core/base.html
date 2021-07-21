@@ -29,18 +29,20 @@
 	{% endblock styles %}
 </head>
 <body class="{% block body_class %}{% endblock body_class %}">
-	{% block nav %}
-	  {% include 'core/nav.html' %}
-	{% endblock nav %}
-
-
-	{% block content %}
-	{% endblock content %}
-
-	{% block footer %}
-		{% include 'core/footer.html' %}
-	{% endblock footer %}
-
+	{% block banner %}
+	{% endblock %}
+	<div class="position-relative">
+		{% block nav %}
+			{% include 'core/nav.html' %}
+		{% endblock nav %}
+	
+		{% block content %}
+		{% endblock content %}
+	
+		{% block footer %}
+			{% include 'core/footer.html' %}
+		{% endblock footer %}
+	</div>
 
 	{% block scripts %}
 		<script src="{% static 'app.js' %}"></script>

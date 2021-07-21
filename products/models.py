@@ -17,14 +17,16 @@ def get_sentinel_price_adjustment():
 
 
 class Product(models.Model):
-	slug = models.SlugField(blank=True, null=False)
-	name = models.CharField(max_length=50, blank=False, null=False)
+	PRODUCT_TYPES = [('RENTAL', 'Rental'), ('PRODUCT', 'Product')]
+	slug = models.SlugField(blank=True, null=False, unique=True)
+	name = models.CharField(max_length=50, blank=False, null=False, unique=True)
 	description_short = models.TextField(null=True, blank=True)
 	description_long = models.TextField(null=True, blank=True)
 	rentable = models.BooleanField(default=False)
 	base_price = models.IntegerField(default=0, help_text="On rentable items, rates are calculated and charged hourly!")
 	available = models.BooleanField(default=False)
 	qty = models.IntegerField(default=0)
+	product_type = models.CharField(null=False, max_length=10, choices=PRODUCT_TYPES, default='PRODUCT')
 
 	def __str__(self):
 		return self.name
@@ -39,8 +41,13 @@ class Product(models.Model):
 		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now())
 
 	@property
-	def active_sales(self):
-		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now(), sale=True)
+	def active_deals(self):
+		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now(), deal=True)
+
+	# Returns an array of unavailable days from today in format 'yyyy-mm-dd'
+	@property
+	def unavailable(self):
+		return []
 
 	@property
 	def fulfilment_price(self):
@@ -65,4 +72,4 @@ class Product(models.Model):
 
 class ProductPriceAdjustment(PriceAdjustment):
 	products = models.ManyToManyField(Product, blank=True)
-	sale = models.BooleanField(default=False)
+	deal = models.BooleanField(default=False)

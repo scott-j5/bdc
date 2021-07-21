@@ -1,10 +1,11 @@
 from django.urls import path, include
 
 from .views import (
+	RentalPriceDetailView,
 	RentalDetailView
 )
 
 urlpatterns = [
-    path('', van_list, name='van-list'),
-    path('<int:pk>/', RentalDetailView.as_view(), name='product-rental-detail'),
+    path('<slug:slug>/', RentalPriceDetailView.as_view(), name='rental-price-detail'),
+	path('<int:pk>/', RentalDetailView.as_view(), name='rental-detail'),
 ]
