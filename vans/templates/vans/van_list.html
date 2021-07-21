@@ -1,5 +1,7 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-yo
+{% for van in object_list %}
+	{{ van.name }}
+{% endfor %}
 {% endblock %}

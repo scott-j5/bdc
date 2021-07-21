@@ -13,6 +13,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from.layout import SpinnerSubmit
+from .utils import parse_date_range
 from .widgets import DatePicker, DateRangePicker
 
 class ContactForm(forms.Form):
@@ -65,6 +66,9 @@ class ContactForm(forms.Form):
 
 
 class DateRangeForm(forms.Form):
+	check_in = forms.DateTimeField(widget=DatePicker(attrs={"placeholder": "Check In"}), label=False, required=False)
+	check_out = forms.DateTimeField(widget=DatePicker(attrs={"placeholder": "Check Out"}), label=False, required=False)
+
 	def __init__(self, *args, **kwargs):
 		#Set Default attrs for the flatpickr input
 		widget_attrs = {
@@ -122,16 +126,20 @@ class DateRangeForm(forms.Form):
 			)
 		)
 	
-	def clean_stay(self):
-		data = self.cleaned_data['stay']
-		if len(data.split(" to ")) != 2:
+	def clean(self):
+		cleaned_data = super().clean()
+		stay = cleaned_data.get('stay')
+
+		if len(stay.split(" to ")) != 2:
 			raise ValidationError(_("Please provide a check out date."))
-		return data
+		else:
+			range_list = parse_date_range(stay)
+			cleaned_data['check_in'] = range_list[0]
+			cleaned_data['check_out'] = range_list[1]
+		return cleaned_data
 
 
 class DateRangeFormMulti(DateRangeForm):
-	check_out = forms.DateField(widget=DatePicker(attrs={"placeholder": "Check Out"}), label=False, required=False)
-
 	def __init__(self, *args, **kwargs):
 		#Set Default attrs for the flatpickr input
 		widget_attrs = {

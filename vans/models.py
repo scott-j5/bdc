@@ -1,15 +1,11 @@
 from django.db import models
 from imageit.models import ScaleItImageField
-from products.models import Product
+from rentals.models import RentalProduct
 
 # Create your models here.
-class Van(Product):
+class Van(RentalProduct):
 	registration = models.CharField(max_length=10)
 	odo = models.IntegerField(default=0)
-
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.qty = 1;
 
 	def __str__(self):
 		return self.name

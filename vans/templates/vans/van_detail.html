@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
+{% load price_tags %}
 
 {% block body_class %}
 	bg-gray-100
@@ -20,7 +21,7 @@
 						<h1 class="title text-white text-light">{{ van.name }}</h1>
 						<h5 class="description text-white text-light">{{ van.description_short }}</h5>
 						<br/>
-						{% if not rental %}
+						{% if not rental_fulfilment %}
 							{% crispy form %}
 						{% endif %}
 					</div>				
@@ -81,31 +82,38 @@
 						
 					</div>
 					<div class="row">
-						{% if not booking %}
+						{% if rental_fulfilment %}
 						<div class="col-12">
 							<div class="card">
 								<div class="card-body">
 									<h3>Your trip</h3>
 									<div class="row">
 										<div class="col-8">
-											<a class="" data-bs-toggle="collapse" href="#mobile-change-date" role="button" aria-expanded="false" aria-controls="mobile-change-date">
-												<p class="m-0 p-0">{{ rental.duration }} rental</p>
-												<small class="text-black-50">({{ rental.rental_start|date:"d/m/y" }} - {{ rental.rental_end|date:"d/m/y" }}) <i class="collapse-closed bi bi-pencil-square"></i></small>
+											<a class="text-reset" data-bs-toggle="collapse" href="#mobile-change-date" role="button" aria-expanded="false" aria-controls="mobile-change-date">
+												<p class="m-0 p-0">{{ rental_fulfilment.duration }} rental</p>
+												<small class="text-black-50">({{ rental_fulfilment.rental_start|date:"d/m/y" }} - {{ rental_fulfilment.rental_end|date:"d/m/y" }}) <i class="collapse-closed bi bi-pencil-square"></i></small>
+												{% for pa in rental_fulfilment.rental_fulfilled_product.active_deals %}
+												<p class="p-0 m-0">
+													<small class="text-danger">
+														{{ pa.amount_humanize_long }}
+													</small>
+												</p>
+												{% endfor %}
 											</a>
 										</div>
-										<div class="col-4 text-end">${{ rental.rental_price }}</div>
+										<div class="col-4 text-end">{{ rental_fulfilment.rental_price|price }}</div>
 									</div>
 									<div class="row collapse" id="mobile-change-date">
 										<div class="col">
 											{% crispy form %}
 										</div>
 									</div>
-									<div class="row py-2">
+									<div class="row py-2 d-flex align-items-center">
 										<hr>
 										<div class="col-6">
 											<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
 										</div>
-										<div class="col-6 text-end">$122.90</div>
+										<div class="col-6 text-end"><strong>{{ rental_fulfilment.rental_price|price }}</strong></div>
 									</div>
 								</div>
 							</div>
@@ -118,7 +126,7 @@
 
 
 			<!--SIDEBAR-->
-			{% if rental %}
+			{% if rental_fulfilment %}
 			<div class="d-none d-md-block col-md-4 mt-vh-50">
 				<div class="sticky-top translate-middle-y sticky-sidebar pt-3">
 					<div class="row">
@@ -131,9 +139,9 @@
 									<h3>Your trip</h3>
 									<div class="row">
 										<div class="col-8">
-											<p class="m-0 p-0">{{ rental.duration }} rental</p>
-											<small class="text-black-50">({{ rental.rental_start }} - {{ rental.rental_end }})</small>
-											{% for pa in rental.product.active_sales %}
+											<p class="m-0 p-0">{{ rental_fulfilment.duration }} rental</p>
+											<small class="text-black-50">({{ rental_fulfilment.rental_start }} - {{ rental_fulfilment.rental_end }})</small>
+											{% for pa in rental_fulfilment.rental_fulfilled_product.active_deals %}
 											<p class="p-0 m-0">
 												<small class="text-danger">
 													{{ pa.amount_humanize_long }}
@@ -141,16 +149,16 @@
 											</p>
 											{% endfor %}
 										</div>
-										<div class="col-4 text-end">${{ rental.fulfilment_price }}</div>
+										<div class="col-4 text-end">{{ rental_fulfilment.fulfilment_price|price }}</div>
 									</div>
 									<div class="row py-2">
 										<hr>
-										<div class="col text-end">${{ rental.fulfilment_price }}</div>
+										<div class="col text-end">{{ rental_fulfilment.fulfilment_price|price }}</div>
 									</div>
 									<div class="row">
 										{% if request.user.is_staff %}
 										<div class="col-6 d-grid">
-											<a href="{% url 'rental-price-detail' object.slug %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
 										</div>
 										<div class="col-6 d-grid">
 										{% endif  %}

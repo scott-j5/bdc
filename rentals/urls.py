@@ -1,11 +1,13 @@
 from django.urls import path, include
 
 from .views import (
-	RentalPriceDetailView,
-	RentalDetailView
+	RentalFulfilmentListView,
+	RentalFulfilmentDetailView,
 )
 
 urlpatterns = [
-    path('<slug:slug>/', RentalPriceDetailView.as_view(), name='rental-price-detail'),
-	path('<int:pk>/', RentalDetailView.as_view(), name='rental-detail'),
+	path('rental-fulfilments/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+    path('rental-fulfilments/price-check/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
+	path('rental-fulfilments/price-check/<slug:slug>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
+	path('rental-fulfilments/<int:pk>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
 ]

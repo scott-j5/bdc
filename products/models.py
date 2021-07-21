@@ -17,7 +17,6 @@ def get_sentinel_price_adjustment():
 
 
 class Product(models.Model):
-	PRODUCT_TYPES = [('RENTAL', 'Rental'), ('PRODUCT', 'Product')]
 	slug = models.SlugField(blank=True, null=False, unique=True)
 	name = models.CharField(max_length=50, blank=False, null=False, unique=True)
 	description_short = models.TextField(null=True, blank=True)
@@ -26,7 +25,6 @@ class Product(models.Model):
 	base_price = models.IntegerField(default=0, help_text="On rentable items, rates are calculated and charged hourly!")
 	available = models.BooleanField(default=False)
 	qty = models.IntegerField(default=0)
-	product_type = models.CharField(null=False, max_length=10, choices=PRODUCT_TYPES, default='PRODUCT')
 
 	def __str__(self):
 		return self.name
@@ -36,27 +34,31 @@ class Product(models.Model):
 		if self.qty <= 0:
 			self.available = False
 	
-	@property
-	def active_price_adjustments(self):
-		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now())
-
-	@property
-	def active_deals(self):
-		return self.productpriceadjustment_set.filter(period_start__lte=timezone.now(), period_end__gte=timezone.now(), deal=True)
-
 	# Returns an array of unavailable days from today in format 'yyyy-mm-dd'
 	@property
 	def unavailable(self):
 		return []
 
+
+class ProductFulfilment(models.Model):
+	product = models.ForeignKey(Product, on_delete=models.SET(get_sentinel_product))
+	product_base_price = models.IntegerField(null=False)
+	fulfilment_date_time = models.DateTimeField(default=timezone.now)
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		if not kwargs.get('fulfilment_date_time'):
+			self.fulfilment_date_time = timezone.now()
+		self.product_base_price = self.product.base_price
+
 	@property
 	def fulfilment_price(self):
-		fulfilment_price = self.base_price
+		fulfilment_price = self.product.base_price
 		for adj in self.active_price_adjustments:
 			#Apply Additions (additions are non-compounding)
 			if adj.adj_amount > 0:
 				if adj.adj_type == 'PER':
-					fulfilment_price = fulfilment_price + ((self.base_price * adj.adj_amount) / 100)
+					fulfilment_price = fulfilment_price + ((self.product.base_price * adj.adj_amount) / 100)
 				elif adj.adj_type == 'DOL':
 					fulfilment_price = fulfilment_price + adj.adj_amount
 
@@ -67,7 +69,15 @@ class Product(models.Model):
 					fulfilment_price = fulfilment_price + ((fulfilment_price * adj.adj_amount) / 100)
 				elif adj.adj_type == 'DOL':
 					fulfilment_price = fulfilment_price + adj.adj_amount
-		return fulfilment_price
+		return round(fulfilment_price, 2)
+
+	@property
+	def active_price_adjustments(self):
+		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time)
+
+	@property
+	def active_deals(self):
+		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time, deal=True)
 
 
 class ProductPriceAdjustment(PriceAdjustment):

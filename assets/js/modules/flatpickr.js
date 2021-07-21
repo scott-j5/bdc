@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		if(element.hasAttribute('data-range_second_input')){
 			let secondInput = document.querySelector(element.dataset.range_second_input);
+			//Removes name of second attribute to omit it from GET query string
 			secondInput.removeAttribute('name');
 			args["plugins"] = [new rangePlugin({ input: element.dataset.range_second_input})]
 		}

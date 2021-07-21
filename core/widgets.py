@@ -12,6 +12,8 @@ class DatePicker(TextInput):
 				"altFormat": "F j, Y",
 				"dateFormat": "Y-m-d",
 			}
+		#For time input "enableTime": True,"dateFormat": "Y-m-dTH:i:S",
+
 
 		#If additional flatpickr configs are passed apply them
 		if attrs.get('data-flatpickr_args') is not None:
