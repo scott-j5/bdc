@@ -21,7 +21,7 @@ class VanListView(ListView):
 		if self.request.GET:
 			form = DateRangeFormMulti(self.request.GET)
 			if form.is_valid():
-				qs = Van.get_available([form.check_in, form.check_out])
+				qs = Van.get_available([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
 		else:
 			qs = Van.objects.all()
 		return qs
@@ -32,7 +32,7 @@ class VanListView(ListView):
 		if self.request.GET:
 			context["form"] = DateRangeFormMulti(self.request.GET, action=reverse_lazy("van-list"), submit_text="Check Pricing", flatpickr_args={})
 			if context["form"].is_valid():
-				self.queryset.filter()
+				self.object_list.filter(rentable=True)
 		else:
 			context["form"] = DateRangeFormMulti(action=reverse_lazy("van-list"), submit_text="Check Pricing", flatpickr_args={})
 		return context
@@ -44,7 +44,6 @@ class VanDetailView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		unavailable = self.object.unavailable()
 		if self.request.GET:
 			context["form"] = DateRangeForm(self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":unavailable})
 			if context["form"].is_valid():
@@ -52,5 +51,5 @@ class VanDetailView(DetailView):
 				rental_dates = parse_date_range(self.request.GET.get('stay'))
 				context["rental_fulfilment"] = RentalFulfilment(product=self.object, fulfilment_date_time=fulfilment_date_time, rental_start=rental_dates[0], rental_end=rental_dates[1])
 		else:
-			context["form"] = DateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
+			context["form"] = DateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":self.object.flatpickr_unavailable})
 		return context

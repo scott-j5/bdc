@@ -4,15 +4,15 @@ from rentals.models import RentalProduct
 
 # Create your models here.
 class Van(RentalProduct):
+	make = models.CharField(max_length=50)
+	model = models.CharField(max_length=50)
+	sleeps = models.IntegerField()
+	seats = models.IntegerField()
 	registration = models.CharField(max_length=10)
 	odo = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.name
-
-	#Returns an array of unavailable days from today in format 'yyyy-mm-dd'
-	def unavailable(self):
-		return []
 
 
 class VanPhotos(models.Model):

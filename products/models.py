@@ -1,4 +1,5 @@
 import math
+import random
 
 from core.models import get_sentinel_user
 from core.utils import get_sentinel_date, daterange
@@ -6,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from imageit.models import ScaleItImageField
 from invoicing.models import PriceAdjustment
 
 # Create your models here.
@@ -22,34 +24,63 @@ class Product(models.Model):
 	description_short = models.TextField(null=True, blank=True)
 	description_long = models.TextField(null=True, blank=True)
 	rentable = models.BooleanField(default=False)
-	base_price = models.IntegerField(default=0, help_text="On rentable items, rates are calculated and charged hourly!")
+	base_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, help_text="On rentable items, rates are calculated and charged hourly!")
 	available = models.BooleanField(default=False)
 	qty = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.name
 
+	@property
+	def banner(self):
+		banners = self.productimage_set.filter(banner=True)
+		if banners.count() > 0:
+			idx = random.randint(0, banners.count() - 1)
+			return banners[idx]
+		else:
+			return banners
+
+	@property
+	def thumbnail(self):
+		thumbs = self.productimage_set.filter(thumbnail=True)
+		if thumbs.count() > 0:
+			idx = random.randint(0, thumbs.count() - 1)
+			return thumbs[idx]
+		else:
+			return thumbs
+
 	def clean(self):
 		self.slug = self.name.replace(' ', '-').lower()
 		if self.qty <= 0:
 			self.available = False
-	
-	# Returns an array of unavailable days from today in format 'yyyy-mm-dd'
-	@property
-	def unavailable(self):
-		return []
+
+
+class ProductImage(models.Model):
+	def get_upload_path(instance, filename):
+		return f"product_images/{instance.product.slug}/{filename}"
+
+	product = models.ForeignKey(Product, on_delete=models.CASCADE)
+	image = ScaleItImageField(max_width=1500, max_height=1500, quality=100, upload_to=get_upload_path)
+	banner = models.BooleanField(default=False, help_text="Banner images should be in a landscape format for best results")
+	thumbnail = models.BooleanField(default=False, help_text="Thumbnail photo dimensions should be square for best results")
+
+	def __str__(self):
+		return f"{self.product.name} - {self.image.name}"
 
 
 class ProductFulfilment(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.SET(get_sentinel_product))
-	product_base_price = models.IntegerField(null=False)
 	fulfilment_date_time = models.DateTimeField(default=timezone.now)
+	fulfilled_product_base_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2)
+	fulfilled_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2)
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		if not kwargs.get('fulfilment_date_time'):
 			self.fulfilment_date_time = timezone.now()
-		self.product_base_price = self.product.base_price
+
+	def __str__(self):
+		return f"{ self.product.name } - (${ self.fulfilled_price }) { self.fulfilment_date_time }"
 
 	@property
 	def fulfilment_price(self):
@@ -78,6 +109,13 @@ class ProductFulfilment(models.Model):
 	@property
 	def active_deals(self):
 		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time, deal=True)
+
+	def save(self, *args, **kwargs):
+		if not self.fulfilled_product_base_price:
+			self.fulfilled_product_base_price = self.product.base_price
+		self.fulfilled_price = self.fulfilment_price
+		# Add info about adjustments here? fk to adj?
+		return super().save(*args, **kwargs)
 
 
 class ProductPriceAdjustment(PriceAdjustment):

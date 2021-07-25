@@ -1,3 +1,5 @@
+from datetime import datetime
+import json
 import math
 
 from core.models import get_sentinel_user
@@ -10,7 +12,13 @@ from products.models import Product, ProductFulfilment, get_sentinel_product
 from core.utils import datediff_hours, get_date_overlap
 
 # Create your models here.
+class RentalProductManager(models.Manager):
+	def get_query_set(self):
+		return self.filter(is_rentable=True).exclude(slug="deleted")
+
+
 class RentalProduct(Product):
+	objects = RentalProductManager()
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -18,9 +26,22 @@ class RentalProduct(Product):
 
 	# Returns a list of dates where the product is unavailable
 	## Not configured for HOURLY RENTALS AS FLATPICKR HAS NO MEANS TO DO SO
+	@property
 	def unavailable(self):
-		return RentalFulfilment.objects.filter(rental_fulfilled_product__product=self)
+		return RentalFulfilment.objects.filter(rental_fulfilled_product__product=self).values_list('rental_start', 'rental_end')
 	
+	# Returns a flatpickr compliant list of unavailable date ranges
+	@property
+	def flatpickr_unavailable(self):
+		formatted_dates = []
+		for start_date, end_date in self.unavailable:
+			date_range = {
+				"from": datetime.strftime(start_date, '%Y-%m-%d'),
+				"to": datetime.strftime(end_date, '%Y-%m-%d'),
+			}
+			formatted_dates.append(date_range)
+		return formatted_dates
+
 	def is_available(self, dt_range):
 		# Select Rental Fulfilments where rental start or rental end are within the specified range or that end after range start or begin before range end
 		clashing_rentals = RentalFulfilment.objects.filter(
@@ -37,15 +58,18 @@ class RentalProduct(Product):
 			Q(rental_start__range=(dt_range[0], dt_range[1]))
 			| Q(rental_end__range=(dt_range[0], dt_range[1]))
 			| Q(rental_start__lte=dt_range[0], rental_end__gte=dt_range[1])
-		).values_list('rental_fulfilled_product__product__id', flat=True)
+		).values_list('product__id', flat=True)
 		return RentalProduct.objects.exclude(id__in=unavailable_products)
+
+	class Meta:
+		proxy = True
 
 
 class RentalFulfilment(ProductFulfilment):
 	rental_fulfilled_product = models.ForeignKey(ProductFulfilment, on_delete=models.SET(get_sentinel_product), related_name='fulfilled_product')
 	rental_start = models.DateTimeField(blank=False, null=False)
 	rental_end = models.DateTimeField(blank=False, null=False)
-	rental_price = models.IntegerField()
+	rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2)
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -55,8 +79,9 @@ class RentalFulfilment(ProductFulfilment):
 			self.rental_fulfilled_product = ProductFulfilment(product=kwargs.get("product"), fulfilment_date_time=self.fulfilment_date_time)
 		if kwargs.get("rental_fulfilled_product"):
 			self.product = kwargs.get("rental_fulfilled_product").product
-		self.rental_price = self._calculate_price()
-		self.base_rate = (self.rental_fulfilled_product.fulfilment_price * self.duration_hours)
+		if hasattr(self, 'rental_fulfilled_product'):
+			self.rental_price = self._calculate_price()
+			self.fulfilled_product_base_price = (self.rental_fulfilled_product.fulfilment_price * self.duration_hours)
 
 	@property
 	def active_price_adjustments(self):
@@ -96,7 +121,7 @@ class RentalFulfilment(ProductFulfilment):
 
 	@property
 	def fulfilment_price(self):
-		return self.rental_price
+		return self.rental_price if self.rental_price else self._calculate_price()
 
 	@property
 	def product_available(self):
@@ -124,9 +149,16 @@ class RentalFulfilment(ProductFulfilment):
 		
 		return round(total_price + adjustment_val, 2)
 	
-	def clean(self):
-		# need to impliment check for overlapping rentals Including buffer
-		pass
+	def clean(self, *args, **kwargs):
+		# Need to impliment check for overlapping rentals Including buffer
+		return super().clean(*args, **kwargs)
+
+	def save(self, *args, **kwargs):
+		if not self.fulfilled_product_base_price:
+			self.fulfilled_product_base_price = (self.rental_fulfilled_product.fulfilment_price * self.duration_hours)
+		if not self.rental_price:
+			self.rental_price = self._calculate_price()
+		return super().save(*args, **kwargs)
 
 
 class RentalPriceAdjustment(PriceAdjustment):

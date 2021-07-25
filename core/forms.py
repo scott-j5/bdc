@@ -165,7 +165,7 @@ class DateRangeFormMulti(DateRangeForm):
 						css_class="col-12 col-md-4",
 					),
 					Div(
-						SpinnerSubmit("search", "Search", css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="search"></i>'),
+						SpinnerSubmit("search", self.submit_value, css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="search"></i>'),
 						css_class="d-grid col-12 col-md-4"
 					),
 					css_class="row"

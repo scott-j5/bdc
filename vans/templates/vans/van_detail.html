@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 {% load price_tags %}
+{% load modal_tags %}
 
 {% block body_class %}
 	bg-gray-100
@@ -14,16 +15,20 @@
 	<div class="container position-relative over-filter h-100">
 		<div class="row">
 			<!--PAGE CONTENT-->
-			<div class="col-12 col-md-8">
+			<div class="col-12 {% if rental_fulfilment %}col-md-8{% endif %}">
 
 				<div class="row align-items-center min-vh-100">
 					<div class="col">
-						<h1 class="title text-white text-light">{{ van.name }}</h1>
-						<h5 class="description text-white text-light">{{ van.description_short }}</h5>
+						<h1 class="title text-white text-light">{{ object.name }}</h1>
+						<h5 class="description text-white text-light">{{ object.description_short }}</h5>
 						<br/>
-						{% if not rental_fulfilment %}
-							{% crispy form %}
-						{% endif %}
+						<div class="row">
+							<div class="col-12 col-md-6">
+								{% if not rental_fulfilment %}
+									{% crispy form %}
+								{% endif %}
+							</div>
+						</div>
 					</div>				
 				</div>
 
@@ -31,18 +36,15 @@
 					<div class="section py-4">
 						<div class="container">
 							<div class="row justify-content-center">
-								<div class="col-4 col-md-2">
-									<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
-								</div>
-								<div class="col-4 col-md-2">
-									<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
-								</div>
-								<div class="col-4 col-md-2">
-									<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
-								</div>
-								<div class="col-4 col-md-2">
-									<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
-								</div>
+								{% for img in object.productimage_set.all %}
+									{% modal_btn url="img.image.url" target="base_modal" btn_text="Button Text" class_list="btn btn-primary" %}
+									{% modal_link url='img.image.url' target="from_modal" link_text="Link Text" class_list="btn btn-link" %}
+									{% modal_link_wrapper url=img.image.url link_text="Link Text" class_list="btn btn-link" %}
+									<div class="col-4 col-md-2">
+										<img class="w-100" src='{{ img.image.url }}'>
+									</div>
+									{% end_modal_link_wrapper %}
+								{% endfor %}
 							</div>
 						</div>
 					</div>
@@ -50,7 +52,7 @@
 				<div class="row">
 					<div class="row justify-content-center">
 						<div class="col">
-							<h2 class="text-light">What makes {{ van.name }} special</h2>
+							<h2 class="text-light">What makes {{ object.name }} special</h2>
 						</div>
 					</div>
 					<div class="row justify-content-center">
@@ -114,6 +116,11 @@
 											<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
 										</div>
 										<div class="col-6 text-end"><strong>{{ rental_fulfilment.rental_price|price }}</strong></div>
+										{% if request.user.is_staff %}
+										<div class="col-12 d-grid mt-3">
+											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger spinner-btn m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+										</div>
+										{% endif  %}
 									</div>
 								</div>
 							</div>
@@ -158,7 +165,7 @@
 									<div class="row">
 										{% if request.user.is_staff %}
 										<div class="col-6 d-grid">
-											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger spinner-btn m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
 										</div>
 										<div class="col-6 d-grid">
 										{% endif  %}
@@ -179,6 +186,11 @@
 	</div>
 </div>
 
+{% modal "to_modal" %}
+
+{% modal_wrapper "from_modal" %}
+	<div class="btn btn-danger">BUTTON DANGER BUD</div>
+{% end_modal_wrapper %}
 {% endblock %}
 
 
@@ -189,8 +201,8 @@
 		<div class="container over-filter">
 			<div class="row">
 				<div class="col-md-8">
-					<h1 class="title text-white text-light">{{ van.name }}</h1>
-					<h5 class="description text-white text-light">{{ van.description }}</h5>
+					<h1 class="title text-white text-light">{{ object.name }}</h1>
+					<h5 class="description text-white text-light">{{ object.description }}</h5>
 					<br/>
 				</div>
 
@@ -260,6 +272,11 @@
 <div class="section section-dark py-4">
 	<div class="container">
 		<div class="row justify-content-center">
+			{% for img in object.productimage_set %}
+			<div class="col-4 col-md-2">
+				<img class="w-100" src='{{ img.image.url }}'>
+			</div>
+			{% endfor %}
 			<div class="col-4 col-md-2">
 				<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
 			</div>
@@ -280,7 +297,7 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col">
-				<h2 class="text-light">What makes Rudy {{ van.name }} special</h2>
+				<h2 class="text-light">What makes Rudy {{ object.name }} special</h2>
 			</div>
 		</div>
 		<div class="row justify-content-center">
