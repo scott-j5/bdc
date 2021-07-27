@@ -16,6 +16,10 @@ def contact_view(request):
 	}
 	return render(request, 'core/home.html', context)
 
+def about_us_view(request):
+    context = {}
+    return render(request, 'core/pricing.html', context)
+
 def pricing_view(request):
     context = {}
     return render(request, 'core/pricing.html', context)

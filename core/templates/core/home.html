@@ -2,6 +2,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block body_class %}
+bg-gray-100
+{% endblock %}
+
 {% block content %}
 <header class="">
 	<div class="d-flex justify-content-center page-header min-vh-100 relative" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
@@ -10,8 +14,10 @@
 			<div class="row justify-content-center">
 				<div class="col-md-8 text-center">
 					<h1 class="title text-white text-light"> Find your next trip</h1>
-					<h5 class="description text-white text-light">Now you have no excuses, it's time to surprise your clients, your competitors, and why not, the world. You probably won't have a better chance to show off all your potential if it's not by designing a website for
-						your own agency or web studio.</h5>
+					<h5 class="description text-white text-light">
+						Now you have no excuses, it's time to surprise your clients, your competitors, and why not, the world. You probably won't have a better chance to show off all your potential if it's not by designing a website for
+						your own agency or web studio.
+					</h5>
 					<br/>
 				</div>
 				<div class="col-md-9">
@@ -128,7 +134,46 @@
 
 
 <!--ABOUT US -->
+<div class="section">
+	<div class="container py-7">
+		<div class="row pb-7">
+			<div class="col-md-8 mx-auto text-center">
+				<h2 class="title text-light text-dark">About us</h2>
+				<h5 class="description text-light text-dark">Bit of a spiel about the big dogs.<a class="" href="{% url 'about-us' %}"> <u>Read More...</u></a></h5>
+			</div>
+		</div>
 
+
+		<div class="row justify-space-between py-2">
+			<div class="col-12 col-md-4 mx-auto">
+				<div class="mt-md-0 mt-5">
+					<a href="#">
+					<div class="p-3">
+						<img class="w-100 border-radius-md shadow-lg" src="{% static 'img/bruce-mars.jpg' %}">
+					</div>
+					</a>
+					<div class="card-body blur justify-content-center text-center mt-n5 mx-4 mb-4 border-radius-md">
+					<h4 class="mb-0">Liam Campbell</h4>
+					<p>sub heading</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-4 mx-auto">
+				<div class="mt-md-0 mt-5">
+					<a href="#">
+					<div class="p-3">
+						<img class="w-100 border-radius-md shadow-lg" src="{% static 'img/bruce-mars.jpg' %}">
+					</div>
+					</a>
+					<div class="card-body blur justify-content-center text-center mt-n5 mx-4 mb-4 border-radius-md">
+					<h4 class="mb-0">Josh Franchetti</h4>
+					<p>Sub heading</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- END ABOUT US -->
 
 
@@ -191,20 +236,22 @@
 			</div>
 		</div>
 	</div>
-  </div>
 </div>
 <!-- END BLOGS -->
 
 
 <!-- MORE INFO -->
-<div class="section py-7">
-    <div class="container">
+<div class="section">
+    <div class="container py-7">
 		<div class="row">
 			<div class="col-md-8 mx-auto text-center">
-				<h2 class="title text-light text-dark">Want more details?</h2>
+				<h2 class="title text-light text-dark">Want more information?</h2>
+				<h5 class="description text-reset text-light pt-3">
+					Check out our other resources for more information about our rental process and how to maximise your rental experience!
+				</h5>
 			</div>
 		</div>
-		<div class="row py-5 py-md-7 align-content-stretch">
+		<div class="row py-5 py-md-6 align-content-stretch">
 			<div class="col-sm-3 pb-5">
 				<a href="{% url 'pricing' %}">
 					<div class="card bg-green h-100">
@@ -271,12 +318,12 @@
 <!-- END MORE INFO -->
 
 <!-- CONTACT US -->
-<div class="section" id="contact-us">
-
-	<div id="" class="big-map"></div>
-	<div class="container">
+<div class="section position-relative" id="contact-us">
+	<div class="filter filter-white"></div>
+	<div id="" class="big-map position-absolute w-100 h-100"><iframe src="https://snazzymaps.com/embed/328184" width="100%" height="100%" style="border:none;"></iframe></div>
+	<div class="container over-filter py-8">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="order-2 order-md-1 col-md-6">
 				<div class="card card-contact card-raised">
 					<div class="card-header header-raised header-primary text-center">
 						<h4 class="card-title">Contact Us</h4>
@@ -290,8 +337,8 @@
 									</div>
 									<div class="description">
 									<h5 class="info-title">Give us a call</h5>
-									<p> Michael Jordan<br>
-										+40 762 321 762<br>
+									<p>
+										+XX XXX XXX XXX<br>
 										Mon - Fri, 8:00-22:00
 									</p>
 									</div>
@@ -303,9 +350,11 @@
 									<i class="nc-icon nc-pin-3" aria-hidden="true"></i>
 									</div>
 									<div class="description">
-									<h5 class="info-title">Find us at the office</h5>
-									<p> Bld Mihail Kogalniceanu<br>
-										7652 Bucharest
+									<h5 class="info-title">Find us on </h5>
+									<p> 
+										<a class="text-reset" href="https://www.instagram.com/bigdogcampervans/" target="_blank"><i class="icon-100" data-feather="facebook"></i> Big Dog Campervans</a>
+										<br>
+										<a class="text-reset" href="https://www.instagram.com/bigdogcampervans/" target="_blank"><i class="icon-100" data-feather="instagram"></i> @bigdogcampervans</a>
 									</p>
 									</div>
 								</div>
@@ -314,6 +363,13 @@
 					  	{% crispy contact_form %}
 					</div>
 			  	</div>
+			</div>
+			<div class="order-1 order-md-2 col-md-6 ps-10 my-5 d-flex align-items-center">
+				<div class="d-block w-100">
+					<div class="position-relative square">
+						<img class="avatar-circle position-absolute top-0 shadow-lg" src="{% static 'img/bdc-us.jpeg' %}"/>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

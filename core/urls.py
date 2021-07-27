@@ -2,6 +2,7 @@ from django.urls import path, include, register_converter
 
 from .views import (
 	contact_view,
+	about_us_view,
 	faqs_view,
 	home_view,
 	pricing_view,
@@ -35,7 +36,8 @@ register_converter(DateRangeConverter, 'daterange')
 urlpatterns = [
     path('', home_view, name='home'),
     path('home/', home_view, name='home'),
-	path('contact/', contact_view, name='contact-us'),
+	path('home/#contact-us', home_view, name='contact-us'),
+	path('about-us/', about_us_view, name='about-us'),
 	path('faqs/', faqs_view, name='faqs'),
 	path('pricing/', pricing_view, name='pricing'),
 	path('testimonials/', testimonials_view, name='testimonials'),

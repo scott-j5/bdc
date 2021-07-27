@@ -14,7 +14,6 @@ class Van(RentalProduct):
 	def __str__(self):
 		return self.name
 
-
 class VanPhotos(models.Model):
 	def get_upload_path(instance, filename):
 		return f'van_images/{self.van.slug}/{filename}'

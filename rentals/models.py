@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import math
 
@@ -14,7 +14,35 @@ from core.utils import datediff_hours, get_date_overlap
 # Create your models here.
 class RentalProductManager(models.Manager):
 	def get_query_set(self):
-		return self.filter(is_rentable=True).exclude(slug="deleted")
+		return self.filter(rentable=True).exclude(slug="deleted")
+
+	# Return all rental products available within a date range
+	def available(self, dt_range):
+		qs = self.get_query_set()
+		unavailable_products = RentalFulfilment.objects.filter(
+			Q(rental_start__range=(dt_range[0], dt_range[1]))
+			| Q(rental_end__range=(dt_range[0], dt_range[1]))
+			| Q(rental_start__lte=dt_range[0], rental_end__gte=dt_range[1])
+		).values_list('product__id', flat=True)
+		return qs.exclude(id__in=unavailable_products)
+
+	# Return all rental products available within a 'period' of a defined date range
+	def nearby(self, dt_range):
+		# Number of days either side of dt_range to search
+		search_period = timedelta(days=30)
+		available_ids = []
+		length = abs(dt_range[0] - dt_range[1])
+		qs = self.get_query_set()
+		for rental_product in qs:
+			available = rental_product.available_dates
+			for period in available:
+				if ((period["start"] > timezone.now() or period["end"] - length > timezone.now())
+				and (abs(period['start'] - dt_range[0]) < search_period)
+				and (abs(period['start'] - period['end']) > length)):
+					available_ids.append(rental_product.id)
+				print(f'AVAILABLE IDS {period["end"] - length}')
+		return qs.filter(id__in=available_ids)
+
 
 
 class RentalProduct(Product):
@@ -24,17 +52,32 @@ class RentalProduct(Product):
 		super().__init__(*args, **kwargs)
 		self.qty = 1;
 
-	# Returns a list of dates where the product is unavailable
-	## Not configured for HOURLY RENTALS AS FLATPICKR HAS NO MEANS TO DO SO
+	# Returns a list of dates where the rental product is available
 	@property
-	def unavailable(self):
+	def available_dates(self):
+		available = []
+		unavailable = self.unavailable_dates.order_by('rental_start')
+		available_start = timezone.make_aware(datetime.strptime('0001-01-01', '%Y-%m-%d'))
+		for unavailable_start, unavailable_end in unavailable:
+			# Check for overlap between the start of current unavailable period and next available_start
+			if available_start < unavailable_start:
+				available_range = {"start": available_start, "end": unavailable_start}
+				available.append(available_range)
+			available_start = unavailable_end
+		available.append({"start": available_start, "end": timezone.make_aware(datetime.strptime('9999-12-31', '%Y-%m-%d'))})
+		return available
+
+	# Returns a list of dates where the rentak product is unavailable
+	@property
+	def unavailable_dates(self):
 		return RentalFulfilment.objects.filter(rental_fulfilled_product__product=self).values_list('rental_start', 'rental_end')
 	
 	# Returns a flatpickr compliant list of unavailable date ranges
+	## Not configured for HOURLY RENTALS AS FLATPICKR HAS NO MEANS TO DO SO
 	@property
 	def flatpickr_unavailable(self):
 		formatted_dates = []
-		for start_date, end_date in self.unavailable:
+		for start_date, end_date in self.unavailable_dates:
 			date_range = {
 				"from": datetime.strftime(start_date, '%Y-%m-%d'),
 				"to": datetime.strftime(end_date, '%Y-%m-%d'),
@@ -50,16 +93,6 @@ class RentalProduct(Product):
 			| Q(rental_start__lte=dt_range[0], rental_end__gte=dt_range[1])
 		)
 		return False if len(clashing_rentals) > 0 else True
-
-	@staticmethod
-	def get_available(dt_range):
-		# Exclude Rental Fulfilments where rental start or rental end are within the specified range or that end after range start or begin before range end
-		unavailable_products = RentalFulfilment.objects.filter(
-			Q(rental_start__range=(dt_range[0], dt_range[1]))
-			| Q(rental_end__range=(dt_range[0], dt_range[1]))
-			| Q(rental_start__lte=dt_range[0], rental_end__gte=dt_range[1])
-		).values_list('product__id', flat=True)
-		return RentalProduct.objects.exclude(id__in=unavailable_products)
 
 	class Meta:
 		proxy = True
