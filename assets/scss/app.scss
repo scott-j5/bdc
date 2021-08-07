@@ -1,0 +1,69 @@
+// Bootstrap functions (used in variables)
+@import "~bootstrap/scss/functions";
+
+
+//Variables
+// Custom Variables
+@import "soft-design-system-pro/custom/variables";
+@import "custom/variables.scss";
+
+// Theme Variables
+@import "soft-design-system-pro/variables";
+@import "~bootstrap/scss/variables";
+
+//3rd party plugins
+@import "~flatpickr/dist/flatpickr.min.css";
+
+//Plugins
+@import "plugins/flatpickr.scss";
+@import "plugins/icons.scss";
+@import "plugins/spinners.scss";
+
+//Bootstrap
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/breadcrumb";
+@import "~bootstrap/scss/badge";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/accordion";
+@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/helpers";
+
+@import "~bootstrap/scss/carousel";
+@import "~bootstrap/scss/offcanvas";
+@import "~bootstrap/scss/pagination";
+@import "~bootstrap/scss/popover";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/spinners";
+@import "~bootstrap/scss/toasts";
+@import "~bootstrap/scss/tooltip";
+
+
+//BOOTSRAP ICONS
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+//Soft UI
+@import "soft-design-system-pro.scss";
+
+//Custom Styles
+@import "custom/custom.scss";
+
+//Bootstrap utility api -Ensures custom utilities are applied
+@import "~bootstrap/scss/utilities/api";

@@ -1,0 +1,321 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% load price_tags %}
+{% load modal_tags %}
+
+{% block body_class %}
+	bg-gray-100
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 position-relative min-vh-100">
+	<div class="d-flex justify-content-center page-header min-vh-100 min-vw-100 position-absolute top-0" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+		<div class="filter"></div>
+	</div>
+	<div class="container position-relative over-filter h-100">
+		<div class="row">
+			<!--PAGE CONTENT-->
+			<div class="col-12 {% if rental_fulfilment %}col-md-8{% endif %}">
+
+				<div class="row align-items-center min-vh-100">
+					<div class="col">
+						<h1 class="title text-white text-light">{{ object.name }}</h1>
+						<h5 class="description text-white text-light">{{ object.description_short }}</h5>
+						<br/>
+						<div class="row">
+							<div class="col-12 col-md-6">
+								{% if not rental_fulfilment %}
+									{% crispy form %}
+								{% endif %}
+							</div>
+						</div>
+					</div>				
+				</div>
+
+				<div class="row">
+					<div class="section py-4">
+						<div class="container">
+							<div class="row justify-content-center">
+								{% for img in object.productimage_set.all %}
+									{% modal_btn url="img.image.url" target="base_modal" btn_text="Button Text" class_list="btn btn-primary" %}
+									{% modal_link url='img.image.url' target="from_modal" link_text="Link Text" class_list="btn btn-link" %}
+									{% modal_link_wrapper url=img.image.url link_text="Link Text" class_list="btn btn-link" %}
+									<div class="col-4 col-md-2">
+										<img class="w-100" src='{{ img.image.url }}'>
+									</div>
+									{% end_modal_link_wrapper %}
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="row justify-content-center">
+						<div class="col">
+							<h2 class="text-light">What makes {{ object.name }} special</h2>
+						</div>
+					</div>
+					<div class="row justify-content-center">
+						<div class="col-12 col-md-6 col-lg-4">
+							<i class="bi-chevron-right"></i> Feature
+						</div>
+			
+						<div class="col-12 col-md-6 col-lg-4">
+							<i class="bi-chevron-right"></i> Feature
+						</div>
+			
+						<div class="col-12 col-md-6 col-lg-4">
+							<i class="bi-chevron-right"></i> Feature
+						</div>
+			
+						<div class="col-12 col-md-6 col-lg-4">
+							<i class="bi-chevron-right"></i> Feature
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--END PAGE CONTENT-->
+
+
+			<!--MOBILE FIXED-BOTTOM-->
+			<div class="d-md-none col-12">
+				<div class="fixed-bottom">
+					<div class="row">
+						
+					</div>
+					<div class="row">
+						{% if rental_fulfilment %}
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<h3>Your trip</h3>
+									<div class="row">
+										<div class="col-8">
+											<a class="text-reset" data-bs-toggle="collapse" href="#mobile-change-date" role="button" aria-expanded="false" aria-controls="mobile-change-date">
+												<p class="m-0 p-0">{{ rental_fulfilment.duration }} rental</p>
+												<small class="text-black-50">({{ rental_fulfilment.rental_start|date:"d/m/y" }} - {{ rental_fulfilment.rental_end|date:"d/m/y" }}) <i class="collapse-closed bi bi-pencil-square"></i></small>
+												{% for pa in rental_fulfilment.rental_fulfilled_product.active_deals %}
+												<p class="p-0 m-0">
+													<small class="text-danger">
+														{{ pa.amount_humanize_long }}
+													</small>
+												</p>
+												{% endfor %}
+											</a>
+										</div>
+										<div class="col-4 text-end">{{ rental_fulfilment.rental_price|price }}</div>
+									</div>
+									<div class="row collapse" id="mobile-change-date">
+										<div class="col">
+											{% crispy form %}
+										</div>
+									</div>
+									<div class="row py-2 d-flex align-items-center">
+										<hr>
+										<div class="col-6">
+											<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+										</div>
+										<div class="col-6 text-end"><strong>{{ rental_fulfilment.rental_price|price }}</strong></div>
+										{% if request.user.is_staff %}
+										<div class="col-12 d-grid mt-3">
+											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger spinner-btn m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+										</div>
+										{% endif  %}
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<!--MOBILE FIXED-BOTTOM-->
+
+
+			<!--SIDEBAR-->
+			{% if rental_fulfilment %}
+			<div class="d-none d-md-block col-md-4 mt-vh-50">
+				<div class="sticky-top translate-middle-y sticky-sidebar pt-3">
+					<div class="row">
+						{% crispy form %}
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<h3>Your trip</h3>
+									<div class="row">
+										<div class="col-8">
+											<p class="m-0 p-0">{{ rental_fulfilment.duration }} rental</p>
+											<small class="text-black-50">({{ rental_fulfilment.rental_start }} - {{ rental_fulfilment.rental_end }})</small>
+											{% for pa in rental_fulfilment.rental_fulfilled_product.active_deals %}
+											<p class="p-0 m-0">
+												<small class="text-danger">
+													{{ pa.amount_humanize_long }}
+												</small>
+											</p>
+											{% endfor %}
+										</div>
+										<div class="col-4 text-end">{{ rental_fulfilment.fulfilment_price|price }}</div>
+									</div>
+									<div class="row py-2">
+										<hr>
+										<div class="col text-end">{{ rental_fulfilment.fulfilment_price|price }}</div>
+									</div>
+									<div class="row">
+										{% if request.user.is_staff %}
+										<div class="col-6 d-grid">
+											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger spinner-btn m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
+										</div>
+										<div class="col-6 d-grid">
+										{% endif  %}
+										<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+										{% if request.user.is_staff %}
+										</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			<!--END SIDEBAR-->
+		</div>
+	</div>
+</div>
+
+{% modal "to_modal" %}
+
+{% modal_wrapper "from_modal" %}
+	<div class="btn btn-danger">BUTTON DANGER BUD</div>
+{% end_modal_wrapper %}
+{% endblock %}
+
+
+<div class="sticky-top top-50"><div class="position-absolute translate-middle-y">THIST IS STICKY</div></div>
+<header class="">
+	<div class="d-flex justify-content-center page-header min-vh-100 relative" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+		<div class="filter"></div>
+		<div class="container over-filter">
+			<div class="row">
+				<div class="col-md-8">
+					<h1 class="title text-white text-light">{{ object.name }}</h1>
+					<h5 class="description text-white text-light">{{ object.description }}</h5>
+					<br/>
+				</div>
+
+					<div>
+						<div class="card card-raised card-form-horizontal no-transition">
+							<div class="card-body">
+							<form method="" action="">
+								<div class="row">
+			
+									<div class="col-md-6">
+										<div class="form-group mb-md-0">
+										<input type="text" value="" placeholder="Date" class="form-control" id="datepcker"/>
+										</div>
+									</div>
+									<div class="d-grid gap-2 col-md-6">
+										<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="search"></i> &nbsp; Check Pricing</button>
+									</div>
+								</div>
+							</form>
+							</div>
+						</div>
+					</div>
+				{% crispy form %}
+				{% if not booking %}
+					<div class="col-md-4">
+						<div class="card">
+							<div class="card-body">
+								<h3>Your trip</h3>
+								<div class="row">
+									<div class="col-8">
+										<p class="m-0 p-0">4 Day rental</p>
+										<small class="text-black-50">(12/08/21 - 16-08-21)</small>
+									</div>
+									<div class="col-4 text-end">$122.90</div>
+								</div>
+								<div class="row py-2">
+									<hr>
+									<div class="col text-end">$122.90</div>
+								</div>
+								<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="container bg-white sticky-top py-3">
+		<form method="" action="">
+			<div class="row mb-3">
+				<div class="col-12">
+					<div class="form-group mb-0">
+						<input type="text" value="" placeholder="Date" class="form-control text-center" id="datepicker"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="d-grid gap-2 col-12">
+					<button type="button" class="btn btn-danger m-0">Check Pricing</button>
+				</div>
+			</div>
+		</form>
+</div>
+
+<div class="section section-dark py-4">
+	<div class="container">
+		<div class="row justify-content-center">
+			{% for img in object.productimage_set %}
+			<div class="col-4 col-md-2">
+				<img class="w-100" src='{{ img.image.url }}'>
+			</div>
+			{% endfor %}
+			<div class="col-4 col-md-2">
+				<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+			<div class="col-4 col-md-2">
+				<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+			<div class="col-4 col-md-2">
+				<img class="w-100" src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+			<div class="col-4 col-md-2">
+				<img class="w-100"  src='https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="section section-dark py-4">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col">
+				<h2 class="text-light">What makes Rudy {{ object.name }} special</h2>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<i class="bi-chevron-right"></i> Feature
+			</div>
+		</div>
+	</div>
+</div>

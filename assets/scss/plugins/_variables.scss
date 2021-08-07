@@ -1,0 +1,62 @@
+//TYPOGRAPHY
+$font-family-sans-serif: 'Montserrat', "Helvetica", Arial, sans-serif;
+
+$font-weight-lighter:         lighter;
+$font-weight-light:           300;
+$font-weight-normal:          400;
+$font-weight-bold:            700;
+$font-weight-bolder:          bolder;
+
+
+//COLORS
+$primary:       #51cbce !default;
+$secondary:     #8392AB !default;
+$info:          #51bcda !default;
+$success:       #6bd098 !default;
+$warning:       #fbc658 !default;
+$danger:        #f5593d !default;
+
+$green: #86d9ab !default;
+$blue: #6ec7e0 !default;
+$purple: #cc90cc !default;
+$brown: #e4c4a1 !default;
+
+/*$primary:       #51cbce !default;
+$secondary:     #8392AB !default;
+$info:          #51bcda !default;
+$success:       #6bd098 !default;
+$warning:       #fbc658 !default;
+$danger:        #f5593d !default;*/
+
+//Custom colors
+$dark: #151f20;
+
+//GRADIENTS
+$primary-gradient:            darken($primary, 25%) !default;
+$primary-gradient-state:      $primary !default;
+
+$secondary-gradient:          #627594 !default;
+$secondary-gradient-state:    #A8B8D8 !default;
+
+$info-gradient:               darken($info, 25%) !default;
+$info-gradient-state:         $info !default;
+
+$success-gradient:            darken($success, 25%) !default;
+$success-gradient-state:      $success !default;
+
+$danger-gradient:             lighten($danger, 25%) !default;
+$danger-gradient-state:       $danger !default;
+
+$warning-gradient:            darken($warning, 25%) !default;
+$warning-gradient-state:      $warning !default;
+
+$dark-gradient:               #141727 !default;
+$dark-gradient-state:         #3A416F !default;
+
+$light-gradient:              #CED4DA !default;
+$light-gradient-state:        #EBEFF4 !default;
+
+
+//FLATPICKR
+$flatpickr-color: $danger;
+$flatpickr-range-color: rgba($danger, 0.28);

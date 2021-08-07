@@ -6,4 +6,7 @@
     ],
     "python.autoComplete.addBrackets": true,
     "python.pythonPath": "../bin/python3",
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
 }
