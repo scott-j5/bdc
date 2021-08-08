@@ -144,7 +144,12 @@ jobs:
       - name: Update Application on production server
         run: |
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} touch ~/heyyyyy
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /home/ubuntu/thumbsup fetch origin
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /home/ubuntu/thumbsup checkout "${GITHUB_SHA}"
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} if ! git ls-remote origin --quiet; then git -C /srv/bdc-venv/src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src fetch --all
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src reset --hard "${GITHUB_SHA}"
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src clone git@github.com-bdc:scott-j5/bdc.git .
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src checkout "${GITHUB_SHA}"
+        # set perms
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo /home/ubuntu/thumbsup/admin/update.bash
-    
+
+        
