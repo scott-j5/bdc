@@ -57,7 +57,7 @@ class TestUtils(unittest.TestCase):
 		range1 = [datetime.datetime(2021, 2, 15), datetime.datetime(2021, 2, 20)]
 		range2 = [datetime.datetime(2021, 2, 10), datetime.datetime(2021, 2, 15)]
 		overlap = get_date_overlap(range1, range2)
-		self.assertEqual(overlap, False)
+		self.assertEqual(overlap, datetime.timedelta(0))
 
 	def test_get_date_overlap_time(self):
 		range1 = [datetime.datetime(2021, 2, 15, 0, 0, 0, 0), datetime.datetime(2021, 2, 20, 0, 0, 0, 0)]
