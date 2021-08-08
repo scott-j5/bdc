@@ -74,7 +74,7 @@ jobs:
           python-version: 3.8
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DJANGO_DEBUG: 0
+          DJANGO_DEBUG: '0'
           DJANGO_ALLOWED_HOSTS: ''
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
