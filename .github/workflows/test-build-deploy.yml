@@ -86,7 +86,7 @@ jobs:
 
       - name: Collect static
         run: |
-          python manage.py collectstatic
+          python manage.py collectstatic --noinput
   
         
   # Job to deploy python files to server
