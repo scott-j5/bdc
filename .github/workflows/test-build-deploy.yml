@@ -113,7 +113,7 @@ jobs:
       - name: Make migrations
         run: |
           python manage.py makemigrations --noinput
-          pyhton manage.py migrate --noinput
+          python manage.py migrate --noinput
         
       # Retreive private key from secrets and save as file deployment.key
       - name: Create identity file
