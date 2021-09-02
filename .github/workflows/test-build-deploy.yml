@@ -61,8 +61,7 @@ jobs:
           DEPLOYMENT_SSH_KEY: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           DEPLOYMENT_PUB_KEY_FINGERPRINT: ${{ secrets.DEPLOYMENT_PUB_KEY_FINGERPRINT }}
         run: |
-          mkdir -p ~/.ssh
-          echo "$DEPLOYMENT_PUB_KEY_FINGERPRINT" | base64 --decode >> ~/.ssh/known_hosts
+          mkdir ~/.ssh
           echo "$DEPLOYMENT_SSH_KEY" | base64 --decode  > deployment.key
           chmod 400 deployment.key
       
