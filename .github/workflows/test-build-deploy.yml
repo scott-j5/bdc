@@ -62,8 +62,7 @@ jobs:
           DEPLOYMENT_PUB_KEY_FINGERPRINT: ${{ secrets.DEPLOYMENT_PUB_KEY_FINGERPRINT }}
         run: |
           mkdir ~/.ssh
-          echo "$DEPLOYMENT_SSH_KEY" | base64 --decode  > deployment.key
-          chmod 400 deployment.key
+          
       
       # Run update scripts on remote server
       - name: Update Application on production server
