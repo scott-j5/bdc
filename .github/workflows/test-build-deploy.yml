@@ -28,11 +28,11 @@ env:
   AWS_STORAGE_BUCKET_NAME: ${{ secrets.AWS_STORAGE_BUCKET_NAME }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
+jobs:    
   # Job to deploy python files to server
   deploy_to_server:
     # Dependant on success of test & build_and_deploy_static
-    # needs: build_and_deploy_static
+
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
@@ -61,7 +61,7 @@ jobs:
           DEPLOYMENT_SSH_KEY: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           DEPLOYMENT_PUB_KEY_FINGERPRINT: ${{ secrets.DEPLOYMENT_PUB_KEY_FINGERPRINT }}
         run: |
-          touch ~/.ssh/known_hosts
+          mkdir ~/.ssh
           echo "$DEPLOYMENT_PUB_KEY_FINGERPRINT" >> ~/.ssh/known_hosts
           echo "$DEPLOYMENT_SSH_KEY" | base64 --decode  > deployment.key
           chmod 400 deployment.key
