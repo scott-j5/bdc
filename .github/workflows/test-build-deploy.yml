@@ -29,70 +29,11 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 3
-      matrix:
-        include:
-          - python-version: 3.9
-            django-version: Django==3.2
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install ${{ matrix.django-version }}
-      - name: Test Django=${{ matrix.django-version }}, Python=${{ matrix.python-version }}
-        run: |
-          python manage.py test --noinput
-
-  # Build job to build static files
-  build_and_deploy_static:
-    # Dependant on test passing
-    needs: test
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - name: Install Node dependancies
-        run: npm ci
-      - name: Node build
-        run: npm run build --if-present -- --no-watch
-      - name: Node test
-        run: npm test
-        
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install Python dependancies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: Collect static
-        run: |
-          python manage.py collectstatic --noinput
-  
-        
+    
   # Job to deploy python files to server
   deploy_to_server:
     # Dependant on success of test & build_and_deploy_static
-    needs: build_and_deploy_static
+    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
@@ -116,15 +57,18 @@ jobs:
           python manage.py migrate --noinput
         
       # Retreive private key from secrets and save as file deployment.key
-      - name: Create identity file
+      - name: Key management for deployment
         env:
           DEPLOYMENT_SSH_KEY: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           DEPLOYMENT_PUB_KEY_FINGERPRINT: ${{ secrets.DEPLOYMENT_PUB_KEY_FINGERPRINT }}
+          GITHUB_PUB_KEY_FINGERPRINT: ${{ secrets.GH_PUB_KEY_FINGERPRINT }}
         run: |
           mkdir ~/.ssh
           echo "$DEPLOYMENT_PUB_KEY_FINGERPRINT" >> ~/.ssh/known_hosts
           echo "$DEPLOYMENT_SSH_KEY" >> deployment.key
           chmod 400 deployment.key
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} grep -qxf '$GITHUB_PUB_KEY_FINGERPRINT' ~/.ssh/known_hosts || echo "$GITHUB_PUB_KEY_FINGERPRINT" >> ~/.ssh/known_hosts
+        # add github public key to known_hosts on deployment server if using ssh protocol
       
       # Run update scripts on remote server
       - name: Update Application on production server
