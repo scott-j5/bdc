@@ -132,7 +132,7 @@ jobs:
       # Run update scripts on remote server
       - name: Update Application on production server
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C /srv/bdc-venv/src ls-remote origin --quiet; then git -C /srv/bdc-venv/src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C /srv/bdc-venv/src ls-remote origin &>/dev/null; then git -C /srv/bdc-venv/src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src fetch --all
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src reset --hard "${GITHUB_SHA}"
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src clone git@github.com-bdc:scott-j5/bdc.git .
