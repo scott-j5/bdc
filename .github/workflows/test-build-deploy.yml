@@ -130,12 +130,23 @@ jobs:
         # add github public key to known_hosts on deployment server if using ssh protocol
       
       # Run update scripts on remote server
-      - name: Update Application on production server
+      - name: Push application code to server
         run: |
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C /srv/bdc-venv/src ls-remote origin &>/dev/null; then git -C /srv/bdc-venv/src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src fetch --all
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src reset --hard "${GITHUB_SHA}"
+
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src clone git@github.com-bdc:scott-j5/bdc.git .
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/bdc-venv/src checkout "${GITHUB_SHA}"
         # set perms
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo /home/ubuntu/thumbsup/admin/update.bash
+
+      - name: Update application code permissions
+        run: |
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chown -R :www-data /srv/bdc-venv/src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chmod -R /srv/bdc-venv/src 750
+        # Set perms for Sqlite, media etc. if required.
+
+      - name: Restart Services
+        run: |
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo /etc/init.d/apache2 restart
