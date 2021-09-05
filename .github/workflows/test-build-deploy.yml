@@ -143,8 +143,8 @@ jobs:
 
       - name: Update application code permissions
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chown -R :www-data /srv/bdc-venv/src
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chmod -R /srv/bdc-venv/src 750
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R :www-data /srv/bdc-venv/src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chmod -R 750 /srv/bdc-venv/src
         # Set perms for Sqlite, media etc. if required.
 
       - name: Restart Services
