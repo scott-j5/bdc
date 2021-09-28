@@ -135,16 +135,13 @@ jobs:
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C /srv/www/bdc-venv/src ls-remote origin &>/dev/null; then git -C /srv/www/bdc-venv/src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src fetch --all
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src reset --hard "${GITHUB_SHA}"
-
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src clone git@github.com-bdc:scott-j5/bdc.git .
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src checkout "${GITHUB_SHA}"
-        # set perms
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo /home/ubuntu/thumbsup/admin/update.bash
 
       - name: Update application code permissions
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R :www-data /srv/www/bdc-venv/src
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chmod -R 750 /srv/www/bdc-venv/src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R deploy:www-data /srv/www/bdc-venv/src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chmod -R 750 /srv/www/bdc-venv/src
         # Set perms for Sqlite, media etc. if required.
         # Install dependancies from requirements.txt
 
