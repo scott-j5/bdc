@@ -147,7 +147,7 @@ jobs:
 
       - name: Install Pyhton Dependancies
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} source /srv/www/bdc-venv/bin/activate; pip install -r /srv/www/bdc-venv/src/requirements.txt
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source /srv/www/bdc-venv/bin/activate; pip install -r /srv/www/bdc-venv/src/requirements.txt'
 
       - name: Restart Services
         run: |
