@@ -146,6 +146,7 @@ jobs:
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R :www-data /srv/www/bdc-venv/src
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} chmod -R 750 /srv/www/bdc-venv/src
         # Set perms for Sqlite, media etc. if required.
+        # Install dependancies from requirements.txt
 
       - name: Restart Services
         run: |
