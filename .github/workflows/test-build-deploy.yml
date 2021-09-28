@@ -145,6 +145,10 @@ jobs:
         # Set perms for Sqlite, media etc. if required.
         # Install dependancies from requirements.txt
 
+      - name: Install Pyhton Dependancies
+        run: |
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} source /srv/www/bdc-venv/bin/activate; pip install -r /srv/www/bdc-venv/src/requirements.txt
+
       - name: Restart Services
         run: |
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo /etc/init.d/apache2 restart
