@@ -14,6 +14,7 @@ on:
   workflow_dispatch:
 
 env:
+  DEPLOYMENT_PATH: '/srv/www/bdc-venv/'
   DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
   DJANGO_DEBUG: '0'
   DJANGO_ALLOWED_HOSTS: ''
@@ -132,22 +133,22 @@ jobs:
       # Run update scripts on remote server
       - name: Push application code to server
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C /srv/www/bdc-venv/src ls-remote origin &>/dev/null; then git -C /srv/www/bdc-venv/src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src fetch --all
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src reset --hard "${GITHUB_SHA}"
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src clone git@github.com-bdc:scott-j5/bdc.git .
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C /srv/www/bdc-venv/src checkout "${GITHUB_SHA}"
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C "$DEPLOYMENT_PATH"src ls-remote origin &>/dev/null; then git -C "$DEPLOYMENT_PATH"src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src fetch --all
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src reset --hard "${GITHUB_SHA}"
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src clone git@github.com-bdc:scott-j5/bdc.git .
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src checkout "${GITHUB_SHA}"
 
       - name: Update application code permissions
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R deploy:www-data /srv/www/bdc-venv/src
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chmod -R 750 /srv/www/bdc-venv/src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R deploy:www-data "$DEPLOYMENT_PATH"src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chmod -R 750 "$DEPLOYMENT_PATH"src
         # Set perms for Sqlite, media etc. if required.
         # Install dependancies from requirements.txt
 
       - name: Install Pyhton Dependancies
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source /srv/www/bdc-venv/bin/activate; pip install -r /srv/www/bdc-venv/src/requirements.txt'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source "$DEPLOYMENT_PATH"bin/activate; pip install -r "$DEPLOYMENT_PATH"src/requirements.txt'
 
       - name: Restart Services
         run: |
