@@ -100,7 +100,7 @@ module.exports = {
 				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
                 type: "asset/resource",
                 generator: {
-                    filename: 'fonts/[hash][ext][query]',
+                    filename: 'fonts/[hash][name][ext][query]',
                 }
             },
             // Load images
