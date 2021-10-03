@@ -133,22 +133,22 @@ jobs:
       # Run update scripts on remote server
       - name: Push application code to server
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C "$DEPLOYMENT_PATH"src ls-remote origin &>/dev/null; then git -C "$DEPLOYMENT_PATH"src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src fetch --all
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src reset --hard "${GITHUB_SHA}"
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src clone git@github.com-bdc:scott-j5/bdc.git .
-        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "$DEPLOYMENT_PATH"src checkout "${GITHUB_SHA}"
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C "${DEPLOYMENT_PATH}src" ls-remote origin &>/dev/null; then git -C "$DEPLOYMENT_PATH"src remote add origin git@github.com-bdc:scott-j5/bdc.git; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}src" fetch --all
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}src" reset --hard "${GITHUB_SHA}"
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}src" clone git@github.com-bdc:scott-j5/bdc.git .
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}src" checkout "${GITHUB_SHA}"
 
       - name: Update application code permissions
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R deploy:www-data "$DEPLOYMENT_PATH"src
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chmod -R 750 "$DEPLOYMENT_PATH"src
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chown -R deploy:www-data "${DEPLOYMENT_PATH}src"
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} sudo chmod -R 750 "${DEPLOYMENT_PATH}src"
         # Set perms for Sqlite, media etc. if required.
         # Install dependancies from requirements.txt
 
       - name: Install Pyhton Dependancies
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source "$DEPLOYMENT_PATH"bin/activate; pip install -r "$DEPLOYMENT_PATH"src/requirements.txt'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source "$DEPLOYMENT_PATH"bin/activate; pip install -r "${DEPLOYMENT_PATH}src/requirements.txt"'
 
       - name: Restart Services
         run: |
