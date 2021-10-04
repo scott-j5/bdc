@@ -148,7 +148,7 @@ jobs:
 
       - name: Install Pyhton Dependancies
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source "${DEPLOYMENT_PATH}"bin/activate; pip install -r "${DEPLOYMENT_PATH}"src/requirements.txt'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'source '"${DEPLOYMENT_PATH}"'bin/activate; pip install -r '"${DEPLOYMENT_PATH}"'src/requirements.txt'
 
       - name: Restart Services
         run: |
