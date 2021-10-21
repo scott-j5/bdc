@@ -21,7 +21,7 @@ class VanListView(ListView):
 		if self.request.GET:
 			form = DateRangeFormMulti(self.request.GET)
 			if form.is_valid():
-				qs = Van.objects.available([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
+				qs = Van.objects.fulfilled([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
 		else:
 			qs = Van.objects.all()
 		return qs
@@ -31,7 +31,7 @@ class VanListView(ListView):
 		context = super().get_context_data(**kwargs)
 		if self.request.GET:
 			context["form"] = DateRangeFormMulti(self.request.GET, action=reverse_lazy("van-list"), submit_text="Change Dates", flatpickr_args={})
-			if context["form"].is_valid():
+			if context["form"].is_valid() and len(self.object_list) <= 0:
 				context['alt_rentals'] = Van.objects.nearby([context["form"].cleaned_data['check_in'], context["form"].cleaned_data['check_out']])
 		else:
 			context["form"] = DateRangeFormMulti(action=reverse_lazy("van-list"), submit_text="Check Pricing", flatpickr_args={})

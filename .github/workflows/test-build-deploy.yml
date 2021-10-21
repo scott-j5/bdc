@@ -127,7 +127,7 @@ jobs:
           echo "$DEPLOYMENT_PUB_KEY_FINGERPRINT" >> ~/.ssh/known_hosts
           echo "$DEPLOYMENT_SSH_KEY" >> deployment.key
           chmod 400 deployment.key
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! ssh-keygen -F github.com; then echo '"$GH_PUB_KEY_FINGERPRINT"' >> /home/deploy/.ssh/known_hosts; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! ssh-keygen -F github.com; then echo '"${GITHUB_PUB_KEY_FINGERPRINT}"' >> /home/deploy/.ssh/known_hosts; fi'
         # add github public key to known_hosts on deployment server if using ssh protocol
       
       # Run update scripts on remote server

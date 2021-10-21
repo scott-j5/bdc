@@ -26,21 +26,32 @@ class RentalProductManager(models.Manager):
 		).values_list('product__id', flat=True)
 		return qs.exclude(id__in=unavailable_products)
 
+	# Return dry (uncommited) rental fulfillments for a set date range
+	def fulfilled(self, dt_range):
+		qs = self.available(dt_range)
+		fulfillments = []
+		for obj in qs:
+			fulfillment = RentalFulfilment(product=obj, rental_start=dt_range[0], rental_end=dt_range[1])
+			fulfillments.append(fulfillment)
+			obj.rental_price = fulfillment.rental_price
+		return qs
+
 	# Return all rental products available within a 'period' of a defined date range
 	def nearby(self, dt_range):
 		# Number of days either side of dt_range to search
 		search_period = timedelta(days=30)
-		available_ids = []
+		# Desired length of rental
 		length = abs(dt_range[0] - dt_range[1])
+		available_ids = []
 		qs = self.get_query_set()
 		for rental_product in qs:
 			available = rental_product.available_dates
 			for period in available:
+				# Add rentals of same length, but within search period to available_ids
 				if ((period["start"] > timezone.now() or period["end"] - length > timezone.now())
 				and (abs(period['start'] - dt_range[0]) < search_period)
 				and (abs(period['start'] - period['end']) > length)):
 					available_ids.append(rental_product.id)
-				print(f'AVAILABLE IDS {period["end"] - length}')
 		return qs.filter(id__in=available_ids)
 
 
@@ -53,6 +64,7 @@ class RentalProduct(Product):
 		self.qty = 1;
 
 	# Returns a list of dates where the rental product is available
+	# [{"start": dt, "end", dt},{"start": dt, "end", dt}]
 	@property
 	def available_dates(self):
 		available = []

@@ -18,19 +18,123 @@
 			<div class="col-12 {% if rental_fulfilment %}col-md-8{% endif %}">
 
 				<div class="row align-items-center min-vh-100">
-					<div class="col">
+					<div class="col-12 col-md-6">
 						<h1 class="title text-white text-light">{{ object.name }}</h1>
-						<h5 class="description text-white text-light">{{ object.description_short }}</h5>
+						<h5 class="description text-white text-light mb-0">{{ object.description_short }}</h5>
 						<br/>
-						<div class="row">
-							<div class="col-12 col-md-6">
-								{% if not rental_fulfilment %}
-									{% crispy form %}
-								{% endif %}
+
+						<div class="row justify-conte">
+							<div class="col">
+								<div class="d-inline-block pe-3 text-center text-white text-light">
+									<i class="fa fa-bed"></i>
+									<br/>
+									Sleeps {{ object.sleeps }}
+								</div>
+								<div class="d-inline-block px-3 text-center text-white text-light">
+									<i class="fa fa-chair"></i>
+									<br/>
+									Seats {{ object.seats }}
+								</div>
+								<div class="d-inline-block px-3 text-center text-white text-light">
+									<i class="fa fa-road"></i>
+									<br/>
+									4x4
+								</div>
+								<div class="d-inline-block ps-3 text-center text-white text-light">
+									<i class="fa fa-dog"></i>
+									<br/>
+									{% if object.pets %}Pets <i class="bi-check"></i>{% else %}No Pets{% endif %}
+								</div>
 							</div>
 						</div>
+						{% if not rental_fulfilment %}
+							<br/>
+							<div class="row">
+								<div class="col">
+									{% crispy form %}
+								</div>
+							</div>
+						{% endif %}
 					</div>				
 				</div>
+				
+				<!-- GET TO KNOW INFO -->
+				<div class="row">
+					<div class="section py-5">
+						<h1 class="text-light text-dark">Get to know {{ object.name }}</h1>
+						<hr>
+						<div class="row">
+							<div class="col-12 col-md-8">
+								<p>{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}</p>
+							</div>
+							<div class="col-12 col-md-4">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- END GET TO KNOW INFO -->
+
+				<!-- IMAGES -->
+				<div class="row">
+					<div class="section py-5">
+						<hr>
+						<div class="row">
+							<div class="col-12 col-md-8">
+								<p>{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}</p>
+							</div>
+							<div class="col-12 col-md-4">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- END IMAGES -->
+
+				<!-- IMPORTANT INFO -->
+				<div class="row">
+					<div class="section py-5">
+						<h1 class="text-light text-dark">Important information</h1>
+						<hr>
+						<div class="row">
+							<div class="col-12 col-md-4">
+								- Point 1
+							</div>
+							<div class="col-12 col-md-4">
+								- Point 1
+							</div>
+							<div class="col-12 col-md-4">
+								- Point 1
+							</div>
+							<div class="col-12 col-md-4">
+								- Point 1
+							</div>
+							<div class="col-12 col-md-4">
+								- Point 1
+							</div>
+							<div class="col-12 col-md-4">
+								- Point 1
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- END IMPORTANT INFO -->
+
+
+
+
 
 				<div class="row">
 					<div class="section py-4">
@@ -185,6 +289,16 @@
 		</div>
 	</div>
 </div>
+
+
+
+
+
+
+
+
+
+
 
 {% modal "to_modal" %}
 
