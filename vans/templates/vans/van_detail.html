@@ -38,7 +38,7 @@
 								<div class="d-inline-block px-3 text-center text-white text-light">
 									<i class="fa fa-road"></i>
 									<br/>
-									4x4
+									2x4
 								</div>
 								<div class="d-inline-block ps-3 text-center text-white text-light">
 									<i class="fa fa-dog"></i>
@@ -69,6 +69,9 @@
 							</div>
 							<div class="col-12 col-md-4">
 								<ul class="list-group list-group-flush">
+									{% for feature in object.productfeature_set.all %}
+										<li class="list-group-item bg-transparent p-2"><i class="{{ feature.icon_class }}"></i> {{ feature.name }}</li>
+									{% endfor %}
 									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
 									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
 									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
@@ -84,20 +87,29 @@
 				<!-- IMAGES -->
 				<div class="row">
 					<div class="section py-5">
-						<hr>
 						<div class="row">
-							<div class="col-12 col-md-8">
-								<p>{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}{{ object.description_long }}</p>
-							</div>
-							<div class="col-12 col-md-4">
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-								</ul>
-							</div>
+							
+							{% for img in object.productimage_set.all %}
+								{% if forloop.first %}
+									<div class="col-12 col-md-6">
+										<div class="w-100 square position-relative rounded-3 overflow-hidden">
+											<img class="w-100 fit-cover position-absolute top-0" src='{{ img.image.url }}'>
+										</div>
+									</div>
+									<div class="col-12 col-md-6">
+										<div class="row">
+								{% else %}
+											<div class="col-6 col-md-4 py-3">
+												<div class="w-100 square position-relative rounded-3 overflow-hidden">
+													<img class="w-100 fit-cover position-absolute top-0" src='{{ img.image.url }}'>
+												</div>
+											</div>
+								{% endif %}
+								{% if forloop.last %}
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
 						</div>
 					</div>
 				</div>
@@ -131,6 +143,35 @@
 					</div>
 				</div>
 				<!-- END IMPORTANT INFO -->
+
+				<!-- AVAILABILITY -->
+					<div class="row">
+						<div class="section py-5">
+							<h1 class="text-light text-dark">Availability</h1>
+							<hr>
+							<div class="row">
+								<div class="col-12 col-md-4">
+									- Point 1
+								</div>
+								<div class="col-12 col-md-4">
+									- Point 1
+								</div>
+								<div class="col-12 col-md-4">
+									- Point 1
+								</div>
+								<div class="col-12 col-md-4">
+									- Point 1
+								</div>
+								<div class="col-12 col-md-4">
+									- Point 1
+								</div>
+								<div class="col-12 col-md-4">
+									- Point 1
+								</div>
+							</div>
+						</div>
+					</div>
+				<!-- END AVAILABILITY -->
 
 
 
