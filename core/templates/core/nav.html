@@ -400,6 +400,13 @@
 										<li class="px-3">
 											<hr class="my-2">
 										</li>
+										{% if user.is_staff %}
+										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+											<a class="border-radius-md pe-3" href="{% url 'admin:index' %}">
+												<span>Admin</span>
+											</a>
+										</li>
+										{% endif %}
 										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
 											<a class="border-radius-md pe-3" href="#">
 												<span>My Rentals</span>
@@ -432,6 +439,11 @@
 							<!-- MOBILE SUB MENU -->
 							<div class="row d-lg-none mt-1">
 								<div class="col-12 d-flex justify-content-center flex-column">
+									{% if user.is_staff %}
+									<a href="{% url 'admin:index' %}" class="dropdown-item p-2 ps-0 border-bottom">
+										Admin
+									</a>
+									{% endif %}
 									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
 										My Rentals
 									</a>

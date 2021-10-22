@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 
 from products.models import ProductFulfilment
+from products.views import CompleteProductUpdateView, ProductDeleteView
 from rentals.models import RentalFulfilment
 
 from .models import (
@@ -53,3 +54,11 @@ class VanDetailView(DetailView):
 		else:
 			context["form"] = DateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":self.object.flatpickr_unavailable})
 		return context
+
+
+class VanUpdateView(CompleteProductUpdateView):
+	pass
+
+
+class VanDeleteView(ProductDeleteView):
+	pass

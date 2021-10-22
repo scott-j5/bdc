@@ -20,10 +20,18 @@
 				<div class="row align-items-center min-vh-100">
 					<div class="col-12 col-md-6">
 						<h1 class="title text-white text-light">{{ object.name }}</h1>
+						{% if perms.vans %}
+							{% if perms.vans.change_van %}
+								<a class="btn btn-outline-info btn-rounded btn-sm me-3" href="{% url 'van-update' object.slug %}"><i class="fa fa-edit"></i> Edit</a>
+							{% endif %}
+							{% if perms.vans.delete_van %}
+								<a class="btn btn-outline-danger btn-rounded btn-sm" href="{% url 'van-delete' object.slug %}"><i class="fa fa-trash"></i> Delete</a>
+							{% endif %}
+						{% endif %}
 						<h5 class="description text-white text-light mb-0">{{ object.description_short }}</h5>
 						<br/>
 
-						<div class="row justify-conte">
+						<div class="row">
 							<div class="col">
 								<div class="d-inline-block pe-3 text-center text-white text-light">
 									<i class="fa fa-bed"></i>
@@ -38,7 +46,7 @@
 								<div class="d-inline-block px-3 text-center text-white text-light">
 									<i class="fa fa-road"></i>
 									<br/>
-									2x4
+									{{ object.drive_type }}
 								</div>
 								<div class="d-inline-block ps-3 text-center text-white text-light">
 									<i class="fa fa-dog"></i>
@@ -69,14 +77,9 @@
 							</div>
 							<div class="col-12 col-md-4">
 								<ul class="list-group list-group-flush">
-									{% for feature in object.productfeature_set.all %}
+									{% for feature in object.features.all %}
 										<li class="list-group-item bg-transparent p-2"><i class="{{ feature.icon_class }}"></i> {{ feature.name }}</li>
 									{% endfor %}
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
-									<li class="list-group-item bg-transparent p-2"><i class="fa fa-dog"></i> Feature 1</li>
 								</ul>
 							</div>
 						</div>
@@ -88,28 +91,24 @@
 				<div class="row">
 					<div class="section py-5">
 						<div class="row">
-							
-							{% for img in object.productimage_set.all %}
-								{% if forloop.first %}
-									<div class="col-12 col-md-6">
-										<div class="w-100 square position-relative rounded-3 overflow-hidden">
-											<img class="w-100 fit-cover position-absolute top-0" src='{{ img.image.url }}'>
-										</div>
-									</div>
-									<div class="col-12 col-md-6">
-										<div class="row">
-								{% else %}
+							<div class="col-12 col-md-6">
+								<div class="w-100 square position-relative rounded-3 overflow-hidden">
+									<img class="w-100 fit-cover position-absolute top-0" src='{{ object.primary_img.image.url }}'>
+								</div>
+							</div>
+							<div class="col-12 col-md-6">
+								<div class="row">
+									{% for img in object.productimage_set.all %}
+										{% if not img.primary %}
 											<div class="col-6 col-md-4 py-3">
 												<div class="w-100 square position-relative rounded-3 overflow-hidden">
 													<img class="w-100 fit-cover position-absolute top-0" src='{{ img.image.url }}'>
 												</div>
 											</div>
-								{% endif %}
-								{% if forloop.last %}
-										</div>
-									</div>
-								{% endif %}
-							{% endfor %}
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

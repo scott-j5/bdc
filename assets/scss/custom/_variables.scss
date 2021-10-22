@@ -45,8 +45,8 @@ $info-gradient-state:         $info !default;
 $success-gradient:            darken($success, 25%) !default;
 $success-gradient-state:      $success !default;
 
-$danger-gradient:             lighten($danger, 25%) !default;
-$danger-gradient-state:       $danger !default;
+$danger-gradient:             darken($danger, 3%) !default;
+$danger-gradient-state:       lighten($danger, 3%) !default;
 
 $warning-gradient:            darken($warning, 25%) !default;
 $warning-gradient-state:      $warning !default;
