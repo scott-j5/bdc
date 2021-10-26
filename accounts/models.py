@@ -27,7 +27,10 @@ class UserProfile(models.Model):
 
 	@property
 	def avatar_url(self):
-		url = self.user.socialaccount_set.first().get_avatar_url()
+		try:
+			url = self.user.socialaccount_set.first().get_avatar_url()
+		except:
+			url = None
 		if self.avatar.name:
 			return self.avatar.url
 		elif url is not None:

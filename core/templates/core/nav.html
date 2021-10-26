@@ -382,7 +382,7 @@
 						</div>
 						<a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
 							<div>
-								<img class="avatar-sm rounded-circle" alt="Profile Image" src="{{ user.profile.avatar_url }}">
+								{% if user.profile.avatar_url %}<img class="avatar-sm rounded-circle" alt="Profile Image" src="{{ user.profile.avatar_url }}">{% endif %}
 								<span class="ps-2 d-lg-none text-black-50">{{ user.profile.display_name }}</span>
 							</div>
 							<img src="{% static 'img/down-arrow-white.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-block d-none">
