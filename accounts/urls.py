@@ -1,9 +1,10 @@
 from django.urls import path, include
 
-from core.views import (
-    home_view
+from .views import (
+    ProfileDetail
 )
 
 urlpatterns = [
-    path('profile/', home_view, name='profile'),
+    path('profile/<int:pk>/', ProfileDetail.as_view(), name='profile'),
+	path('profile/', ProfileDetail.as_view(), name='profile'),
 ]

@@ -59,9 +59,7 @@
 							{% endif %}
 							<div class="row mt-4">
 								<div class="col-12 text-end">
-									{% if not socialaccount_providers %}
-										<a class="btn btn-outline-danger rounded-pill py-2 px-5" href="{{ signup_url }}">{% trans "Sign Up" %}</a>
-									{% endif %}
+									<a class="btn btn-outline-danger rounded-pill py-2 px-5" href="{{ signup_url }}">{% trans "Sign Up" %}</a>
 									<button type="submit" class="btn btn-danger rounded-pill py-2 px-5">{% trans "Sign In" %}</button>
 								</div>
 								<div class="col text-end">

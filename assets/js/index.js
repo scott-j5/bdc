@@ -15,4 +15,4 @@ import "./modules/soft-design-system-pro";
 import "./modules/rellax";
 
 //Custom
-import "./django-bs5-modal";
+import "./modules/django-bs5-modal.js";

@@ -382,8 +382,8 @@
 						</div>
 						<a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
 							<div>
-								<img class="avatar-sm rounded-circle" alt="Profile Image" src="{% static 'img/team-4.jpg' %}">
-								<span class="ps-2 d-lg-none text-black-50">Scott James</span>
+								<img class="avatar-sm rounded-circle" alt="Profile Image" src="{{ user.profile.avatar_url }}">
+								<span class="ps-2 d-lg-none text-black-50">{{ user.profile.display_name }}</span>
 							</div>
 							<img src="{% static 'img/down-arrow-white.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-block d-none">
 							<img src="{% static 'img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-none d-block">
@@ -395,7 +395,7 @@
 								<div class="col p-0 d-flex justify-content-center flex-column">
 									<ul class="list-group">
 										<li class="list-group-item text-end border-0 p-0 pe-3">
-											<span class="text-end">Scott James</span>
+											<span class="text-end ps-3">{{ user.profile.display_name }}</span>
 										</li>
 										<li class="px-3">
 											<hr class="my-2">
@@ -413,7 +413,7 @@
 											</a>
 										</li>
 										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
-											<a class="border-radius-md pe-3" href="#">
+											<a class="border-radius-md pe-3" href="{% url 'profile' user.id %}">
 												<span>Profile</span>
 											</a>
 										</li>
@@ -447,7 +447,7 @@
 									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
 										My Rentals
 									</a>
-									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
+									<a href="{% url 'profile' user.id %}" class="dropdown-item p-2 ps-0 border-bottom">
 										Profile
 									</a>
 									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
