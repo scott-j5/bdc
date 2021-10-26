@@ -208,3 +208,13 @@ class RentalFulfilment(ProductFulfilment):
 
 class RentalPriceAdjustment(PriceAdjustment):
 	products = models.ManyToManyField(Product)
+
+
+class RentalRules(models.Model):
+	title = models.CharField(max_length=300, null=False, blank=False)
+	description = models.TextField(null=True, blank=True)
+
+
+class RentalInformation(models.Model):
+	title = models.CharField(max_length=300, null=False, blank=False)
+	description = models.TextField(null=True, blank=True)

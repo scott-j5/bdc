@@ -75,7 +75,7 @@ class GenericModalNode(template.Node):
 	def __init__(self, *args, **kwargs):
 		self.target_modal = kwargs.get("target", get_random_modal_uuid())
 		self.url = kwargs.get("url", "#")
-		self.prompt_text = kwargs.get("prompt_text", "Default Text")
+		self.prompt_text = kwargs.get("prompt_text", False)
 		self.class_list = kwargs.get("class_list", "btn btn-primary")
 		self.extra_context = kwargs
 

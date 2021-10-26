@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView
 
 from products.models import ProductFulfilment
 from products.views import CompleteProductUpdateView, ProductDeleteView
-from rentals.models import RentalFulfilment
+from rentals.models import RentalFulfilment, RentalRules, RentalInformation
 
 from .models import (
 	Van,
@@ -45,6 +45,8 @@ class VanDetailView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		context["rental_information"] = RentalInformation.objects.all()
+		context["rental_rules"] = RentalRules.objects.all()
 		if self.request.GET:
 			context["form"] = DateRangeForm(self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":self.object.flatpickr_unavailable})
 			if context["form"].is_valid():

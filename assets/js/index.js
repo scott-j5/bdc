@@ -13,3 +13,6 @@ import "./modules/soft-design-system-pro";
 
 // 3rd party libraries
 import "./modules/rellax";
+
+//Custom
+import "./django-bs5-modal";

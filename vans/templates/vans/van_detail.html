@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="container-fluid p-0 position-relative min-vh-100">
-	<div class="d-flex justify-content-center page-header min-vh-100 min-vw-100 position-absolute top-0" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+	<div class="d-flex justify-content-center page-header min-vh-100 min-vw-100 position-absolute top-0" style="background-image: url('{% if object.banner_img.image.url %}{{ object.banner_img.image.url }}{% else %}https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop='{% endif %});">
 		<div class="filter"></div>
 	</div>
 	<div class="container position-relative over-filter h-100">
@@ -92,18 +92,23 @@
 					<div class="section py-5">
 						<div class="row">
 							<div class="col-12 col-md-6">
-								<div class="w-100 square position-relative rounded-3 overflow-hidden">
-									<img class="w-100 fit-cover position-absolute top-0" src='{{ object.primary_img.image.url }}'>
-								</div>
+								{% modal_link_wrapper url=object.primary_img.image.url target="base_modal" link_text="Link Text" class_list="btn btn-link d-block p-0 m-0" %}
+									<div class="w-100 square position-relative rounded-3 overflow-hidden">
+										<img class="w-100 fit-cover position-absolute top-0 start-0" src='{{ object.primary_img.image.url }}'>
+									</div>
+								{% end_modal_link_wrapper %}
 							</div>
+
 							<div class="col-12 col-md-6">
 								<div class="row">
 									{% for img in object.productimage_set.all %}
 										{% if not img.primary %}
 											<div class="col-6 col-md-4 py-3">
-												<div class="w-100 square position-relative rounded-3 overflow-hidden">
-													<img class="w-100 fit-cover position-absolute top-0" src='{{ img.image.url }}'>
-												</div>
+												{% modal_link_wrapper url=img.image.url target="base_modal" link_text="Link Text" class_list="btn btn-link d-block p-0 m-0" %}
+													<div class="w-100 square position-relative rounded-3 overflow-hidden">
+														<img class="w-100 fit-cover position-absolute top-0 start-0" src='{{ img.image.url }}'>
+													</div>
+												{% end_modal_link_wrapper %}
 											</div>
 										{% endif %}
 									{% endfor %}
@@ -114,109 +119,57 @@
 				</div>
 				<!-- END IMAGES -->
 
+				<!-- RULES -->
+				<div class="row">
+					<div class="section py-5">
+						<h1 class="text-light text-dark">Rules</h1>
+						<hr>
+						<div class="row">
+							{% for rule in rental_rules %}
+								<div class="col-12 col-md-4">
+									- {{ rule.title }}
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<!-- END RULES -->
+
 				<!-- IMPORTANT INFO -->
 				<div class="row">
 					<div class="section py-5">
 						<h1 class="text-light text-dark">Important information</h1>
 						<hr>
 						<div class="row">
-							<div class="col-12 col-md-4">
-								- Point 1
-							</div>
-							<div class="col-12 col-md-4">
-								- Point 1
-							</div>
-							<div class="col-12 col-md-4">
-								- Point 1
-							</div>
-							<div class="col-12 col-md-4">
-								- Point 1
-							</div>
-							<div class="col-12 col-md-4">
-								- Point 1
-							</div>
-							<div class="col-12 col-md-4">
-								- Point 1
-							</div>
+							{% for info in rental_information %}
+								<div class="col-12 col-md-4">
+									- {{ info.title }}
+								</div>
+							{% endfor %}
 						</div>
 					</div>
 				</div>
 				<!-- END IMPORTANT INFO -->
 
 				<!-- AVAILABILITY -->
+				{% if not rental_fulfilment %}
 					<div class="row">
 						<div class="section py-5">
-							<h1 class="text-light text-dark">Availability</h1>
+							<h1 class="text-light text-dark">Availability & Pricing</h1>
 							<hr>
 							<div class="row">
-								<div class="col-12 col-md-4">
-									- Point 1
+								<div class="col-12">
+									<br/>
+									{% crispy form %}
 								</div>
-								<div class="col-12 col-md-4">
-									- Point 1
-								</div>
-								<div class="col-12 col-md-4">
-									- Point 1
-								</div>
-								<div class="col-12 col-md-4">
-									- Point 1
-								</div>
-								<div class="col-12 col-md-4">
-									- Point 1
-								</div>
-								<div class="col-12 col-md-4">
-									- Point 1
+								<div class="col-12 text-center">
+									Please select your desired travel dates to see pricing. Availability is shown within the calendar.
 								</div>
 							</div>
 						</div>
 					</div>
+				{% endif %}
 				<!-- END AVAILABILITY -->
-
-
-
-
-
-				<div class="row">
-					<div class="section py-4">
-						<div class="container">
-							<div class="row justify-content-center">
-								{% for img in object.productimage_set.all %}
-									{% modal_btn url="img.image.url" target="base_modal" btn_text="Button Text" class_list="btn btn-primary" %}
-									{% modal_link url='img.image.url' target="from_modal" link_text="Link Text" class_list="btn btn-link" %}
-									{% modal_link_wrapper url=img.image.url link_text="Link Text" class_list="btn btn-link" %}
-									<div class="col-4 col-md-2">
-										<img class="w-100" src='{{ img.image.url }}'>
-									</div>
-									{% end_modal_link_wrapper %}
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="row justify-content-center">
-						<div class="col">
-							<h2 class="text-light">What makes {{ object.name }} special</h2>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-12 col-md-6 col-lg-4">
-							<i class="bi-chevron-right"></i> Feature
-						</div>
-			
-						<div class="col-12 col-md-6 col-lg-4">
-							<i class="bi-chevron-right"></i> Feature
-						</div>
-			
-						<div class="col-12 col-md-6 col-lg-4">
-							<i class="bi-chevron-right"></i> Feature
-						</div>
-			
-						<div class="col-12 col-md-6 col-lg-4">
-							<i class="bi-chevron-right"></i> Feature
-						</div>
-					</div>
-				</div>
 			</div>
 			<!--END PAGE CONTENT-->
 
@@ -334,18 +287,69 @@
 
 
 
+<div class="row">
+	<div class="section py-4">
+		<div class="container">
+			<div class="row justify-content-center">
+				{% for img in object.productimage_set.all %}
+					{% modal_btn url=img.image.url target="base_modal" btn_text="Button Text" class_list="btn btn-primary" %}
+					{% modal_link url='img.image.url' target="from_modal" link_text="Link Text" class_list="btn btn-link" %}
+					{% modal_link_wrapper url=img.image.url link_text="Link Text" class_list="btn btn-link" %}
+					<div class="col-4 col-md-2">
+						<img class="w-100" src='{{ img.image.url }}'>
+					</div>
+					{% end_modal_link_wrapper %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="row justify-content-center">
+		<div class="col">
+			<h2 class="text-light">What makes {{ object.name }} special</h2>
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-12 col-md-6 col-lg-4">
+			<i class="bi-chevron-right"></i> Feature
+		</div>
 
+		<div class="col-12 col-md-6 col-lg-4">
+			<i class="bi-chevron-right"></i> Feature
+		</div>
 
+		<div class="col-12 col-md-6 col-lg-4">
+			<i class="bi-chevron-right"></i> Feature
+		</div>
 
-
-
+		<div class="col-12 col-md-6 col-lg-4">
+			<i class="bi-chevron-right"></i> Feature
+		</div>
+	</div>
+</div>
 
 {% modal "to_modal" %}
 
 {% modal_wrapper "from_modal" %}
 	<div class="btn btn-danger">BUTTON DANGER BUD</div>
 {% end_modal_wrapper %}
+
+
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div class="sticky-top top-50"><div class="position-absolute translate-middle-y">THIST IS STICKY</div></div>

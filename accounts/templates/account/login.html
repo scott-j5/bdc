@@ -22,13 +22,35 @@
 					<div class="card p-5">
 
 						{% get_providers as socialaccount_providers %}
-				
-						<div class="text-center mt-4">
-							<h1 class="h3 text-light text-dark">{% trans "Sign In" %}</h1>
-							<p class="lead">
-							</p>
-						</div>
-
+						
+						{% if socialaccount_providers %}
+							<div class="text-center mt-4">
+								<h1 class="h3 text-light text-dark">{% trans "Continue with" %}</h1>
+								<p class="lead">
+								</p>
+							</div>
+							<div class="row">
+								<div class="col-12 text-center">
+									<div class="socialaccount_ballot">
+										<div class="socialaccount_providers row justify-content-center">
+											{% include "socialaccount/snippets/provider_list.html" with process="login" %}
+										</div>
+										{% include "socialaccount/snippets/login_extra.html" %}
+									</div>
+								</div>
+							</div>
+							<div class="text-center mt-4">
+								<p class="text-light text-dark">- {% trans "or sign in" %} -</p>
+								<p class="lead">
+								</p>
+							</div>
+						{% else %}
+							<div class="text-center mt-4">
+								<h1 class="h3 text-light text-dark">{% trans "Sign In" %}</h1>
+								<p class="lead">
+								</p>
+							</div>
+						{% endif %}
 						<form class="login" method="POST" action="{% url 'account_login' %}">
 							{% csrf_token %}
 							{{ form|crispy }}
@@ -36,14 +58,14 @@
 								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 							{% endif %}
 							<div class="row mt-4">
-								<div class="col d-flex align-items-center">
-									<a class="button secondaryAction text-muted text-light" href="{% url 'account_reset_password' %}"><small>{% trans "Forgot Password?" %}</small></a>
+								<div class="col-12 text-end">
+									{% if not socialaccount_providers %}
+										<a class="btn btn-outline-danger rounded-pill py-2 px-5" href="{{ signup_url }}">{% trans "Sign Up" %}</a>
+									{% endif %}
+									<button type="submit" class="btn btn-danger rounded-pill py-2 px-5">{% trans "Sign In" %}</button>
 								</div>
 								<div class="col text-end">
-									{% if not socialaccount_providers %}
-										<a class="btn btn-outline-primary rounded-pill py-2 px-5" href="{{ signup_url }}">{% trans "Sign Up" %}</a>
-									{% endif %}
-									<button type="submit" class="btn btn-primary rounded-pill py-2 px-5">{% trans "Sign In" %}</button>
+									<a class="button secondaryAction text-muted text-light" href="{% url 'account_reset_password' %}"><small>{% trans "Forgot Password?" %}</small></a>
 								</div>
 							</div>
 						</form>
@@ -51,23 +73,6 @@
 					</div>
 				</div>
 			</div>
-		
-				{% if socialaccount_providers %}
-					<div class="row">
-						<div class="col-12 text-center">
-							<p class="m-4 text-black-50">- or continue with -</p>
-							<div class="socialaccount_ballot">
-								<ul class="socialaccount_providers">
-									{% include "socialaccount/snippets/provider_list.html" with process="login" %}
-								</ul>
-								<div class="m-4 text-black-50">{% trans 'or' %}</div>
-								{% include "socialaccount/snippets/login_extra.html" %}
-							</div>
-						</div>
-					</div>
-				{% endif %}
-			</div>
-		
 		</div>
 	</div>
 </div>
@@ -98,14 +103,14 @@
 				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 			{% endif %}
 			<div class="row mt-4">
-				<div class="col d-flex align-items-center">
-					<a class="button secondaryAction text-muted text-light" href="{% url 'account_reset_password' %}"><small>{% trans "Forgot Password?" %}</small></a>
-				</div>
-				<div class="col text-end">
+				<div class="col text-end d-flex">
 					{% if not socialaccount_providers %}
 						<a class="btn btn-outline-primary rounded-pill py-2 px-5" href="{{ signup_url }}">{% trans "Sign Up" %}</a>
 					{% endif %}
 					<button type="submit" class="btn btn-primary rounded-pill py-2 px-5">{% trans "Sign In" %}</button>
+				</div>
+				<div class="col d-flex align-items-center">
+					<a class="button secondaryAction text-muted text-light" href="{% url 'account_reset_password' %}"><small>{% trans "Forgot Password?" %}</small></a>
 				</div>
 			</div>
 		</form>

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+	'allauth.socialaccount.providers.google',
 	'bootstrap_modal',
 	'captcha',
 	'crispy_forms',
@@ -57,10 +58,7 @@ INSTALLED_APPS = [
 	'vans',
 ]
 
-'''
-# Provider specific settings
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
+'''    'google': {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
@@ -69,9 +67,23 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': '456',
             'key': ''
         }
+    }'''
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+	'google': {
+		# For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
     }
 }
-'''
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
