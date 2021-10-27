@@ -200,6 +200,17 @@ if not DEBUG:
 
 
 
+#Email settings
+DEFAULT_FROM_EMAIL = 'noreply@bigdogcampers.co.uk'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.zoho.com.au'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+
+
+
 # RECAPTCHA SETTINGS
 RECAPTCHA_PUBLIC_KEY = '6LemP8AbAAAAAI1HTkJNCurg9sbq9ZU0rbm3lgDB'
 RECAPTCHA_PRIVATE_KEY = '6LemP8AbAAAAAEKBVzAhQIYmeUcYQ--AOcjarIkW'

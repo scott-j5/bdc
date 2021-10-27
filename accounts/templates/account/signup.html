@@ -6,70 +6,55 @@
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
-{% block content %}
-<div class="wrapper">
-	<div class="page-header min-vh-100" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
-		<div class="filter"></div>
-		<div class="container">
-			<div class="row justify-content-center align-items-center">
-				<div class="col-12 col-lg-5">
-					<div class="card p-5">
-				
-						{% get_providers as socialaccount_providers %}
-						
-						{% if socialaccount_providers %}
-							<div class="text-center mt-4">
-								<h1 class="h3 text-light text-dark">{% trans "Sign up with" %}</h1>
-								<p class="lead">
-								</p>
-							</div>
-							<div class="row">
-								<div class="col-12 text-center">
-									<div class="socialaccount_ballot">
-										<div class="socialaccount_providers row justify-content-center">
-											{% include "socialaccount/snippets/provider_list.html" with process="login" %}
-										</div>
-										{% include "socialaccount/snippets/login_extra.html" %}
-									</div>
-								</div>
-							</div>
-							<div class="text-center mt-4">
-								<p class="text-light text-dark">- {% trans "or sign up" %} -</p>
-								<p class="lead">
-								</p>
-							</div>
-						{% else %}
-							<div class="text-center mt-4">
-								<h1 class="h3">{% trans "Sign Up" %}</h1>
-								<p class="text-black-50">
-									{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in here.</a>{% endblocktrans %}
-								</p>
-							</div>
-						{% endif %}
-						<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-							{% csrf_token %}
-							{{ form|crispy }}
-							{% if redirect_field_value %}
-								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-							{% endif %}
-							<div class="row mt-4">
-								<div class="col text-end">
-									<button type="submit" class="btn btn-danger rounded-pill py-2 px-5">{% trans "Sign Up" %}</button>
-								</div>
-							</div>
-						</form>
-						{% if socialaccount_providers %}
-						<p class="text-black-50 text-center">
-							<small>	
-								{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in here.</a>{% endblocktrans %}
-							</small>
-						</p>
-						{% endif %}
+{% block card_content %}
+	{% get_providers as socialaccount_providers %}
+							
+	{% if socialaccount_providers %}
+		<div class="text-center mt-4">
+			<h1 class="h3 text-light text-dark">{% trans "Sign up with" %}</h1>
+			<p class="lead">
+			</p>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center">
+				<div class="socialaccount_ballot">
+					<div class="socialaccount_providers row justify-content-center">
+						{% include "socialaccount/snippets/provider_list.html" with process="login" %}
 					</div>
+					{% include "socialaccount/snippets/login_extra.html" %}
 				</div>
 			</div>
-		
 		</div>
-	</div>
-</div>
+		<div class="text-center mt-4">
+			<p class="text-light text-dark">- {% trans "or sign up" %} -</p>
+			<p class="lead">
+			</p>
+		</div>
+	{% else %}
+		<div class="text-center mt-4">
+			<h1 class="h3">{% trans "Sign Up" %}</h1>
+			<p class="text-black-50">
+				{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in here.</a>{% endblocktrans %}
+			</p>
+		</div>
+	{% endif %}
+	<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+		{% csrf_token %}
+		{{ form|crispy }}
+		{% if redirect_field_value %}
+			<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		{% endif %}
+		<div class="row mt-4">
+			<div class="col text-end">
+				<button type="submit" class="btn btn-danger rounded-pill py-2 px-5">{% trans "Sign Up" %}</button>
+			</div>
+		</div>
+	</form>
+	{% if socialaccount_providers %}
+	<p class="text-black-50 text-center">
+		<small>	
+			{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in here.</a>{% endblocktrans %}
+		</small>
+	</p>
+	{% endif %}
 {% endblock %}
