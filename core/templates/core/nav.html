@@ -423,7 +423,7 @@
 											</a>
 										</li>
 										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
-											<a class="border-radius-md pe-3 d-block" href="#">
+											<a class="border-radius-md pe-3 d-block" href="{% url 'account_reset_password' %}">
 												<span>Change Password</span>
 											</a>
 										</li>
@@ -453,7 +453,7 @@
 									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
 										Settings
 									</a>
-									<a href="#" class="dropdown-item p-2 ps-0">
+									<a href="{% url 'account_reset_password' %}" class="dropdown-item p-2 ps-0">
 										Change Password
 									</a>
 									<a href="{% url 'account_logout' %}" class="dropdown-item p-2 ps-0">

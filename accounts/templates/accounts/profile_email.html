@@ -1,24 +1,30 @@
-{% extends "account/base.html" %}
+{% extends 'accounts/profile_base.html' %}
+{% load static %}
 
-{% load crispy_forms_tags %}
+{% block account-content %}
+
+
+{% endblock account-content %}
 
 {% load i18n %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
 
-{% block head_title %}{% trans "E-mail Addresses" %}{% endblock %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block card_content %}
-<div class="">
-	<div class="text-center mt-4">
-		<h1 class="h3">{% trans "E-mail Addresses" %}</h1>
+{% block profile_content %}
+	<div class="mt-3">
+		<h1 class="h3 text-light">{% trans "E-mail Addresses" %}</h1>
+		<hr/>
 	{% if user.emailaddress_set.all %}
-		<p class="text-black-50">
-			{% trans 'The following e-mail addresses are associated with your account:' %}
+		<p class="text-light">
+			{% trans 'Manage e-mail addresses associated with your account' %}
 		</p>
 	</div>
 
 	{% if can_add_email %}
 		<div class="m3">
-			<form method="post" action="{% url 'account_email' %}" class="add_email">
+			<form method="post" action="{% url 'profile-email' %}" class="add_email">
 				{% csrf_token %}
 				{% if form.non_field_errors %}
 					<div class="alert alert-danger">
@@ -43,15 +49,15 @@
 		</div>
 	{% endif %}
 
-	<form action="{% url 'account_email' %}" class="email_list" method="post">
+	<form action="{% url 'profile-email' %}" class="email_list" method="post">
 		{% csrf_token %}
 		<fieldset class="blockLabels">
 			<ul class="list-group list-group-flush">
 				{% for emailaddress in user.emailaddress_set.all %}
-					<li class="list-group-item d-flex justify-content-between align-items-center">
+					<li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
 						<div class="form-check">
 							<input class="form-check-input" id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
-							<label for="email_radio_{{forloop.counter}}" class="text-break {% if emailaddress.primary %}primary_email{%endif%}">
+							<label for="email_radio_{{forloop.counter}}" class="text-break text-light fw-bold {% if emailaddress.primary %}primary_email{%endif%}">
 								{{ emailaddress.email }}
 							</label>
 						</div>
@@ -65,37 +71,19 @@
 						</div>
 					</li>
 				{% endfor %}
-				<li class="list-group-item d-flex flex-wrap justify-content-around align-items-center pt-3">
+				<li class="list-group-item d-flex flex-wrap justify-content-around align-items-center pt-3 bg-transparent">
 					<button class="primaryAction btn btn-outline-danger rounded-pill flex-fill py-2 px-4 mx-1" type="submit" name="action_remove" >{% trans 'Remove' %}</button>
 					<button class="secondaryAction btn btn-outline-info rounded-pill flex-fill py-2 px-4 mx-1" type="submit" name="action_send" >{% trans 'Re-send Verification' %}</button>
-					<button class="secondaryAction btn btn-primary rounded-pill py-2 flex-fill px-4 mx-1" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
+					<button class="secondaryAction btn btn-primary rounded-pill flex-fill py-2 px-4 mx-1" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
 				</li>
 			</ul>
 		</fieldset>
 	</form>
 
 	{% else %}
-		<p class="text-black-50">
+		<p class="text-light">
 			{% trans "You currently do not have any e-mail address set up. An e-mail address is required to receive notifications, reset your password, etc." %}
 		</p>
 	</div>
 	{% endif %}
-</div>
-{% endblock %}
-
-
-{% block extra_body %}
-<script type="text/javascript">
-(function() {
-  var message = "{% trans 'Do you really want to remove the selected e-mail address?' %}";
-  var actions = document.getElementsByName('action_remove');
-  if (actions.length) {
-    actions[0].addEventListener("click", function(e) {
-      if (! confirm(message)) {
-        e.preventDefault();
-      }
-    });
-  }
-})();
-</script>
-{% endblock %}
+{% endblock profile_content %}
