@@ -83,7 +83,8 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_USER_DISPLAY = 'user.profile.display_name'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
