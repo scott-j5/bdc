@@ -28,7 +28,7 @@
 								</div>
 							</div>
 							<div class="mt-3 text-center">
-								<h1 class="h3 text-light">{{ object.display_name }}</h1>
+								<h1 class="h3 text-light text-break">{{ object.display_name }}</h1>
 								{% if user.is_staff %}<p>Staff</p>{% endif %}
 							</div>
 							<hr/>
@@ -47,6 +47,7 @@
 							<div class="mt-3 text-">
 								<h6 class="text-light">Change Password</h6>
 							</div>
+							<hr/>
 						</div>
 						<div class="col-12 col-md-8">
 							{% block profile_content %}
