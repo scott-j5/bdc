@@ -83,8 +83,13 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
 ACCOUNT_PRESERVE_USERNAME_CASING = False
-ACCOUNT_USER_DISPLAY = 'user.profile.display_name'
+
+ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display_name_with_date'
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -166,7 +171,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
