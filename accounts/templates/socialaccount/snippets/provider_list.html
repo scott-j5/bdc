@@ -16,13 +16,13 @@
 {% endif %}
 <div class="col-4">
   	<a title="{{provider.name}}" 
-  		class="socialaccount_provider {{provider.id}}" 
+  		class="socialaccount_provider {{provider.id}} text-reset" 
   		aria-label="Continue using {{ provider.name }}"
 		href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"
 		>
 		<i class="bi bi-{{ provider.name|lower }} icon-150"></i>
 		<br/>
-		<small class="text-light text-dark">{{ provider.name }}</small>
+		<small class="fw-lighter text-reset">{{ provider.name }}</small>
 	</a>
 </div>
 {% endfor %}
