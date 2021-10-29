@@ -237,3 +237,29 @@ AWS_DEFAULT_ACL = None
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'media_storages.MediaStorage'
 
+
+
+
+
+# TO BE DELETED ONCE ALLAUTH DEFAULT_AUTO_FIELD UPDATES ARE RELEASED
+import allauth.app_settings
+allauth.app_settings.SOCIALACCOUNT_ENABLED = True
+
+SOCIALACCOUNT_PROVIDERS = {
+	'google': {
+		# For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+
+ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display_name_with_date'
