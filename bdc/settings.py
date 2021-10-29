@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'accounts',
     'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+	# replaced: "allauth.account" to prevent migration issue on default_auto_field
+    "bdc.apps.ModifiedAccountConfig",
+    # replaced: "allauth.socialaccount" to prevent migration issue on default_auto_field
+    "bdc.apps.ModifiedSocialAccountConfig",
 	'allauth.socialaccount.providers.google',
 	'bootstrap_modal',
 	'captcha',
