@@ -1,6 +1,8 @@
 {% extends 'accounts/profile_base.html' %}
 {% load static %}
 
+{% block page_title %}Profile Connections{% endblock %}
+
 {% block account-content %}
 
 
@@ -50,7 +52,7 @@
 				</form>
 			
 			{% else %}
-				<p class="text-light">{% trans 'You currently have no social network accounts connected to this account.' %}</p>
+				<p class="text-light">{% trans 'You currently have no connected social accounts.' %}</p>
 			{% endif %}
 			<br/>
 			<h5 class="text-light">{% trans 'Add a 3rd Party Account' %}</h5>

@@ -2,6 +2,8 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block head_title %}Home{% endblock %}
+
 {% block body_class %}
 bg-gray-100
 {% endblock %}
@@ -13,11 +15,10 @@ bg-gray-100
 		<div class="container over-filter">
 			<div class="row justify-content-center">
 				<div class="col-md-8 text-center">
-					<h1 class="title text-white text-light"> Find your next trip</h1>
-					<h5 class="description text-white text-light">
-						Now you have no excuses, it's time to surprise your clients, your competitors, and why not, the world. You probably won't have a better chance to show off all your potential if it's not by designing a website for
-						your own agency or web studio.
-					</h5>
+					<h1 class="title text-white text-light"> Plan the road trip of a lifetime</h1>
+					<h2 class="fs-5 description text-white text-light">
+						Edinburghs newest camper van rental business, born from a desire to get 'out there'. Our custom built camper vans come fully equipped and ready for adventure.
+					</h2>
 					<br/>
 				</div>
 				<div class="col-md-9">
@@ -46,6 +47,14 @@ bg-gray-100
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col text-center">
+					<br>
+					<h3 class="fs-5 description">
+						<a href="#" class="text-white text-light">Watch the video</a>
+					</h3>
+				</div>
+			</div>
 		</div>
 	</div>
 </header>
@@ -72,8 +81,8 @@ bg-gray-100
 						<div class="col-10 col-md-5 d-flex justify-content-md-end">
 							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="map-pin"></i>
 							<div class="order-md-1 text-md-end">
-								<strong>Located in Scotland</strong>
-								<p>sub text</p>
+								<strong>Located in Edinburgh</strong>
+								<p>Right where you want us</p>
 							</div>
 						</div>
 					</div>
@@ -93,89 +102,58 @@ bg-gray-100
 							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
 							<div class="order-md-1 text-md-end">
 								<strong>Standing-height Ceilings</strong>
-								<p>sub text</p>
+								<p>Stretch out and enjoy</p>
 							</div>
 						</div>
 					</div>
 	
 					<div class="row justify-content-start justify-content-md-end pb-5">
 						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger" data-feather="user"></i>
+							<i class="icon-150 mx-3 text-danger fa fa-utensils"></i>
 							<div class="">
-								<strong>In-van kitchen</strong>
-								<p>Sub Text</p>
+								<strong>In-van kitchens</strong>
+								<p>Avoid the weather. Cook up a storm inside instead!</p>
 							</div>
 						</div>
 					</div>
 					<div class="row justify-content-start pb-5">
 						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="user"></i>
+							<i class="icon-150 order-md-2 mx-3 text-danger fa fa-truck-loading"></i>
 							<div class="order-md-1 text-md-end">
-								<strong>Heading</strong>
-								<p>Text</p>
+								<strong>Loads of storage</strong>
+								<p>Even enough room for the bikes!</p>
 							</div>
 						</div>
 					</div>
 	
 					<div class="row justify-content-start justify-content-md-end pb-5">
 						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger" data-feather="user"></i>
+							<i class="icon-150 mx-3 text-danger fa fa-bed"></i>
 							<div class="">
-								<strong>Heading</strong>
-								<p>Text</p>
+								<strong>Dedicated Bed</strong>
+								<p>No set-up or pack-up required</p>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-<!-- END INTRO -->
-
-
-<!--ABOUT US -->
-<div class="section">
-	<div class="container py-7">
-		<div class="row pb-7">
-			<div class="col-md-8 mx-auto text-center">
-				<h2 class="title text-light text-dark">About us</h2>
-				<h5 class="description text-light text-dark">Bit of a spiel about the big dogs.<a class="" href="{% url 'about-us' %}"> <u>Read More...</u></a></h5>
-			</div>
-		</div>
-
-
-		<div class="row justify-space-between py-2">
-			<div class="col-12 col-md-4 mx-auto">
-				<div class="mt-md-0 mt-5">
-					<a href="#">
-					<div class="p-3">
-						<img class="w-100 border-radius-md shadow-lg" src="{% static 'img/bruce-mars.jpg' %}">
-					</div>
-					</a>
-					<div class="card-body blur justify-content-center text-center mt-n5 mx-4 mb-4 border-radius-md">
-					<h4 class="mb-0">Liam Campbell</h4>
-					<p>sub heading</p>
-					</div>
-				</div>
-			</div>
-			<div class="col-12 col-md-4 mx-auto">
-				<div class="mt-md-0 mt-5">
-					<a href="#">
-					<div class="p-3">
-						<img class="w-100 border-radius-md shadow-lg" src="{% static 'img/bruce-mars.jpg' %}">
-					</div>
-					</a>
-					<div class="card-body blur justify-content-center text-center mt-n5 mx-4 mb-4 border-radius-md">
-					<h4 class="mb-0">Josh Franchetti</h4>
-					<p>Sub heading</p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- END ABOUT US -->
+<!-- END INTRO -->
 
+<!-- VANS PROMPT -->
+<div class="section">
+	<div class="container py-7">
+		<div class="row pb-7">
+			<div class="col-md-8 mx-auto text-center">
+				<h1 class="title text-light text-dark">Ready to book?</h1>
+				<h3 class="description text-light text-dark"><a class="btn btn-rounded btn-lg btn-danger fs-5" href="{% url 'van-list' %}">Explore vans available for rent</a></h3>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END VANS PROMPT -->
 
 <!-- BLOGS -->
 <div class="section-dark">
@@ -183,7 +161,7 @@ bg-gray-100
 		<div class="row pb-7">
 			<div class="col-md-8 mx-auto text-center">
 				<h2 class="title text-light text-white">Blogs</h2>
-				<h5 class="description text-light text-white">Trip ideas, Builds and more! Follow the big dogs on their journey.</h5>
+				<h5 class="description text-light text-white">Preparing for your rental, Road trip ideas, Camper van builds and more! Follow the big dogs journey.</h5>
 			</div>
 		</div>
 
@@ -238,7 +216,7 @@ bg-gray-100
 
 		<div class="row">
 			<div class="col text-center">
-				<a href="#" class="btn btn-link btn-neutral">
+				<a href="{% url 'blog-list' %}" class="btn btn-link btn-neutral">
 					<i class="fa fa-plus" aria-hidden="true"></i> View all
 				</a>
 			</div>
@@ -247,6 +225,48 @@ bg-gray-100
 </div>
 <!-- END BLOGS -->
 
+<!--ABOUT US -->
+<div class="section">
+	<div class="container py-7">
+		<div class="row pb-7">
+			<div class="col-md-8 mx-auto text-center">
+				<h2 class="title text-light text-dark">About us</h2>
+				<h5 class="description text-light text-dark">Bit of a spiel about the big dogs.<a class="" href="{% url 'about-us' %}"> <u>Read More...</u></a></h5>
+			</div>
+		</div>
+
+
+		<div class="row justify-space-between py-2">
+			<div class="col-12 col-md-4 mx-auto">
+				<div class="mt-md-0 mt-5">
+					<a href="#">
+					<div class="p-3">
+						<img class="w-100 border-radius-md shadow-lg" src="{% static 'img/bruce-mars.jpg' %}">
+					</div>
+					</a>
+					<div class="card-body blur justify-content-center text-center mt-n5 mx-4 mb-4 border-radius-md">
+					<h4 class="mb-0">Liam Campbell</h4>
+					<p>sub heading</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-4 mx-auto">
+				<div class="mt-md-0 mt-5">
+					<a href="#">
+					<div class="p-3">
+						<img class="w-100 border-radius-md shadow-lg" src="{% static 'img/bruce-mars.jpg' %}">
+					</div>
+					</a>
+					<div class="card-body blur justify-content-center text-center mt-n5 mx-4 mb-4 border-radius-md">
+					<h4 class="mb-0">Josh Franchetti</h4>
+					<p>Sub heading</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END ABOUT US -->
 
 <!-- MORE INFO -->
 <div class="section">

@@ -1,0 +1,56 @@
+{% if blogs|length <= 0 %}
+    <div class="span3 text-center">
+        <h1><i class="fa fa-3x fa-sad-cry"></i></h1>
+        <p>No blogs matching your search</p>
+    </div>
+{% else %}
+    <div class="col-2 col-1-sm">
+        {% for blog in page_obj %}
+        <a class="text-muted blog-card-container" href="{% url 'blog-detail' blog.slug %}">
+            <div class="blog-card">
+                <div class="blog-card-img-container center-content-xy">
+                    <div class="blog-card-img-overlay"></div>
+                    <img class="blog-card-img" src="{% if blog.thumbnail %}{{ blog.thumbnail.url }}{% endif %}"/>
+                </div>
+                <div class="blog-card-text-container flex-y">
+                    <div class="blog-card-header-container">
+                        <div class="blog-card-header">
+                            <small>{{ blog.author_name }}</small>
+                            {% if blog.published %}
+                                <small>{{ blog.published_on|date:"M. j, Y" }}  | <i class="fa fa-book-reader"></i> {{ blog.read_time }} min.</small>
+                            {% else %}
+                                <small>Draft. <i class="fa fa-pencil-ruler"></i></small>
+                            {% endif %}
+                        </div>
+                        <div class="blog-card-title">
+                            <h4>{{ blog.title }}</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="blog-card-description">
+                        <small>{{ blog.description|truncatechars:100 }} </small>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a class="page-toggle" href="?page=1" data-page="1">&laquo; first</a>
+                <a class="page-toggle" href="?page={{ page_obj.previous_page_number }}" data-page="{{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="page-toggle" data-page="{{ page_obj.next_page_number }}">next</a>
+                <a class="page-toggle" data-page="{{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}

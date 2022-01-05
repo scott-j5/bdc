@@ -38,3 +38,7 @@ class PriceAdjustment(models.Model):
 	def clean(self):
 		if not self.slug or self.slug == '':
 			self.slug = self.name.replace(' ', '-').lower()
+
+
+class Invoice(models.Model):
+	pass

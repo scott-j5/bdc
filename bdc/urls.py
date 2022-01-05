@@ -30,6 +30,8 @@ urlpatterns = [
 	path('accounts/', include('accounts.urls')),
 	path('vans/', include('vans.urls')),
 	path('rentals/', include('rentals.urls')),
+	path('blogs/', include('blogs.urls')),
+	path('djrichtextfield/', include('djrichtextfield.urls')),
 ]
 
 handler403 = error_403

@@ -1,0 +1,181 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block head_title %}Blogs{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/blog_list.js' %}"></script>
+{% endblock scripts %}
+
+{% block content %}
+<div class="container">
+	<div class="section">
+		<div class="row min-vh-50">
+			<div class="col-9 col-12-md m-auto text-center">
+				<h1 class="text-light text-dark">Blogs</h1>
+				<h4 class="text-light text-dark">
+					Get inspired with road trip ideas, help prepare yourself for your very own rental or just keep up to date with new builds and news from the big dogs!
+				</h4>
+				<div class="row">
+					<div class="col-8 col-md-11 m-auto d-flex justify-content-around align-items-center flex-wrap">
+						{% for tag in tags %}
+							<div id="tag-{{ tag.id }}" class="mx-2" data-identifier="{{ tag.id }}"><small class="btn btn-rounded btn-outline btn-danger btn-sm text-normal my-1">{{ tag.name }}</small></div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="row">
+			{% if blogs|length > 0 %}
+				<div class="col-6">
+					<div class="row">
+						<div class="col-12">
+							<img class="w-100" src="{% if blogs.0.thumbnail %}{{ blogs.0.thumbnail.url }}{% endif %}"/>
+						</div>
+					</div>
+					<small class="text-danger">
+						{{ blogs.0.author_name }}
+						{% if blogs.0.published %}
+							<small>{{ blogs.0.published_on|date:"M. j, Y" }}  | <i class="fa fa-book-reader"></i> {{ blogs.0.read_time }} min.</small>
+						{% else %}
+							<small>Draft. <i class="fa fa-pencil-ruler"></i></small>
+						{% endif %}
+					</small>
+					<h2>{{ blogs.0.title }}</h2>
+					<p>{{ blogs.0.description }}</p>
+					{% for tag in blogs.0.tags.all %}
+						<div class="badge badge-danger">{{ tag.name }}</div>
+					{% endfor %}
+				</div>
+
+				<div class="col-6">
+					<div class="row h-50 pb-3">
+							
+
+							<div class="col-6">
+								<img class="w-100 h-100" src="{% if blogs.0.thumbnail %}{{ blogs.0.thumbnail.url }}{% endif %}"/>
+							</div>
+							<div class="col-6">
+								<small class="text-danger">
+									{{ blogs.0.author_name }}
+									{% if blogs.0.published %}
+										<small>{{ blogs.0.published_on|date:"M. j, Y" }}  | <i class="fa fa-book-reader"></i> {{ blogs.0.read_time }} min.</small>
+									{% else %}
+										<small>Draft. <i class="fa fa-pencil-ruler"></i></small>
+									{% endif %}
+								</small>
+								<h2>{{ blogs.0.title }}</h2>
+								<p>{{ blogs.0.description }}</p>
+								{% for tag in blogs.0.tags.all %}
+									<div class="badge badge-danger">{{ tag.name }}</div>
+								{% endfor %}
+							</div>
+							
+					</div>
+					<div class="row h-50 pt-3">
+							
+
+						<div class="col-6">
+							<img class="w-100 h-100" src="{% if blogs.0.thumbnail %}{{ blogs.0.thumbnail.url }}{% endif %}"/>
+						</div>
+						<div class="col-6">
+							<small class="text-danger">
+								{{ blogs.0.author_name }}
+								{% if blogs.0.published %}
+									<small>{{ blogs.0.published_on|date:"M. j, Y" }}  | <i class="fa fa-book-reader"></i> {{ blogs.0.read_time }} min.</small>
+								{% else %}
+									<small>Draft. <i class="fa fa-pencil-ruler"></i></small>
+								{% endif %}
+							</small>
+							<h2>{{ blogs.0.title }}</h2>
+							<p>{{ blogs.0.description }}</p>
+							{% for tag in blogs.0.tags.all %}
+								<div class="badge badge-danger">{{ tag.name }}</div>
+							{% endfor %}
+						</div>
+						
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<div id="blog-list-wrapper">
+    <div class="blog-list-header-container page page-padded flex-y" style="background-image: url('{% static 'img/cookie-watermark-left.png' %}')">
+        <div class="blog-header w-100 p-y-xxxl">
+            <div class="center-content-y center-content-xy-sm">
+                <div class="text-center-sm">
+                    <h1 class="no-m color-white">Recent blogs</h1>
+                </div>
+            </div>
+            <div class="col-2 col-1-sm">
+                {% if blogs|length > 0 %}
+                <a class="m-t-xxl hidden-sm" href="{% url 'blog-detail' blogs.0.slug %}">
+                    <div class="blog-highlight color-white w-100 no-p">
+                        <div class="blog-card-highlight">
+                            <div class="blog-card-img-container center-content-xy">
+                                <div class="blog-card-img-overlay"></div>
+                                <img class="blog-card-img" src="{% if blogs.0.thumbnail %}{{ blogs.0.thumbnail.url }}{% endif %}"/>
+                            </div>
+                            <div class="blog-card-text-container flex-y">
+                            <div class="blog-card-header-container">
+                                    <div class="blog-card-header">
+                                        <small>{{ blogs.0.author_name }}</small>
+                                        {% if blogs.0.published %}
+                                            <small>{{ blogs.0.published_on|date:"M. j, Y" }}  | <i class="fa fa-book-reader"></i> {{ blogs.0.read_time }} min.</small>
+                                        {% else %}
+                                            <small>Draft. <i class="fa fa-pencil-ruler"></i></small>
+                                        {% endif %}
+                                    </div>
+                                    <div class="blog-card-title">
+                                        <h4>{{ blogs.0.title }}</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="blog-card-description">
+                                    <small>{{ blogs.0.description|truncatechars:100 }} </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                <div id="blog-search" class="w-100 no-p m-t-xxl">
+                    <div>
+                        <div class="input-container no-m m-b-lg">
+                            <input class="input-field" type="text" placeholder="Search blogs" name="search"/>
+                            <i class="fa fa-search fa-input-icon fa-input-icon-hover center-self-y"></i>
+                        </div>
+                        <div>
+                            <p class="color-white m-b-md tag-list-title">Topics:</p>
+                            <ul class="tag-list">
+                                {% for tag in tags %}
+                                    <li id="tag-{{ tag.id }}" data-identifier="{{ tag.id }}"><small class="color-white">{{ tag.name }}</small></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="blog-list-content-wrapper">
+        <img id="blog-list-header-wave" src="{% static 'img/blog-img-frame.svg' %}"/>
+        <div class="white-bg">
+            <div class="page p-y-xxxl" id="blog-card-list">
+                {% include 'blogs/blog_card_list.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

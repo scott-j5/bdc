@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "bdc.apps.ModifiedAccountConfig",
     # replaced: "allauth.socialaccount" to prevent migration issue on default_auto_field
     "bdc.apps.ModifiedSocialAccountConfig",
+	"blogs",
 	'allauth.socialaccount.providers.google',
 	'bootstrap_modal',
 	'captcha',
@@ -263,3 +264,42 @@ SOCIALACCOUNT_PROVIDERS = {
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 
 ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display_name_with_date'
+
+
+DJRICHTEXTFIELD_CONFIG = {
+    'js': ['https://cdn.tiny.cloud/1/zsce7lst5im33auwvlcxynn7rqyiwyopckmqdtjxebwsp8x2/tinymce/5/tinymce.min.js'],
+    'init_template': 'core/init-tinymce.js',
+    'settings': {
+        'menubar': False,
+        'plugins': 'code codesample hr image lists link table',
+        'toolbar': [
+            'code | undo redo | styleselect | bold italic underline hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist',
+            'codesample image link | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+        ],
+        'codesample_languages': [
+            {'text': 'Bash', 'value': 'bash' },
+            {'text': 'Apache', 'value': 'apacheconf' },
+            {'text': 'C', 'value': 'c' },
+            {'text': 'C#', 'value': 'csharp' },
+            {'text': 'C++', 'value': 'cpp' },
+            {'text': 'CSS', 'value': 'css' },
+            {'text': 'F#', 'value': 'fsharp' },
+            {'text': 'Java', 'value': 'java'},
+            {'text': 'HTML/XML', 'value': 'markup'},
+            {'text': 'JavaScript', 'value': 'javascript' },
+            {'text': 'Json', 'value': 'json' },
+            {'text': 'LESS', 'value': 'less' },
+            {'text': 'PHP', 'value': 'php'},
+            {'text': 'Python', 'value': 'python'},
+            {'text': 'Ruby', 'value': 'ruby'},
+            {'text': 'SASS', 'value': 'scss' },
+            {'text': 'SQL', 'value': 'sql' },
+            {'text': 'TypeScript', 'value': 'typescript' }
+        ],
+        'width': '100%',
+        'height': '500',
+        'branding': False,
+        'images_upload_url': '/blogs/blog/default/image/upload/',
+        'relative_urls': False,
+    }
+}
