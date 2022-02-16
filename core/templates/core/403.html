@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block head_title %}403{% endblock %}
+
+{% block content %}
+<div class="d-flex min-vh-100 page-header" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=')">
+	<div class="filter"></div>
+	<div class="container over-filter">
+		<div class="row text-center">
+			<h1 class="fs-xxl text-light mb-0">403</h1>
+			<h3 class="text-white">Guard dog on duty... 
+				<br /> 
+			</h3>
+			<p class="text-white">You do not have the required permissions to view this page</p>
+		</div>
+		<div class="row mt-4">
+			<div class="col-12 text-center">
+				<a class="btn btn-link btn-danger btn-rounded" onclick="history.back()">Go back</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

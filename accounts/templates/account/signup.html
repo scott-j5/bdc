@@ -1,0 +1,60 @@
+{% extends "account/base.html" %}
+
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block card_content %}
+	{% get_providers as socialaccount_providers %}
+							
+	{% if socialaccount_providers %}
+		<div class="text-center mt-4">
+			<h1 class="h3 text-light text-dark">{% trans "Sign up with" %}</h1>
+			<p class="lead">
+			</p>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center">
+				<div class="socialaccount_ballot">
+					<div class="socialaccount_providers row justify-content-center text-dark">
+						{% include "socialaccount/snippets/provider_list.html" with process="login" %}
+					</div>
+					{% include "socialaccount/snippets/login_extra.html" %}
+				</div>
+			</div>
+		</div>
+		<div class="text-center mt-4">
+			<p class="text-light text-dark">- {% trans "or sign up" %} -</p>
+			<p class="lead">
+			</p>
+		</div>
+	{% else %}
+		<div class="text-center mt-4">
+			<h1 class="h3">{% trans "Sign Up" %}</h1>
+			<p class="text-black-50">
+				{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in here.</a>{% endblocktrans %}
+			</p>
+		</div>
+	{% endif %}
+	<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+		{% csrf_token %}
+		{{ form|crispy }}
+		{% if redirect_field_value %}
+			<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		{% endif %}
+		<div class="row mt-4">
+			<div class="col text-end">
+				<button type="submit" class="btn btn-danger rounded-pill py-2 px-5">{% trans "Sign Up" %}</button>
+			</div>
+		</div>
+	</form>
+	{% if socialaccount_providers %}
+	<p class="text-black-50 text-center">
+		<small>	
+			{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign in here.</a>{% endblocktrans %}
+		</small>
+	</p>
+	{% endif %}
+{% endblock %}

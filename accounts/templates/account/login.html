@@ -1,0 +1,62 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block account-content %}
+
+
+{% endblock account-content %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block card_content %}
+	{% get_providers as socialaccount_providers %}
+	
+	{% if socialaccount_providers %}
+		<div class="text-center mt-4">
+			<h1 class="h3 text-light text-dark">{% trans "Continue with" %}</h1>
+			<p class="lead">
+			</p>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center">
+				<div class="socialaccount_ballot">
+					<div class="socialaccount_providers row justify-content-center text-dark">
+						{% include "socialaccount/snippets/provider_list.html" with process="login" %}
+					</div>
+					{% include "socialaccount/snippets/login_extra.html" %}
+				</div>
+			</div>
+		</div>
+		<div class="text-center mt-4">
+			<p class="text-light text-dark">- {% trans "or sign in" %} -</p>
+			<p class="lead">
+			</p>
+		</div>
+	{% else %}
+		<div class="text-center mt-4">
+			<h1 class="h3 text-light text-dark">{% trans "Sign In" %}</h1>
+			<p class="lead">
+			</p>
+		</div>
+	{% endif %}
+	<form class="login" method="POST" action="{% url 'account_login' %}">
+		{% csrf_token %}
+		{{ form|crispy }}
+		{% if redirect_field_value %}
+			<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		{% endif %}
+		<div class="row mt-4">
+			<div class="col-12 text-end">
+				<a class="btn btn-outline-danger rounded-pill py-2 px-4" href="{{ signup_url }}">{% trans "Sign Up" %}</a>
+				<button type="submit" class="btn btn-danger rounded-pill py-2 px-5">{% trans "Sign In" %}</button>
+			</div>
+			<div class="col text-end">
+				<a class="button secondaryAction text-muted text-light" href="{% url 'account_reset_password' %}"><small>{% trans "Forgot Password?" %}</small></a>
+			</div>
+		</div>
+	</form>
+{% endblock card_content %}

@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% load price_tags %}
+
+{% block head_title %}Vans{% endblock %}
+
+{% block body_class %}
+bg-gray-100
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid section-dark">
+	<div class="container min-vh-50 d-flex align-items-center justify-content-center">
+		<div class="row justify-content-center">
+			<div class="col-md-8 text-center py-7">
+				<h1 class="title text-white text-light mt-1">Vans</h1>
+				<h5 class="description text-white text-light">Our vans come fully equipped and ready for any adventure. Simply select a check-in and check-out date to start planning the trip of your dreams!</h5>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div>
+	<div class="translate-middle-y">
+		<div class="container py-1">
+			<div class="row justify-content-center">
+				<div class="col-md-10 rounded-3 mt-3 mx-auto" id="vans-date-select-form">
+					{% if form %}
+						{% crispy form %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="py-4">
+	<div class="container">
+		<div class="row justify-space-around py-2">
+			{% if object_list|length > 0 %}
+				{% for van in object_list %}
+					<div class="col-12 col-md-6 col-lg-4 mx-auto">
+						<div class="card card-blog card-plain">
+							<div class="position-relative square">
+								<a class="d-block position-absolute top-0 h-100 w-100 blur-shadow-image">
+									<img src="{{ van.thumbnail.image.url }}" alt="product-img" class="img-fluid shadow border-radius-lg fit-cover">
+								</a>
+								<div class="colored-shadow"></div>
+							</div>
+							<div class="card-body px-1 pt-3">
+								<a href="{% url 'van-detail' van.slug %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+									<p class="text-gradient text-danger mb-2 text-sm">{{ van.make }} {{ van.model }} • Sleeps {{ van.sleeps }} • Seats {{ van.seats }}</p>
+										<h5>
+											{{ van.name }}
+										</h5>
+									
+									<p class="text-muted">
+										{{ van.description_short }}
+									</p>
+									<button type="button" class="btn btn-outline-primary btn-sm">{% if van.rental_price %}{{ van.rental_price|price }}{% else %}Select dates to see pricing{% endif %}</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="col-12 text-center">
+					<div class="row justify-content-center">
+						<div class="col-md-9">
+							<h1 class="text-light text-dark">Unfortunately, no vans are available for your selected dates.</h1>
+						</div>
+					</div>
+					{% if alt_rentals|length > 0 %}
+						<div class="row justify-content-center">
+							<div class="col-md-9">
+								<h5 class="text-light text-dark mb-5">However, we found these options close to your prefered stay.</h5>
+							</div>
+						</div>
+						<div class="row">
+							{% for van in alt_rentals %}
+								<div class="col-12 col-md-6 col-lg-4 mx-auto text-start">
+									<div class="card card-blog card-plain">
+										<div class="position-relative square">
+											<a class="d-block position-absolute top-0 h-100 w-100 blur-shadow-image">
+												<img src="{{ van.thumbnail.image.url }}" alt="product-img" class="img-fluid shadow border-radius-lg fit-cover">
+											</a>
+											<div class="colored-shadow"></div>
+										</div>
+										<div class="card-body px-1 pt-3">
+											<a href="{% url 'van-detail' van.slug %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+												<p class="text-gradient text-danger mb-2 text-sm">{{ van.make }} {{ van.model }} • Sleeps {{ van.sleeps }} • Seats {{ van.seats }}</p>
+													<h5>
+														{{ van.name }}
+													</h5>
+												
+												<p class="text-muted">
+													{{ van.description_short }}
+												</p>
+												<button type="button" class="btn btn-outline-primary btn-sm">{% if van.alt_dates %}{{ van.alt_dates }}{% else %}Nearby Dates{% endif %}</button>
+											</a>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% else %}
+						<div class="row justify-content-center">
+							<div class="col-md-9">
+								<h5 class="text-light text-dark">We even searched high and low for rentals of desired duration within 30 days of your desired travel dates</h5>
+								<p>If you have your heart set on one of our vans, check out its detail page and it's calandar will show exactly when it is next available for rent.</p>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

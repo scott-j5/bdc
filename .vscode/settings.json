@@ -1,0 +1,12 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.autoComplete.extraPaths": [
+        "../lib/Python3.8/site-packages/",
+    ],
+    "python.autoComplete.addBrackets": true,
+    "python.pythonPath": "../bin/python3",
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
+}
