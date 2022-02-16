@@ -50,12 +50,8 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: opts.staticSrcDir + "fonts", to: "fonts" },
-<<<<<<< HEAD
 				{ from: opts.staticSrcDir + "img", to: "img" },
 				{ from: opts.staticSrcDir + "video", to: "video" }
-=======
-                { from: opts.staticSrcDir + "img", to: "img" }
->>>>>>> 66b269670072224110000bd40ea8e0c92851e938
             ]
         }),
     ],
