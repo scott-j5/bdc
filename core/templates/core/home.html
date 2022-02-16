@@ -1,0 +1,559 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}Home{% endblock %}
+
+{% block body_class %}
+bg-gray-100
+{% endblock %}
+
+{% block content %}
+<header class="position-relative">
+	<div class="d-flex justify-content-center page-header min-vh-100 position-relative" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
+		<video autoplay muted loop class="position-absolute w-100 h-100 fit-cover" id="myVideo">
+			<source src="{% static 'video/BIG_DOG_CAMPERS_FINAL_EDIT_720p_web.mp4' %}" type="video/mp4">
+		</video>
+		<div class="filter"></div>
+		<div class="container over-filter">
+			<div class="row justify-content-center">
+				<div class="col-md-8 text-center">
+					<h1 class="title text-white text-light"> Plan the road trip of a lifetime</h1>
+					<h2 class="fs-5 description text-white text-light">
+						Book your next adventure with Big Dog Campervans now.  Travel the North Coast 500, to the isle of Skye or wherever your heart desires in our beautifully handcrafted adventure wagon ‘Rudy’. 
+					</h2>
+					<br/>
+				</div>
+				<div class="col-md-9">
+					<div class="card card-raised card-form-horizontal no-transition">
+						<div class="card-body p-3 pb-0"><!--
+						<form method="" action="">
+							<div class="row">
+		
+								<div class="col-md-4">
+									<div class="form-group mb-md-0">
+									<input id="datepicker" type="text" value="" placeholder="Date" class="form-control" />
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group mb-md-0">
+									<input type="text" value="" placeholder="Date" class="form-control" />
+									</div>
+								</div>
+								<div class="d-grid gap-2 col-md-4">
+									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="search"></i> &nbsp; Search</button>
+								</div>
+							</div>
+						</form>-->
+						{% crispy date_range_form %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col text-center">
+					<br>
+					<h3 class="fs-5 description">
+						<a href="#" class="text-white text-light">Watch the video</a>
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+
+<!-- INTRO -->
+<div class="section">
+	<div class="container">
+		<h1>OPTION 1</h1>
+		<div class="row py-8">
+			<div class="col position-relative">
+				<!-- Road -->
+				<div class="row position-absolute justify-content-end justify-content-md-center w-100 h-100">
+					<div class="d-flex flex-column align-items-center h-100 w-auto">
+						<div class="pixel p-2 rounded-circle bg-danger"></div>
+						<div class="pixel-2  h-100 dashed-line"></div>
+						<div class="pixel p-2 rounded-circle bg-danger"></div>
+						<div class="position-absolute w-10 w-md-5 rellax" id="moving-van" data-rellax-speed="-3">
+							<img src="{% static 'img/van-top.svg' %}">
+						</div>
+					</div>
+				</div>
+				<div class="position-relative over-filter pt-5">
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger fa fa-check-to-slot"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Check availability and book your trip</strong>
+								<p>Pricing will be shown when you check your dates using the search bar above</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger bi bi-pin-map"></i>
+							<div class="">
+								<strong>Plan your adventure</strong>
+								<p>If you are struggling, we are happy to help in any way we can</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Pick up the van from either Glasgow or Edinburgh</strong>
+								<p>We also offer a drop off service for an additional charge, please email for more information</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-truck-loading"></i>
+							<div class="">
+								<strong>Meet us at your desired pick-up location</strong>
+								<p>We will do a full run down of how everything works in the van</p>
+							</div>
+						</div>
+					</div>
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger "></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Have wonderful trip</strong>
+								<p>Take amazing, beautiful photos and tag us in them ;) <a class="text-muted" href="https://instagram.com/bigdogcampervans">@bigdogcampervans</a></p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-house-person-return"></i>
+							<div class="">
+								<strong>Return the van to us</strong>
+								<p>Please leave us a wee review when you’re done</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END INTRO -->
+
+
+
+
+
+<!-- INTRO -->
+<div class="section">
+	<div class="container">
+		<h1>OPTION 2</h1>
+		<div class="row py-8">
+			<div class="col position-relative">
+				<!-- Road -->
+				<div class="row position-absolute justify-content-end justify-content-md-center w-100 h-100">
+					<div class="d-flex flex-column align-items-center h-100 w-auto">
+						<div class="pixel p-2 rounded-circle bg-danger"></div>
+						<div class="pixel-2  h-100 dashed-line"></div>
+						<div class="pixel p-2 rounded-circle bg-danger"></div>
+						<div class="position-absolute w-10 w-md-5 rellax" id="moving-van" data-rellax-speed="-3">
+							<img src="{% static 'img/van-top.svg' %}">
+						</div>
+					</div>
+				</div>
+				<div class="position-relative over-filter pt-5">
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>High Roof</strong>
+								<p>Rudy has an internal height of 6ft 1 inches meaning most people can comfortably stand up straight</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-utensils"></i>
+							<div class="">
+								<strong>Full working kitchen</strong>
+								<p>A two-burner stove, electric cool box and all your cooking utensils make scran on the road a pleasure to prepare</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger bi-battery-charging"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Off grid electricity</strong>
+								<p>Rudy charges while you drive, then when your stopped she charges from a large solar panel on the roof</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-bed"></i>
+							<div class="">
+								<strong>Double bed</strong>
+								<p>A fixed double bed makes for comfortable nights on the road</p>
+							</div>
+						</div>
+					</div>
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger fa fa-faucet"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Running water</strong>
+								<p>A 70l water tank provides running water from the electric pump</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-truck-loading"></i>
+							<div class="">
+								<strong>Huge storage capacity</strong>
+								<p>Plenty of storage for all your adventure needs including a slide out tray in the garage</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END INTRO -->
+
+
+
+<!-- INTRO -->
+<div class="section">
+	<div class="container">
+		<h1>OPTION 3 (ignore van going too far)</h1>
+		<div class="row py-8">
+			<div class="col position-relative">
+				<!-- Road -->
+				<div class="row position-absolute justify-content-end justify-content-md-center w-100 h-100">
+					<div class="d-flex flex-column align-items-center h-100 w-auto">
+						<div class="pixel p-2 rounded-circle bg-danger"></div>
+						<div class="pixel-2  h-100 dashed-line"></div>
+						<div class="pixel p-2 rounded-circle bg-danger"></div>
+						<div class="position-absolute w-10 w-md-5 rellax" id="moving-van" data-rellax-speed="-3">
+							<img src="{% static 'img/van-top.svg' %}">
+						</div>
+					</div>
+				</div>
+				<div class="position-relative over-filter pt-5">
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="map-pin"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Located in Edinburgh</strong>
+								<p>Right where you want us</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger" data-feather="dollar-sign"></i>
+							<div class="">
+								<strong>All Inclusive</strong>
+								<p>No Hidden Costs</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Standing-height Ceilings</strong>
+								<p>Stretch out and enjoy</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-utensils"></i>
+							<div class="">
+								<strong>In-van kitchens</strong>
+								<p>Avoid the weather. Cook up a storm inside instead!</p>
+							</div>
+						</div>
+					</div>
+					<div class="row justify-content-start pb-5">
+						<div class="col-10 col-md-5 d-flex justify-content-md-end">
+							<i class="icon-150 order-md-2 mx-3 text-danger fa fa-truck-loading"></i>
+							<div class="order-md-1 text-md-end">
+								<strong>Loads of storage</strong>
+								<p>Even enough room for the bikes!</p>
+							</div>
+						</div>
+					</div>
+	
+					<div class="row justify-content-start justify-content-md-end pb-5">
+						<div class="col-10 col-md-5 d-flex">
+							<i class="icon-150 mx-3 text-danger fa fa-bed"></i>
+							<div class="">
+								<strong>Dedicated Bed</strong>
+								<p>No set-up or pack-up required</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END INTRO -->
+
+
+
+
+
+
+
+<!-- VANS PROMPT -->
+<div class="section">
+	<div class="container py-7">
+		<div class="row pb-7">
+			<div class="col-md-8 mx-auto text-center">
+				<h1 class="title text-light text-dark">Ready to book?</h1>
+				<h3 class="description text-light text-dark"><a class="btn btn-rounded btn-lg btn-danger fs-5" href="{% url 'van-list' %}">Explore vans available for rent</a></h3>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END VANS PROMPT -->
+
+<!-- BLOGS -->
+<div class="section-dark">
+	<div class="container py-7">
+		<div class="row pb-7">
+			<div class="col-md-8 mx-auto text-center">
+				<h2 class="title text-light text-white">Inspiration</h2>
+				<h5 class="description text-light text-white">Preparing for your rental, Road trip ideas, Camper van builds and more! Follow the big dogs journey.</h5>
+			</div>
+		</div>
+
+		{% for blog in blogs %}
+			<div class="row align-items-center mb-7">
+				<div class="col-12 col-lg-5 col-md-4 ms-auto {% cycle '' 'order-md-2' %}">
+					<div class="card">
+						<div class="responsive-img-container img-4-3 vignette-inset card-img">
+							<img class="responsive-img fit-cover card-img" src="{% if blog.thumbnail %}{{ blog.thumbnail.url }}{% endif %}"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-lg-5 col-md-6 mx-auto {% cycle '' 'order-md-1' %}">
+					<div class="card card-plain">
+						<div class="card-body">
+							<div class="mb-2">
+								<h6 class="card-category text-white d-inline-block mb-0">
+									<span class="text-break">{{ blog.author_name }}</span>
+									&#8226;
+								</h6>
+								{% if blog.published %}
+									<small class="text-right text-light d-inline-block">{{ blog.published_on|date:"M. j, Y" }}</small>
+								{% else %}
+									<small class="text-light d-inline-block">Draft. <i class="fa fa-pencil-ruler"></i></small>
+								{% endif %}
+							</div>
+							
+							<a href="{% url 'blog-detail' blog.slug %}">
+								<h3 class="card-title text-white text-light">{{ blog.title|truncatechars:50  }}</h3>
+							</a>
+							<p class="card-description">{{ blog.content|truncatechars:200 }}</p>
+							<div class="card-footer ps-0 pt-0">
+								<a href="{% url 'blog-detail' blog.slug %}" class="btn btn-link btn-neutral">
+									<i class="fa fa-book" aria-hidden="true"></i> Read More
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+		<div class="row">
+			<div class="col text-center">
+				<a href="{% url 'blog-list' %}" class="btn btn-link btn-neutral">
+					<i class="fa fa-plus" aria-hidden="true"></i> View all
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END BLOGS -->
+
+<!--ABOUT US -->
+<div class="section">
+	<div class="container pt-7">
+		<div class="row pb-7">
+			<div class="col-md-8 mx-auto text-center">
+				<h2 class="title text-light text-dark">About us</h2>
+				<h5 class="description text-light text-dark pt-2">Josh and I have hand crafted a beautiful adventure campervan which is available for hire! After spending many years travelling the world separately, we both settled down in our native country of Scotland. With a joint love for carpentry and working with our hands, we felt it was a good idea to work together on the project of converting an empty shell white van into a lovely home on wheels. The result is 'Rudy'. We took our time, choosing not to cut corners as we wanted to create the most comfortable, warm and cosy space we possibly could. We really hope you enjoy your journey and are more than happy to offer help with planning your route, pointing you towards hidden gem spots to park up and stay. We hope to make more vans in the future so any feedback would be greatly appreciated. Happy camping! Liam & Josh.<a class="" href="{% url 'about-us' %}"> <u>Explore More...</u></a></h5>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END ABOUT US -->
+
+<!-- MORE INFO -->
+<div class="section">
+    <div class="container py-7">
+		<div class="row">
+			<div class="col-md-8 mx-auto text-center">
+				<h2 class="title text-light text-dark">Want more information?</h2>
+				<h5 class="description text-reset text-light pt-3">
+					Check out our resources for more information about our rental process and how to maximise your rental experience!
+				</h5>
+			</div>
+		</div>
+		<div class="row py-5 py-md-6 align-content-stretch">
+			<div class="col-sm-3 pb-5">
+				<a href="{% url 'pricing' %}">
+					<div class="card bg-green h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-currency-dollar icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">Pricing</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">Our pricing varies throughout the year, detailed pricing will be shown when you enter your desired travel dates.</p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-sm-3 pb-5">
+				<a href="{% url 'faqs' %}">
+					<div class="card bg-blue h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-question-circle icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">FAQ's</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">You have questions, we have answers. See answers to the burning questions we get on a daily basis.</p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-sm-3 pb-5">
+				<a href="{% url 'testimonials' %}">
+					<div class="card bg-purple h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-chat-left-quote icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">Testimonials</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">See what our renters are saying about us.</p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-sm-3 pb-5">
+				<a href="#contact-us">
+					<div class="card bg-brown h-100">
+						<div class="card-body text-center d-flex flex-column">
+							<div class="card-icon py-4">
+								<i class="bi-megaphone icon-300 text-white"></i>
+							</div>
+							<h4 class="card-title text-normal text-white pb-2">Contact Us</h4>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<p class="card-description text-white">Needing more information or not sure on the next step to securing your rental? Reach out, we're here to help!</p>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+    </div>
+</div>
+<!-- END MORE INFO -->
+
+<!-- CONTACT US -->
+<div class="section position-relative" id="contact-us">
+	<div class="filter filter-white"></div>
+	<div id="" class="big-map position-absolute w-100 h-100"><iframe src="https://snazzymaps.com/embed/328184" width="100%" height="100%" style="border:none;"></iframe></div>
+	<div class="container over-filter py-8">
+		<div class="row">
+			<div class="order-2 order-md-1 col-md-6">
+				<div class="card card-contact card-raised">
+					<div class="card-header header-raised header-primary text-center">
+						<h4 class="card-title">Contact Us</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="info info-horizontal">
+									<div class="icon icon-info">
+									<i class="nc-icon nc-badge" aria-hidden="true"></i>
+									</div>
+									<div class="description">
+									<h5 class="info-title">Give us a call</h5>
+									<p>
+										+XX XXX XXX XXX<br>
+										Mon - Fri, 8:00-22:00
+									</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="info info-horizontal">
+									<div class="icon icon-danger">
+									<i class="nc-icon nc-pin-3" aria-hidden="true"></i>
+									</div>
+									<div class="description">
+									<h5 class="info-title">Find us on </h5>
+									<p> 
+										<a class="text-reset" href="https://www.instagram.com/bigdogcampervans/" target="_blank"><i class="icon-100" data-feather="facebook"></i> Big Dog Campervans</a>
+										<br>
+										<a class="text-reset" href="https://www.instagram.com/bigdogcampervans/" target="_blank"><i class="icon-100" data-feather="instagram"></i> @bigdogcampervans</a>
+									</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					  	{% crispy contact_form %}
+					</div>
+			  	</div>
+			</div>
+			<div class="order-1 order-md-2 col-md-6 d-flex align-items-center pb-5 px-5 px-md-7">
+				<div class="d-block w-100">
+					<div class="position-relative square">
+						<img class="avatar-circle position-absolute top-0 shadow-lg" src="{% static 'img/bdc-us.jpeg' %}"/>
+					</div>
+				</div>
+			</div>
+			<!--
+			<div class="order-1 order-md-2 col-md-6 ps-10 my-5 d-flex align-items-center">
+				<div class="d-block w-100">
+					<div class="position-relative square">
+						<img class="avatar-circle position-absolute top-0 shadow-lg" src="{% static 'img/bdc-us.jpeg' %}"/>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+	</div>
+</div>
+
+<!-- END CONTACT US -->
+
+{% endblock content %}

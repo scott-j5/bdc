@@ -1,0 +1,53 @@
+{% load static %}
+{% load modal_tags %}
+
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- FAVICONS -->
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+	<link rel="manifest" href="{% static 'img/favicon/site.webmanifest' %}">
+
+
+	<title>
+		Camper Van Rental Scotland | Big Dog Camper Vans - {% block head_title %}{% endblock %}
+	</title>
+	<!--     Fonts and icons     -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+
+	<!-- Font Awesome Icons -->
+	<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> 
+
+	{% block styles %}
+		<!-- CSS Files -->
+		<link id="pagestyle" href="{% static 'app.css' %}" rel="stylesheet" />
+	{% endblock styles %}
+</head>
+<body class="{% block body_class %}{% endblock body_class %}">
+	{% block banner %}
+	{% endblock %}
+	<div class="position-relative">
+		{% block nav %}
+			{% include 'core/nav.html' %}
+		{% endblock nav %}
+	
+		{% block content %}
+		{% endblock content %}
+	
+		{% block footer %}
+			{% include 'core/footer.html' %}
+		{% endblock footer %}
+	</div>
+
+	{% modal 'base_modal' %}
+	
+	{% block scripts %}
+		<script src="{% static 'app.js' %}"></script>
+	{% endblock scripts %}
+</body>
