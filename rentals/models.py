@@ -157,12 +157,12 @@ class RentalFulfilment(ProductFulfilment):
 		diff = self.rental_end - self.rental_start
 		days, seconds = diff.days, diff.seconds
 		if days >= .5:
-			pluralize = "s" if days > 1 else ""
-			return f"{math.ceil(days)} Day{pluralize}"
+			##pluralize = "s" if days > 1 else ""
+			return f"{math.ceil(days)} Day"
 		else:
 			hours = math.ceil(days * 24 + seconds // 3600)
-			pluralize = "s" if hours > 1 else ""
-			return f"{hours} Hour{pluralize}"
+			##pluralize = "s" if hours > 1 else ""
+			return f"{hours} Hour"
 
 	@property
 	def fulfilment_price(self):
