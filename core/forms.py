@@ -130,7 +130,7 @@ class DateRangeForm(forms.Form):
 		cleaned_data = super().clean()
 		stay = cleaned_data.get('stay')
 
-		if len(stay.split(" to ")) != 2:
+		if stay and len(stay.split(" to ")) != 2:
 			raise ValidationError(_("Please provide a check out date."))
 		else:
 			range_list = parse_date_range(stay)

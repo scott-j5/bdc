@@ -17,9 +17,11 @@ class Tag(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+
 class Series(models.Model):
     name = models.CharField(max_length=150)
     slug = models.SlugField(max_length=150)
+
 
 class Blog(models.Model):
 	def get_upload_path(instance, filename):
@@ -65,7 +67,6 @@ class Blog(models.Model):
 	
 	def clean(self, *args, **kwargs):
 		if self.slug == '' or self.slug == None:
-			print("YOOOOOO")
 			self.slug = self.title.replace(' ', '-').lower()
 		super().clean(*args, **kwargs)
 

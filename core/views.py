@@ -1,10 +1,13 @@
 from django.shortcuts import render
 
+from blogs.models import Blog
+
 from .forms import ContactForm, DateRangeForm, DateRangeFormMulti
 
 # Create your views here.
 def home_view(request):
     context = {
+		"blogs": Blog.objects.filter(published=True).distinct().order_by('-published_on')[:3],
 		"date_range_form": DateRangeFormMulti(action="van-list", flatpickr_args={"disable":["2021-07-20", "2021-07-21"]}),
 		"contact_form": ContactForm()
 	}

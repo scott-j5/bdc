@@ -1,108 +1,4 @@
-{% extends "core/base.html" %}
-{% load static %}
-
-{% block head_title %}Blogs{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-{% endblock scripts %}
-
-{% block content %}
-<div class="container">
-	<div class="section">
-		<div class="row min-vh-50 pt-8">
-			<div class="col-12 col-md-10 m-auto text-center">
-				<h1 class="text-light text-dark">Blogs</h1>
-				<h4 class="text-light text-dark">
-					Get inspired with road trip ideas, help prepare yourself for your very own rental or just keep up to date with new builds and news from the big dogs!
-				</h4>
-				<div class="row">
-					<div class="col-11 col-md-7 m-auto d-flex justify-content-around align-items-center flex-wrap">
-						<div class="input-group mb-3">
-							<input name=search type="text" class="form-control" placeholder="Search" aria-label="Search Blogs" aria-describedby="search">
-							<button class="btn btn-outline-secondary mb-0" type="button" id="search"><i class="fa fa-search"></i></button>
-						</div>
-					</div>
-					<div class="col-11 col-md-6 m-auto d-flex justify-content-around align-items-center flex-wrap" id="tag-list">
-						{% for tag in tags %}
-							<div id="tag-{{ tag.id }}" class="mx-2" data-identifier="{{ tag.id }}"><p class="m-0 p-0"><h6 class="btn btn-rounded btn-outline btn-danger btn-sm text-normal my-1 py-2 px-4">{{ tag.name }}</small></h6></div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="section" id="blog-card-list">
-		{% include 'blogs/blog_card_list.html' %}
-    </div>
-</div>
-
-<script type="text/javascript">
- LOAD = {
-    request : null,
-    loadToElement: async function(element, url){
-        let loader = document.createElement("div");
-        loader.classList.add("loader");
-        element.append(loader);
-        element.classList.add('loading');
-        
-        var response = null;
-        try{
-            response = await this._load(url, 'text/html');
-            LOAD.updateContent(response, element);
-        }catch{
-            LOAD.showError(response, element);
-        }
-        element.classList.remove('loading');
-    },
-    loadJson: async function(url){
-        return json.parse(await this._load(url, 'application/json', false));
-    },
-    _load(url, contentType, data=false){
-        return new Promise((resolve, reject) => {
-            //Ajax function to get files
-            const xhr = new XMLHttpRequest();
-            
-            if (data){
-                xhr.open('POST', url, true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-                xhr.send(data); 
-            }else{
-                xhr.open('GET', url, true);
-                xhr.setRequestHeader('Content-Type', contentType);
-                xhr.send(null); 
-            };
-
-            xhr.onload = function(){
-                if(xhr.status == 200){
-                    if (contentType = 'application/JSON'){
-                        resolve(xhr.responseText);
-                    }else{
-                        resolve(xhr.response);
-                    }
-                }else{
-                    reject(xhr);
-                }
-            }
-        });
-    },
-    showError: function(xhr, element=false){
-        if(element){
-            if (xhr.status == 200 ){
-                element.innerHTML = xhr.response;
-            }else{
-                element.innerHTML = '<div class="form-alert form-error"> Error ' + xhr.status + ': ' + xhr.statusText + '</div>';
-            }
-        }else{
-            console.log('Error ' + xhr.status + ': ' + xhr.statusText);
-        }
-    },
-    updateContent: function(response, element){
-        element.innerHTML = response;
-    }
-};
-
+import LOAD from './load.js';
 
 BLOGLIST = {
     searchQuery: "",
@@ -113,17 +9,17 @@ BLOGLIST = {
     //Set Listeners for filter inputs
     //Runs render on tags/ search input
     init: function(searchSelector, tagListSelector, windowSelector){
+        this.update();
+
         this.searchSelector = searchSelector;
         this.tagListSelector = tagListSelector;
         this.windowSelector = windowSelector;
 
-		this.update();
-
         document.querySelector(searchSelector).addEventListener("keyup", BLOGLIST.searchDelay(function(e){BLOGLIST.search(e)}, 500));
         document.querySelectorAll(tagListSelector).forEach(item => {
-			item.childNodes.forEach(listItem => {
-				listItem.addEventListener("click", BLOGLIST.updateTags);
-			});
+            item.children.forEach(listItem => {
+                listItem.addEventListener("click", BLOGLIST.updateTags);
+            });
         });
         BLOGLIST.setPageListeners();
     },
@@ -135,7 +31,7 @@ BLOGLIST = {
     },
     //Populates existing filter params from GET request
     getQuery: function(){
-        let params = new URLSearchParams(window.location.search);
+        params = new URLSearchParams(window.location.search);
         // If GET contains params populate search query else set to defaults
         if(Array.from(params).length >= 1 ){
             tags = []
@@ -200,14 +96,12 @@ BLOGLIST = {
                 item.classList.remove('tag-list-active');
             });
         }
-        document.querySelectorAll(BLOGLIST.tagListSelector).forEach(item => {
-			item.childNodes.forEach(listItem => {
-				if(BLOGLIST.searchQuery.tags.includes(item.dataset.identifier)){
-					item.classList.add("active");
-				}else{
-					item.classList.remove("active");
-				}
-			});
+        document.querySelectorAll(BLOGLIST.tagListSelector).children.forEach(item => {
+            if(BLOGLIST.searchQuery.tags.includes(item.dataset.identifier)){
+                item.classList.add("active");
+            }else{
+                item.classList.remove("active");
+            }
         });
     },
     load: async function(pushState=null){
@@ -230,7 +124,7 @@ BLOGLIST = {
     },
 }
 
-var blogList = function(
+export const blogList = function(
     searchSelector,
     tagListSelector,
     windowSelector
@@ -242,14 +136,3 @@ var blogList = function(
         obj.update();
     };
 };
-
-
-
-
-
-
-	window.addEventListener("DOMContentLoaded", function(){
-		blogList("input[name='search']","#tag-list","#blog-card-list");
-	});
-</script>
-{% endblock content %}

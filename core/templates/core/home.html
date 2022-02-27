@@ -10,8 +10,8 @@ bg-gray-100
 
 {% block content %}
 <header class="position-relative">
-	<div class="d-flex justify-content-center page-header min-vh-100 position-relative" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
-		<video autoplay muted loop class="position-absolute w-100 h-100 fit-cover" id="myVideo">
+	<div class="d-flex justify-content-center page-header min-vh-100 position-relative">
+		<video autoplay muted loop class="position-absolute w-100 h-100 fit-cover" poster="">
 			<source src="{% static 'video/BIG_DOG_CAMPERS_FINAL_EDIT_1080p_web.mp4' %}" type="video/mp4">
 		</video>
 		<div class="filter"></div>
@@ -20,31 +20,13 @@ bg-gray-100
 				<div class="col-md-8 text-center">
 					<h1 class="title text-white text-light"> Plan the road trip of a lifetime</h1>
 					<h2 class="fs-5 description text-white text-light">
-						Edinburghs newest camper van rental business, born from a desire to get 'out there'. Our custom built camper vans come fully equipped and ready for adventure.
+						Book your next adventure with Big Dog Campervans now.  Travel the North Coast 500, to the isle of Skye or wherever your heart desires in our beautifully handcrafted adventure wagon ‘Rudy’.
 					</h2>
 					<br/>
 				</div>
 				<div class="col-md-9">
 					<div class="card card-raised card-form-horizontal no-transition">
-						<div class="card-body p-3 pb-0"><!--
-						<form method="" action="">
-							<div class="row">
-		
-								<div class="col-md-4">
-									<div class="form-group mb-md-0">
-									<input id="datepicker" type="text" value="" placeholder="Date" class="form-control" />
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group mb-md-0">
-									<input type="text" value="" placeholder="Date" class="form-control" />
-									</div>
-								</div>
-								<div class="d-grid gap-2 col-md-4">
-									<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="search"></i> &nbsp; Search</button>
-								</div>
-							</div>
-						</form>-->
+						<div class="card-body p-3 pb-0">
 						{% crispy date_range_form %}
 						</div>
 					</div>
@@ -66,7 +48,6 @@ bg-gray-100
 <!-- INTRO -->
 <div class="section">
 	<div class="container">
-		<h1>OPTION 1</h1>
 		<div class="row py-8">
 			<div class="col position-relative">
 				<!-- Road -->
@@ -145,183 +126,6 @@ bg-gray-100
 	</div>
 </div>
 <!-- END INTRO -->
-
-
-
-
-
-<!-- INTRO -->
-<div class="section">
-	<div class="container">
-		<h1>OPTION 2</h1>
-		<div class="row py-8">
-			<div class="col position-relative">
-				<!-- Road -->
-				<div class="row position-absolute justify-content-end justify-content-md-center w-100 h-100">
-					<div class="d-flex flex-column align-items-center h-100 w-auto">
-						<div class="pixel p-2 rounded-circle bg-danger"></div>
-						<div class="pixel-2  h-100 dashed-line"></div>
-						<div class="pixel p-2 rounded-circle bg-danger"></div>
-						<div class="position-absolute w-10 w-md-5 rellax" id="moving-van" data-rellax-speed="-3">
-							<img src="{% static 'img/van-top.svg' %}">
-						</div>
-					</div>
-				</div>
-				<div class="position-relative over-filter pt-5">
-					<div class="row justify-content-start pb-5">
-						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
-							<div class="order-md-1 text-md-end">
-								<strong>High Roof</strong>
-								<p>Rudy has an internal height of 6ft 1 inches meaning most people can comfortably stand up straight</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start justify-content-md-end pb-5">
-						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger fa fa-utensils"></i>
-							<div class="">
-								<strong>Full working kitchen</strong>
-								<p>A two-burner stove, electric cool box and all your cooking utensils make scran on the road a pleasure to prepare</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start pb-5">
-						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger bi-battery-charging"></i>
-							<div class="order-md-1 text-md-end">
-								<strong>Off grid electricity</strong>
-								<p>Rudy charges while you drive, then when your stopped she charges from a large solar panel on the roof</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start justify-content-md-end pb-5">
-						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger fa fa-bed"></i>
-							<div class="">
-								<strong>Double bed</strong>
-								<p>A fixed double bed makes for comfortable nights on the road</p>
-							</div>
-						</div>
-					</div>
-					<div class="row justify-content-start pb-5">
-						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger fa fa-faucet"></i>
-							<div class="order-md-1 text-md-end">
-								<strong>Running water</strong>
-								<p>A 70l water tank provides running water from the electric pump</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start justify-content-md-end pb-5">
-						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger fa fa-truck-loading"></i>
-							<div class="">
-								<strong>Huge storage capacity</strong>
-								<p>Plenty of storage for all your adventure needs including a slide out tray in the garage</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- END INTRO -->
-
-
-
-<!-- INTRO -->
-<div class="section">
-	<div class="container">
-		<h1>OPTION 3 (ignore van going too far)</h1>
-		<div class="row py-8">
-			<div class="col position-relative">
-				<!-- Road -->
-				<div class="row position-absolute justify-content-end justify-content-md-center w-100 h-100">
-					<div class="d-flex flex-column align-items-center h-100 w-auto">
-						<div class="pixel p-2 rounded-circle bg-danger"></div>
-						<div class="pixel-2  h-100 dashed-line"></div>
-						<div class="pixel p-2 rounded-circle bg-danger"></div>
-						<div class="position-absolute w-10 w-md-5 rellax" id="moving-van" data-rellax-speed="-3">
-							<img src="{% static 'img/van-top.svg' %}">
-						</div>
-					</div>
-				</div>
-				<div class="position-relative over-filter pt-5">
-					<div class="row justify-content-start pb-5">
-						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger" data-feather="map-pin"></i>
-							<div class="order-md-1 text-md-end">
-								<strong>Located in Edinburgh</strong>
-								<p>Right where you want us</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start justify-content-md-end pb-5">
-						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger" data-feather="dollar-sign"></i>
-							<div class="">
-								<strong>All Inclusive</strong>
-								<p>No Hidden Costs</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start pb-5">
-						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger bi-rulers"></i>
-							<div class="order-md-1 text-md-end">
-								<strong>Standing-height Ceilings</strong>
-								<p>Stretch out and enjoy</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start justify-content-md-end pb-5">
-						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger fa fa-utensils"></i>
-							<div class="">
-								<strong>In-van kitchens</strong>
-								<p>Avoid the weather. Cook up a storm inside instead!</p>
-							</div>
-						</div>
-					</div>
-					<div class="row justify-content-start pb-5">
-						<div class="col-10 col-md-5 d-flex justify-content-md-end">
-							<i class="icon-150 order-md-2 mx-3 text-danger fa fa-truck-loading"></i>
-							<div class="order-md-1 text-md-end">
-								<strong>Loads of storage</strong>
-								<p>Even enough room for the bikes!</p>
-							</div>
-						</div>
-					</div>
-	
-					<div class="row justify-content-start justify-content-md-end pb-5">
-						<div class="col-10 col-md-5 d-flex">
-							<i class="icon-150 mx-3 text-danger fa fa-bed"></i>
-							<div class="">
-								<strong>Dedicated Bed</strong>
-								<p>No set-up or pack-up required</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- END INTRO -->
-
-
-
-
-
 
 
 <!-- VANS PROMPT -->
