@@ -23,7 +23,7 @@
 							<button class="btn btn-outline-secondary mb-0" type="button" id="search"><i class="fa fa-search"></i></button>
 						</div>
 					</div>
-					<div class="col-11 col-md-6 m-auto d-flex justify-content-around align-items-center flex-wrap" id="tag-list">
+					<div class="col-11 col-md-6 m-auto d-flex justify-content-around align-items-center flex-wrap tag-list" id="tag-list">
 						{% for tag in tags %}
 							<div id="tag-{{ tag.id }}" class="mx-2" data-identifier="{{ tag.id }}"><p class="m-0 p-0"><h6 class="btn btn-rounded btn-outline btn-danger btn-sm text-normal my-1 py-2 px-4">{{ tag.name }}</small></h6></div>
 						{% endfor %}
@@ -200,14 +200,12 @@ BLOGLIST = {
                 item.classList.remove('tag-list-active');
             });
         }
-        document.querySelectorAll(BLOGLIST.tagListSelector).forEach(item => {
-			item.childNodes.forEach(listItem => {
-				if(BLOGLIST.searchQuery.tags.includes(item.dataset.identifier)){
-					item.classList.add("active");
-				}else{
-					item.classList.remove("active");
-				}
-			});
+        document.querySelectorAll(BLOGLIST.tagListSelector + "> *").forEach(item => {
+			if(BLOGLIST.searchQuery.tags.includes(item.dataset.identifier)){
+				item.classList.add("active");
+			}else{
+				item.classList.remove("active");
+			}
         });
     },
     load: async function(pushState=null){
