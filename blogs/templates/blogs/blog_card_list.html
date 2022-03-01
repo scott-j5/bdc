@@ -9,14 +9,17 @@
 			{% if not forloop.counter == 3 %}
 			<div class="col-12 col-lg-6">
 			{% endif %}
-				<a class="text-muted" href="{% url 'blog-detail' blog.slug %}">
-					<div class="row py-3">
-						<div class="{% if forloop.first %} col-12 {% else %} col-12 col-lg-6 {% endif %}">
+				<div class="row py-3">
+					<div class="{% if forloop.first %} col-12 {% else %} col-12 col-lg-6 {% endif %}">
+						<a class="text-muted" href="{% url 'blog-detail' blog.slug %}">
 							<div class="responsive-img-container {% if forloop.first %} img-16-9 {% else %} img-4-3 {% endif %}">
 								<img class="responsive-img fit-cover" src="{% if blog.thumbnail %}{{ blog.thumbnail.url }}{% endif %}"/>
 							</div>
-						</div>
-						<div class="col-12 {% if not forloop.first %} col-lg-6 {% endif %}">
+						</a>
+					</div>
+					
+					<div class="col-12 {% if not forloop.first %} col-lg-6 {% endif %}">
+						<a class="text-muted" href="{% url 'blog-detail' blog.slug %}">
 							<small class="text-danger">
 								{{ blog.author_name }}
 								{% if blog.published %}
@@ -26,13 +29,25 @@
 								{% endif %}
 							</small>
 							<h2>{{ blog.title }}</h2>
-							<p>{{ blog.description }}</p>
-							{% for tag in blog.tags.all %}
-								<div class="badge badge-danger">{{ tag.name }}</div>
-							{% endfor %}
+							<p class="m-0">{{ blog.description }}</p>
+						</a>
+
+						{% if user.is_staff or user == blog.author or perms.blogs.change_blog or perms.blogs.delete_blog %}
+						<div class="">
+							{% if user.is_staff or user == blog.author or perms.blogs.change_blog %}
+								<a href="#" class="link-primary m-0 px-1"><small><i class="fa fa-edit"></i> Edit</small></a>
+							{% endif %}
+							{% if perms.blogs.delete_blog %}
+								<a href="#" class="link-danger m-0 px-1"><small><i class="fa fa-trash"></i> Delete</small></a>
+							{% endif %}
 						</div>
+						{% endif %}
+
+						{% for tag in blog.tags.all %}
+							<div class="badge badge-danger mt-2"><small class="text-normal">{{ tag.name }}</small></div>
+						{% endfor %}
 					</div>
-				</a>
+				</div>
 			{% if not forloop.counter == 2 or forloop.last %}
 			</div>
 			{% endif %}
