@@ -25,7 +25,7 @@
 					</div>
 					<div class="col-11 col-md-6 m-auto d-flex justify-content-around align-items-center flex-wrap tag-list" id="tag-list">
 						{% for tag in tags %}
-							<div id="tag-{{ tag.id }}" class="mx-2" data-identifier="{{ tag.id }}"><p class="m-0 p-0"><h6 class="btn btn-rounded btn-outline btn-danger btn-sm text-normal my-1 py-2 px-4">{{ tag.name }}</small></h6></div>
+							<div id="tag-{{ tag.slug }}" class="mx-2" data-identifier="{{ tag.slug }}"><p class="m-0 p-0"><h6 class="btn btn-rounded btn-outline btn-danger btn-sm text-normal my-1 py-2 px-4">{{ tag.name }}</small></h6></div>
 						{% endfor %}
 					</div>
 				</div>
@@ -135,13 +135,13 @@ BLOGLIST = {
     },
     //Populates existing filter params from GET request
     getQuery: function(){
-        let params = new URLSearchParams(window.location.search);
+        params = new URLSearchParams(window.location.search);
         // If GET contains params populate search query else set to defaults
         if(Array.from(params).length >= 1 ){
             tags = []
             if(params.get('tags')){
                 params.get('tags').split(',').forEach(tag =>{
-                    if(tag.length >= 1 && !isNaN(tag)){
+                    if(tag.length >= 1){
                         tags.push(tag);
                     }
                 });

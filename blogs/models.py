@@ -12,10 +12,11 @@ from imageit.models import ScaleItImageField, CropItImageField
 
 # Create your models here.
 class Tag(models.Model):
-    name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100, unique=True)
+	slug = models.SlugField(max_length=100, default=1)
 
-    def __str__(self):
-        return f'{self.name}'
+	def __str__(self):
+		return f'{self.name}'
 
 
 class Series(models.Model):
@@ -62,7 +63,7 @@ class Blog(models.Model):
 		result = Blog.objects.filter(**filters)
 		if filter_dict.get('tags'):
 			for tag in filter_dict.get('tags'):
-				result = result.filter(tags__id=tag)
+				result = result.filter(tags__slug=tag)
 		return result
 	
 	def clean(self, *args, **kwargs):
