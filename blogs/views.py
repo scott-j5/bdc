@@ -4,15 +4,18 @@ from django.shortcuts import render
 import json
 import os
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.views.generic import DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import BaseFormView
 
-from .forms import BlogImageForm
+
+from .forms import BlogImageForm, BlogForm
 from .models import Blog, BlogImage, Series, Tag
 
 
@@ -24,6 +27,20 @@ class BlogDetail(DetailView):
         obj = super().get_object(**kwargs)
         obj.increment_views()
         return obj
+
+
+class BlogDelete(PermissionRequiredMixin, DeleteView):
+	permission_required = 'blogs.delete_blog'
+	model = Blog
+	success_url = reverse_lazy('blog-list')
+
+
+class BlogUpdate(PermissionRequiredMixin, UpdateView):
+	permission_required = 'blogs.change_blog'
+	raise_exception = True
+	model = Blog
+	form_class = BlogForm
+	success_url = reverse_lazy('blog-list')
 
 
 def blog_list(request):

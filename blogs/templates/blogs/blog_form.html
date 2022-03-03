@@ -1,0 +1,29 @@
+{% extends 'bootstrap_modal/modal.html' %}
+{% load crispy_forms_tags %}
+
+{% block modal_content %}
+<div class="modal-dialog modal-lg">
+	<div class="modal-content">
+	  <div class="modal-header position-relative d-block">
+		  <div class="text-center">
+			<i class="fa fa-edit modal-icon"></i>
+			<h4 class="modal-title">Update {{ object.title }}</h4>
+		  </div>
+		<button type="button" class="btn-close position-absolute top-0 end-0 mt-2 mx-2" data-bs-dismiss="modal" aria-label="Close"></button>
+	  </div>
+	  <div class="modal-body">
+		  
+		  <form method="POST" action="{% url 'blog-update' object.slug %}">
+			  	{% csrf_token %}
+				{% crispy form %}
+				<!--
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<button type="submit" class="btn btn-primary">Save Changes</button>
+			  </div>
+			  -->
+		  </form>
+	  </div>
+	</div>
+</div>
+{% endblock modal_content %}

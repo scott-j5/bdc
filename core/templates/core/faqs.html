@@ -15,6 +15,9 @@
 			<div class="col text-center py-5">
 				<h1 class="title text-white text-light mt-1">Frequently Asked Questions</h1>
 				<h5 class="description text-white text-light">You have questions. We have answers! Choose a category below to find out more.</h5>
+				{% if perms.core.add_faq %}
+					<a href=""><h5 class="text-primary"><i class="fa fa-plus"></i> Add</h5></a>
+				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -24,12 +27,17 @@
 	<div class="overflow-x-scroll overflow-y-visible translate-middle-y" id="faqs-tabs-container">
 		<div class="container py-1">
 			<ul class="nav nav-tabs nav-justified flex-nowrap gap-5" id="faqs-tabs" role="tablist">
-				<li class="nav-item" role="presentation">
-					<button class="nav-link active text-reset p-4" id="pills-booking-tab" data-bs-toggle="pill" data-bs-target="#pills-booking" type="button" role="tab" aria-controls="pills-booking" aria-selected="true">
-						<h3><i data-feather="bookmark"></i></h3>
-						<p class="m-0">Booking</p>
-					</button>
-				</li>
+				{% regroup faqs by category as faqs_list %}
+				{% for faq_grouped in faqs_list %}
+					<li class="nav-item" role="presentation">
+						<button class="nav-link {% if forloop.first %}active{% endif %} text-reset p-4" id="pills-{{ faq_grouped.grouper.slug }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ faq_grouped.grouper.slug }}" type="button" role="tab" aria-controls="pills-{{ faq_grouped.grouper.name }}" aria-selected="true">
+							<h3><i class="{{ faq_grouped.grouper.icon }}"></i></h3>
+							<p class="m-0">{{ faq_grouped.grouper.name }}</p>
+						</button>
+					</li>
+				{% endfor %}
+
+				
 				<li class="nav-item" role="presentation">
 					<button class="nav-link text-reset p-4" id="pills-vans-tab" data-bs-toggle="pill" data-bs-target="#pills-vans" type="button" role="tab" aria-controls="pills-vans" aria-selected="false">
 						<h3><i class="bi bi-signpost-2"></i></h3>
@@ -58,101 +66,52 @@
 			<div class="row">
 				<div class="col">
 					<div class="tab-content" id="pills-tabContent">
-						<!-- START BOOKING -->
-						<div class="tab-pane fade show active" id="pills-booking" role="tabpanel" aria-labelledby="pills-booking-tab">
-							<div class="container">
-								<div class="row my-5">
-									<div class="col-md-8 mx-auto text-center">
-									<h2>Booking</h2>
-									<p>Curious about our booking process? If you would like to know more, please feel free to submit your question below! </p>
+						{% for faq_grouped in faqs_list %}
+
+							<!-- START {{ faq_grouped.grouper.name }} -->
+							<div class="tab-pane fade show {% if forloop.first %}active{% endif %}" id="pills-{{ faq_grouped.grouper.slug }}" role="tabpanel" aria-labelledby="pills-{{ faq_grouped.grouper.slug }}-tab">
+								<div class="container">
+									<div class="row my-5">
+										<div class="col-md-8 mx-auto text-center">
+										<h2>{{ faq_grouped.grouper.name }}</h2>
+										<p>{{ faq_grouped.grouper.description }}</p>
+										</div>
 									</div>
-								</div>
-								<div class="row justify-content-center">
-									<div class="col-md-10">
-										<div class="accordion" id="accordionRental">
-											<div class="accordion-item mb-3">
-												<h5 class="accordion-header" id="headingOne">
-													<button class="accordion-button border-bottom font-weight-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-													How do I order?
-													<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													</button>
-												</h5>
-												<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionRental" style="">
-													<div class="accordion-body text-sm opacity-8">
-													We’re not always in the position that we want to be at. We’re constantly growing. We’re constantly making mistakes. We’re constantly trying to express ourselves and actualize our dreams. If you have the opportunity to play this game
-													of life you need to appreciate every moment. A lot of people don’t appreciate the moment until it’s passed.
-													</div>
-												</div>
-											</div>
-											<div class="accordion-item mb-3">
-												<h5 class="accordion-header" id="headingTwo">
-													<button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-													How can i make the payment?
-													<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													</button>
-												</h5>
-												<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionRental">
-													<div class="accordion-body text-sm opacity-8">
-													It really matters and then like it really doesn’t matter. What matters is the people who are sparked by it. And the people who are like offended by it, it doesn’t matter. Because it's about motivating the doers. Because I’m here to follow my dreams and inspire other people to follow their dreams, too.
-													<br>
-													We’re not always in the position that we want to be at. We’re constantly growing. We’re constantly making mistakes. We’re constantly trying to express ourselves and actualize our dreams. If you have the opportunity to play this game of life you need to appreciate every moment. A lot of people don’t appreciate the moment until it’s passed.
-													</div>
-												</div>
-											</div>
-											<div class="accordion-item mb-3">
-												<h5 class="accordion-header" id="headingThree">
-													<button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-													How much time does it take to receive the order?
-													<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													</button>
-												</h5>
-												<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionRental">
-													<div class="accordion-body text-sm opacity-8">
-													The time is now for it to be okay to be great. People in this world shun people for being great. For being a bright color. For standing out. But the time is now to be okay to be the greatest you. Would you believe in what you believe in, if you were the only one who believed it?
-													If everything I did failed - which it doesn't, it actually succeeds - just the fact that I'm willing to fail is an inspiration. People are so scared to lose that they don't even try. Like, one thing people can't say is that I'm not trying, and I'm not trying my hardest, and I'm not trying to do the best way I know how.
-													</div>
-												</div>
-											</div>
-											<div class="accordion-item mb-3">
-												<h5 class="accordion-header" id="headingFour">
-													<button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-													Can I resell the products?
-													<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													</button>
-												</h5>
-												<div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionRental">
-													<div class="accordion-body text-sm opacity-8">
-													I always felt like I could do anything. That’s the main thing people are controlled by! Thoughts- their perception of themselves! They're slowed down by their perception of themselves. If you're taught you can’t do anything, you won’t do anything. I was taught I could do everything.
-													<br><br>
-													If everything I did failed - which it doesn't, it actually succeeds - just the fact that I'm willing to fail is an inspiration. People are so scared to lose that they don't even try. Like, one thing people can't say is that I'm not trying, and I'm not trying my hardest, and I'm not trying to do the best way I know how.
-													</div>
-												</div>
-											</div>
-											<div class="accordion-item mb-3">
-												<h5 class="accordion-header" id="headingFifth">
-													<button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFifth" aria-expanded="false" aria-controls="collapseFifth">
-													Where do I find the shipping details?
-													<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
-													</button>
-												</h5>
-												<div id="collapseFifth" class="accordion-collapse collapse" aria-labelledby="headingFifth" data-bs-parent="#accordionRental">
-													<div class="accordion-body text-sm opacity-8">
-													There’s nothing I really wanted to do in life that I wasn’t able to get good at. That’s my skill. I’m not really specifically talented at anything except for the ability to learn. That’s what I do. That’s what I’m here for. Don’t be afraid to be wrong because you can’t learn anything from a compliment.
-													I always felt like I could do anything. That’s the main thing people are controlled by! Thoughts- their perception of themselves! They're slowed down by their perception of themselves. If you're taught you can’t do anything, you won’t do anything. I was taught I could do everything.
+
+									{% for faq in faq_grouped.list %}
+										<div class="row justify-content-center">
+											<div class="col-md-10">
+												<div class="accordion" id="accordion-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}">
+													<div class="accordion-item mb-3">
+														<h5 class="accordion-header" id="heading-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}">
+															<button class="accordion-button border-bottom font-weight-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}">
+																{{ faq.title }}
+															<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
+															<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
+															</button>
+														</h5>
+														
+														<div id="collapse-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}" data-bs-parent="accordion-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}">
+															<div class="accordion-body text-sm opacity-8">
+																{{ faq.description }}
+																{% if perms.core.edit_faq %}
+																	<a href="" class="text-primary p-2"><i class="fa fa-edit"></i></a>
+																{% endif %}
+																{% if perms.core.delete_faq %}
+																	<a href="" class="text-danger p-2"><i class="fa fa-trash"></i></a>
+																{% endif %}
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									{% endfor %}
+									
 								</div>
 							</div>
-						</div>
-						<!-- END BOOKING -->
+							<!-- END {{ faq_grouped.grouper.name }} -->
+						{% endfor %}
 
 						<!-- START PLANNING A TRIP -->
 						<div class="tab-pane fade" id="pills-vans" role="tabpanel" aria-labelledby="pills-vans-tab">
@@ -469,3 +428,11 @@
 	</div>
 </div>
 {% endblock content %}
+
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", () => {
+		const trigger = document.querySelector(`ul.nav a[href="${window.location.hash}"]`)
+		const tab = new bootstrap.Tab(trigger)
+		tab.show()
+	});
+</script>

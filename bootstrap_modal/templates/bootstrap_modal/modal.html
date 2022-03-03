@@ -1,4 +1,12 @@
-<div class="modal fade" id="{{ target_modal }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+{% extends request.GET.is_ajax|yesno:"bootstrap_modal/base_modal.html,core/base.html" %}
+
+{% block content %}
+	<div class="section section-dark min-vh-100 py-8">
+	{% block modal_content %}
+	
+	{% endblock modal_content %}
+	</div>
+{% endblock %}
 	<div class="modal-dialog">
 	  <div class="modal-content">
 		<div class="modal-header">
@@ -14,4 +22,3 @@
 		</div>
 	  </div>
 	</div>
-</div>

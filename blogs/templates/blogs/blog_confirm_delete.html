@@ -1,0 +1,26 @@
+{% extends 'bootstrap_modal/modal.html' %}
+{% load crispy_forms_tags %}
+
+{% block modal_content %}
+<div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header position-relative d-block">
+		  <div class="text-center">
+			<i class="fa fa-trash modal-icon"></i>
+			<h4 class="modal-title">Are you sure you want to delete {{ object.title }}?</h4>
+			<small class="font-bold">This action cannot be undone!</small>
+		  </div>
+		<button type="button" class="btn-close position-absolute top-0 end-0 mt-2 mx-2" data-bs-dismiss="modal" aria-label="Close"></button>
+	  </div>
+	  <div class="modal-body">
+		  <form method="POST" action="{% url 'blog-delete' object.slug %}">
+			  {% csrf_token %}
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="history.back()">Cancel</button>
+				<button type="submit" class="btn btn-danger">Delete</button>
+			  </div>
+		  </form>
+	  </div>
+	</div>
+</div>
+{% endblock modal_content %}

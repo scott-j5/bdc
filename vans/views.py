@@ -1,5 +1,7 @@
 from core.forms import DateRangeForm, DateRangeFormMulti
 from core.utils import parse_date_range
+
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render
 from django.utils import timezone
 from django.urls import reverse_lazy
@@ -8,6 +10,7 @@ from django.views.generic import DetailView, ListView
 from products.models import ProductFulfilment
 from products.views import CompleteProductUpdateView, ProductDeleteView
 from rentals.models import RentalFulfilment, RentalRules, RentalInformation
+
 
 from .models import (
 	Van,
@@ -58,8 +61,10 @@ class VanDetailView(DetailView):
 		return context
 
 
-class VanUpdateView(CompleteProductUpdateView):
-	pass
+class VanUpdateView(PermissionRequiredMixin, CompleteProductUpdateView):
+	permission_required = 'van.change_van'
+	raise_exception = True
+
 
 
 class VanDeleteView(ProductDeleteView):

@@ -33,7 +33,7 @@ class Blog(models.Model):
 	published_on = models.DateTimeField(default=None, null=True, blank=True)
 	updated = models.DateTimeField(default=timezone.now, null=False, blank=False)
 	title = models.CharField(max_length=150)
-	slug = models.SlugField(max_length=150, unique=True)
+	slug = models.SlugField(max_length=150, unique=True, null=False, blank=True, help_text='Leave blank to auto-generate')
 	description = models.CharField(max_length=500)
 	thumbnail = ScaleItImageField(max_width=250, max_height=250, quality=100, null=True, blank=True, upload_to=get_upload_path)
 	banner = CropItImageField(max_width=1000, max_height=1000, null=True, blank=True, upload_to=get_upload_path)
@@ -78,7 +78,7 @@ class Blog(models.Model):
 	def save(self, *args, **kwargs):
 		is_published = Blog.objects.only("published").filter(id=self.id).first()
 
-		if kwargs.pop("updated", None):
+		if kwargs.pop("updated", True) != False:
 			self.updated = timezone.now()
 
 		if is_published and not is_published.published and self.published:

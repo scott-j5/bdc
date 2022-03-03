@@ -10,7 +10,7 @@ from django.forms import(
 
 from .models import Van
 
-
+'''
 class VanForm(ModelForm):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -25,3 +25,4 @@ class VanForm(ModelForm):
 	class Meta:
 		model = Van
 		fields = ['name', 'rate', 'registration', 'odo']
+'''

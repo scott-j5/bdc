@@ -35,10 +35,10 @@
 						{% if user.is_staff or user == blog.author or perms.blogs.change_blog or perms.blogs.delete_blog %}
 						<div class="">
 							{% if user.is_staff or user == blog.author or perms.blogs.change_blog %}
-								<a href="#" class="link-primary m-0 px-1"><small><i class="fa fa-edit"></i> Edit</small></a>
+								<a href="{% url 'blog-update' blog.slug %}" class="link-primary m-0 px-1"><small><i class="fa fa-edit"></i> Edit</small></a>
 							{% endif %}
 							{% if perms.blogs.delete_blog %}
-								<a href="#" class="link-danger m-0 px-1"><small><i class="fa fa-trash"></i> Delete</small></a>
+								<a href="{% url 'blog-delete' blog.slug %}" class="link-danger m-0 px-1"><small><i class="fa fa-trash"></i> Delete</small></a>
 							{% endif %}
 						</div>
 						{% endif %}

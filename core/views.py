@@ -3,6 +3,7 @@ from django.shortcuts import render
 from blogs.models import Blog
 
 from .forms import ContactForm, DateRangeForm, DateRangeFormMulti
+from .models import Faq
 
 # Create your views here.
 def home_view(request):
@@ -29,6 +30,7 @@ def pricing_view(request):
 
 def faqs_view(request):
     context = {
+		"faqs": Faq.objects.all(),
 		"form": ContactForm()
 	}
     return render(request, 'core/faqs.html', context)
