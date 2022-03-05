@@ -119,3 +119,41 @@
 	  }
 	}
   }
+
+
+  @include media-breakpoint-down(lg) {
+	.navbar {
+	  &.navbar-transparent-dark {
+		.navbar-collapse {
+		  padding-top: $spacer / 2;
+		  padding-bottom: $spacer / 2;
+		}
+  
+		.navbar-collapse.collapsing {
+		  background: $white;
+		}
+     
+		.navbar-collapse.show {
+		  background: $white;
+		  .nav-link,
+		  i {
+			color: $dark;
+		  }
+		}
+	  }
+  
+	  .g-sidenav-show & {
+		&:not(.sidenav).navbar-main {
+		  .navbar-collapse {
+			display: flex !important;
+			flex-basis: auto;
+		  }
+  
+		  .navbar-nav {
+			flex-direction: row;
+		  }
+		}
+  
+	  }
+	}
+  }

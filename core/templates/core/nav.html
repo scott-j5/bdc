@@ -32,7 +32,7 @@
 									{{ van.name|capfirst }}
 								</a>
 							{% endfor %}
-							<a href="#" class="dropdown-item border-radius-md">
+							<a href="{% url 'blog-list' %}?tags=build" class="dropdown-item border-radius-md">
 								Coming soon...
 							</a>
 						</div>
@@ -41,7 +41,7 @@
 
 				<li class="nav-item dropdown dropdown-hover mx-2">
 					<a href="{% url 'blog-list' %}" class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center">
-						Posts
+						Inspiration
 					</a>
 				</li>
 
@@ -56,10 +56,10 @@
 							<li class="nav-item">
 								<a class="dropdown-item py-2 ps-3 border-radius-md" href="{% url 'pricing' %}">
 									<div class="d-flex">
-										<i class="icon icon-125 me-3 d-flex mt-1 bi-currency-dollar text-black-50"></i>
+										<i class="icon icon-125 me-3 d-flex mt-1 fa fa-list-check text-black-50"></i>
 										<div>
-											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pricing</h6>
-											<span class="text-sm text-wrap">Get an insight into our pricing throughout the year.</span>
+											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pre-trip Checklist</h6>
+											<span class="text-sm text-wrap">We're here to make sure your trip goes off without a hitch.</span>
 										</div>
 									</div>
 								</a>
@@ -67,21 +67,10 @@
 							<li class="nav-item ">
 								<a class="dropdown-item py-2 ps-3 border-radius-md" href="{% url 'faqs' %}">
 									<div class="d-flex">
-										<i class="icon icon-125 me-3 d-flex mt-1 bi-question-circle text-black-50"></i>
+										<i class="icon icon-125 me-3 d-flex mt-1 fa fa-info text-black-50"></i>
 										<div>
-											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">FAQ's</h6>
-											<span class="text-sm text-wrap">See frequently asked questions or ask one of your own!</span>
-										</div>
-									</div>
-								</a>
-							</li>
-							<li class="nav-item ">
-								<a class="dropdown-item py-2 ps-3 border-radius-md" href="{% url 'testimonials' %}">
-									<div class="d-flex">
-										<i class="icon icon-125 me-3 d-flex mt-1 bi-chat-left-quote text-black-50"></i>
-										<div>
-											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Testimonials</h6>
-											<span class="text-sm text-wrap">See what our renters are saying about us!</span>
+											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">On the road tips</h6>
+											<span class="text-sm text-wrap">Looking after your campervan & making the most of your trip</span>
 										</div>
 									</div>
 								</a>
@@ -104,7 +93,7 @@
 										<i class="icon icon-125 me-3 d-flex mt-1 bi-currency-dollar text-black-50"></i>
 										<div>
 											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Pricing</h6>
-											<span class="text-sm text-wrap">Get an insight into our pricing throughout the year.</span>
+											<span class="text-sm text-wrap">Get an insight into our pricing model.</span>
 										</div>
 									</div>
 								</a>
@@ -115,7 +104,7 @@
 										<i class="icon icon-125 me-3 d-flex mt-1 bi-card-checklist text-black-50"></i>
 										<div>
 											<h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">Rules</h6>
-											<span class="text-sm text-wrap">Get an insight into our pricing throughout the year.</span>
+											<span class="text-sm text-wrap">Like anything fun, we have a few rules to make sure everyone is safe.</span>
 										</div>
 									</div>
 								</a>
