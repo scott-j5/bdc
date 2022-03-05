@@ -111,6 +111,7 @@ class RentalProduct(Product):
 
 
 class RentalFulfilment(ProductFulfilment):
+	rental_user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), blank=False, null=False)
 	rental_fulfilled_product = models.ForeignKey(ProductFulfilment, on_delete=models.SET(get_sentinel_product), related_name='fulfilled_product')
 	rental_start = models.DateTimeField(blank=False, null=False)
 	rental_end = models.DateTimeField(blank=False, null=False)

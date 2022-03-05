@@ -1,0 +1,35 @@
+{% extends 'accounts/profile_base.html' %}
+{% load price_tags %}
+
+{% block profile_content %}
+	{% if object_list|length > 0 %}
+		<div class="row p-4">
+			<div class="col-12">
+				<ul class="list-group list-group-flush ps-4 bg-transparent">
+					{% for rf in object_list %}
+						<a href="{% url 'rental-fulfilment-detail' rf.id %}">
+							<li class="list-group-item pe-0 bg-transparent">
+								<div class="row">
+									<div class="col-8">
+										<p class="m-0 text-light text-normal">{{ rf.product.name }}</p>
+										<small class="text-light text-normal">({{ rf.rental_start }} - {{ rf.rental_end }})</small>
+									</div>
+									<div class="col-4 d-flex align-items-center justify-content-end">
+										<small class="text-light text-normal">{{ rf.fulfilment_price|price }}</small>
+									</div>
+								</div>
+							</li>
+						</a>
+					{% endfor %}
+				</ul>	
+			</div>
+		</div>
+	{% else %}
+		<div class="row h-100 align-items-center">
+			<div class="col-12 d-flex flex-column align-items-center justify-content-center">
+				<div><h3>No rentals found</h3></div>
+				<div><a href="{% url 'van-list' %}" class="btn btn-rounded btn-danger">Start planning your first trip now</a></div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock profile_content %}

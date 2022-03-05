@@ -33,10 +33,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 SITE_ID = 1
 
-ADMINS = [
-	("Scott", "admin@byitegroup.com")
-]
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -222,7 +218,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
-
+ADMINS = [
+	("Scott", "admin@byitegroup.com"),
+	("Scott", "scotty.james95@gmail.com")
+]
 
 # RECAPTCHA SETTINGS
 RECAPTCHA_PUBLIC_KEY = '6LemP8AbAAAAAI1HTkJNCurg9sbq9ZU0rbm3lgDB'

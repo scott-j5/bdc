@@ -1,6 +1,7 @@
 from core.forms import DateRangeFormMulti
 from core.utils import parse_date_range
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.core.exceptions import BadRequest
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -20,6 +21,11 @@ class RentalFulfilmentListView(UserPassesTestMixin, ListView):
 	
 	def test_func(self):
 		return self.request.user.is_staff
+
+	def get_queryset(self):
+		user_id = self.kwargs.get('pk', self.request.user.id)
+		return RentalFulfilment.objects.filter(rental_user__id=user_id)
+
 
 class RentalFulfilmentDetailView(UserPassesTestMixin, DetailView):
 	model = RentalFulfilment
@@ -57,3 +63,22 @@ class RentalFulfilmentDetailView(UserPassesTestMixin, DetailView):
 		return context
 
 
+class MyRentals(UserPassesTestMixin, ListView):
+	model = RentalFulfilment
+	template_name = "rentals/my_rentals.html"
+
+	def test_func(self):
+		return self.request.user.is_authenticated
+
+	def get_queryset(self, *args, **kwargs):
+		#If no user id is provided default to request.user
+		if not self.kwargs.get('pk', False):
+			self.kwargs['user_set'] = True
+			self.kwargs['pk'] = self.request.user.id
+		return RentalFulfilment.objects.filter(rental_user__id=self.kwargs['pk'])
+
+	def get_context_data(self, *args, **kwargs):
+		context = super().get_context_data(*args, **kwargs)
+		user_id = self.kwargs.get('pk', self.request.user.id)
+		context['base_user'] = {"user": User.objects.get(id=user_id)}
+		return context

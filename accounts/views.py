@@ -16,9 +16,12 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 	model = UserProfile
 	template_name = 'accounts/profile_detail.html'
 	success_url = reverse_lazy("profile")
+	context_object_name = "base_user"
 
 	def get(self, *args, **kwargs):
+		#If no user id is provided default to request.user
 		if not self.kwargs.get('pk', False):
+			self.kwargs['user_set'] = True
 			self.kwargs['pk'] = self.request.user.id
 		return super().get(*args, **kwargs)
 
