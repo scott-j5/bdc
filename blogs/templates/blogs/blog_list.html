@@ -7,6 +7,10 @@
     {{ block.super }}
 {% endblock scripts %}
 
+{% block nav %}
+	{% include 'core/nav.html' with nav_dark=True %}
+{% endblock nav %}
+
 {% block content %}
 <div class="container">
 	<div class="section">

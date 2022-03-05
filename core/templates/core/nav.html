@@ -1,9 +1,9 @@
 {% load static %}
 
 <!-- Navbar Transparent -->
-<nav class="navbar navbar-expand-lg position-absolute top-0 z-index-5 w-100 shadow-none my-3 navbar-transparent">
+<nav class="navbar navbar-expand-lg position-absolute top-0 z-index-5 w-100 shadow-none my-3 navbar-transparent{% if nav_dark %}-dark{% endif %}">
 	<div class="container">
-		<a class="navbar-brand text-white " href="{% url 'home' %}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
+		<a class="navbar-brand" href="{% url 'home' %}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
 			Big Dog Campers
 		</a>
 		<button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@
 				<li class="nav-item dropdown dropdown-hover mx-2">
 					<a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
 						Vans
-						<img src="{% static 'img/down-arrow-white.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-block d-none">
+												<svg height="7" viewBox="0 0 10 7" width="10" xmlns="http://www.w3.org/2000/svg" alt="down-arrow" class="arrow primary-arrow ms-1 d-lg-block d-none"><path d="m7.91769231.99461539-3.30230769 3.30230769-3.3023077-3.30230769c-.30182991-.29151709-.78160367-.28734798-1.07832198.00937032-.2967183.29671831-.30088741.77649207-.00937032 1.07832198l3.84615384 3.84615385c.3003845.3002938.78730781.3002938 1.08769231 0l3.84615385-3.84615385c.1999666-.19313421.28016353-.47913684.20976704-.74808255-.07039649-.26894572-.28043108-.47898031-.5493768-.5493768-.26894571-.07039649-.55494834.00980044-.74808255.20976705z"/></svg>
 						<img src="{% static 'img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-none d-block">
 					</a>
 					<div class="dropdown-menu dropdown-menu-animation dropdown-md dropdown-menu-end dropdown-menu-md-start p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
@@ -48,7 +48,7 @@
 				<li class="nav-item dropdown dropdown-hover mx-2">
 					<a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
 						Information for renters
-						<img src="{% static 'img/down-arrow-white.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-block d-none">
+						<svg height="7" viewBox="0 0 10 7" width="10" xmlns="http://www.w3.org/2000/svg" alt="down-arrow" class="arrow primary-arrow ms-1 d-lg-block d-none"><path d="m7.91769231.99461539-3.30230769 3.30230769-3.3023077-3.30230769c-.30182991-.29151709-.78160367-.28734798-1.07832198.00937032-.2967183.29671831-.30088741.77649207-.00937032 1.07832198l3.84615384 3.84615385c.3003845.3002938.78730781.3002938 1.08769231 0l3.84615385-3.84615385c.1999666-.19313421.28016353-.47913684.20976704-.74808255-.07039649-.26894572-.28043108-.47898031-.5493768-.5493768-.26894571-.07039649-.55494834.00980044-.74808255.20976705z"/></svg>
 						<img src="{% static 'img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-none d-block">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-animation dropdown-lg dropdown-menu-end dropdown-menu-md-start mt-0 mt-lg-3 p-3 border-radius-lg" aria-labelledby="dropdownMenuDocs">
@@ -93,7 +93,7 @@
 				<li class="nav-item dropdown dropdown-hover mx-2">
 					<a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
 						Before you book
-						<img src="{% static 'img/down-arrow-white.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-block d-none">
+												<svg height="7" viewBox="0 0 10 7" width="10" xmlns="http://www.w3.org/2000/svg" alt="down-arrow" class="arrow primary-arrow ms-1 d-lg-block d-none"><path d="m7.91769231.99461539-3.30230769 3.30230769-3.3023077-3.30230769c-.30182991-.29151709-.78160367-.28734798-1.07832198.00937032-.2967183.29671831-.30088741.77649207-.00937032 1.07832198l3.84615384 3.84615385c.3003845.3002938.78730781.3002938 1.08769231 0l3.84615385-3.84615385c.1999666-.19313421.28016353-.47913684.20976704-.74808255-.07039649-.26894572-.28043108-.47898031-.5493768-.5493768-.26894571-.07039649-.55494834.00980044-.74808255.20976705z"/></svg>
 						<img src="{% static 'img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-none d-block">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-animation dropdown-lg dropdown-menu-end dropdown-menu-md-start mt-0 mt-lg-3 p-3 border-radius-lg" aria-labelledby="dropdownMenuDocs">
@@ -341,7 +341,7 @@
 								{% if user.profile.avatar_url %}<img class="avatar-sm rounded-circle" alt="Profile Image" src="{{ user.profile.avatar_url }}">{% endif %}
 								<span class="ps-2 d-lg-none text-black-50">{{ user.profile.display_name }}</span>
 							</div>
-							<img src="{% static 'img/down-arrow-white.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-block d-none">
+													<svg height="7" viewBox="0 0 10 7" width="10" xmlns="http://www.w3.org/2000/svg" alt="down-arrow" class="arrow primary-arrow ms-1 d-lg-block d-none"><path d="m7.91769231.99461539-3.30230769 3.30230769-3.3023077-3.30230769c-.30182991-.29151709-.78160367-.28734798-1.07832198.00937032-.2967183.29671831-.30088741.77649207-.00937032 1.07832198l3.84615384 3.84615385c.3003845.3002938.78730781.3002938 1.08769231 0l3.84615385-3.84615385c.1999666-.19313421.28016353-.47913684.20976704-.74808255-.07039649-.26894572-.28043108-.47898031-.5493768-.5493768-.26894571-.07039649-.55494834.00980044-.74808255.20976705z"/></svg>
 							<img src="{% static 'img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-none d-block">
 						</a>
 
