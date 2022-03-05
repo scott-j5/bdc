@@ -5,10 +5,12 @@ from rentals.models import RentalProduct
 # Create your models here.
 class Van(RentalProduct):
 	DRIVE_CHOICES = [("4x4", "4x4"),("2x4", "2x4")]
+	TRANSMISSION_CHOICES = [("Manual", "Manual"), ("Automatic", "Automatic")]
 	make = models.CharField(max_length=50)
 	model = models.CharField(max_length=50)
 	sleeps = models.IntegerField()
 	seats = models.IntegerField()
+	transmission = models.CharField(max_length=10, choices=TRANSMISSION_CHOICES, blank=False, null=False)
 	drive_type = models.CharField(max_length=3, blank=False, null=False, choices=DRIVE_CHOICES)
 	pets = models.BooleanField(default=True)
 	registration = models.CharField(max_length=10)

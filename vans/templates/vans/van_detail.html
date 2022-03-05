@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 {% load price_tags %}
+{% load modulo_tags %}
 {% load modal_tags %}
 
 {% block head_title %}{{ object.name }}{% endblock %}
@@ -44,6 +45,11 @@
 									<i class="fa fa-chair"></i>
 									<br/>
 									Seats {{ object.seats }}
+								</div>
+								<div class="d-inline-block px-3 text-center text-white text-light">
+									<i class="fa fa-gears"></i>
+									<br/>
+									{{ object.transmission }}
 								</div>
 								<div class="d-inline-block px-3 text-center text-white text-light">
 									<i class="fa fa-road"></i>
@@ -125,13 +131,19 @@
 				<div class="row">
 					<div class="section py-5">
 						<h1 class="text-light text-dark">Rules</h1>
-						<hr>
-						<div class="row">
-							{% for rule in rental_rules %}
-								<div class="col-12 col-md-4">
-									- {{ rule.title }}
+						<div class="row justify-content-center">
+							<div class="col-12 col-md-10">
+								<div class="row" data-masonry='{"percentPosition": true}'>
+									{% for rule in rental_rules %}
+										<div class="col-12 col-md-4">
+											<div class="d-flex">
+												<i class="fa fa-plus text-xs pt-1 pe-1 text-danger d-inline-block" aria-hidden="true"></i>
+												<p class="d-inline-block pe-2">{{ rule.title }}</p>
+											</div>
+										</div>
+									{% endfor %}
 								</div>
-							{% endfor %}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -141,14 +153,38 @@
 				<div class="row">
 					<div class="section py-5">
 						<h1 class="text-light text-dark">Important information</h1>
-						<hr>
-						<div class="row">
-							{% for info in rental_information %}
-								<div class="col-12 col-md-4">
-									- {{ info.title }}
+						
+						{% for info in rental_information %}
+							<div class="row justify-content-center">
+								<div class="col-12 col-md-10">
+									<div class="accordion" id="accordion-info-{{ forloop.counter }}">
+										<div class="accordion-item mb-3">
+											<h6 class="accordion-header" id="heading-info{{ forloop.counter }}">
+												<button class="accordion-button border-bottom font-weight-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-info-{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse-info-{{ forloop.counter }}">
+													{{ info.title }}
+												<i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
+												<i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3 text-danger" aria-hidden="true"></i>
+												</button>
+											</h6>
+											
+											<div id="collapse-info-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading-info-{{ forloop.counter }}" data-bs-parent="#accordion-info-{{ forloop.counter }}">
+												<div class="accordion-body text-sm opacity-9 d-flex justify-content-center">
+													<div class="col-12">
+														{{ info.description }}
+														{% if perms.core.edit_rentalinfo %}
+															<a href="" class="text-primary p-2"><i class="fa fa-edit"></i></a>
+														{% endif %}
+														{% if perms.core.delete_rentalinfo %}
+															<a href="" class="text-danger p-2"><i class="fa fa-trash"></i></a>
+														{% endif %}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-							{% endfor %}
-						</div>
+							</div>
+						{% endfor %}
 					</div>
 				</div>
 				<!-- END IMPORTANT INFO -->

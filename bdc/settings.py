@@ -33,6 +33,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 SITE_ID = 1
 
+ADMINS = [
+	("Scott", "admin@byitegroup.com")
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

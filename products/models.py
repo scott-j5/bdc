@@ -20,11 +20,18 @@ def get_sentinel_price_adjustment():
 
 class ProductFeature(models.Model):
 	name = models.CharField(max_length=200, blank=False, null=False, unique=True)
+	slug = models.SlugField(unique=True, blank=True, null=False)
 	description = models.TextField(blank=True, null=False)
 	icon_class = models.CharField(max_length=100, blank=True, null=False, help_text='Search Bootstrap icons, Feather Icons or Font awesome icons for available class names.')
 
 	def __str__(self):
 		return f'{self.name}'
+
+	def clean(self, *args, **kwargs):
+		if self.slug == '' or self.slug == None:
+			self.slug = self.name.replace(' ', '-').lower()
+		super().clean(*args, **kwargs)	
+
 
 class Product(models.Model):
 	slug = models.SlugField(blank=True, null=False, unique=True, help_text="Url appropriate characters only, no spaces")
@@ -80,9 +87,11 @@ class Product(models.Model):
 			return imgs
 
 	def clean(self):
-		self.slug = self.name.replace(' ', '-').lower()
+		if self.slug == '' or self.slug == None:
+			self.slug = self.name.replace(' ', '-').lower()
 		if self.qty <= 0:
 			self.available = False
+		super().clean()
 
 
 class ProductImage(models.Model):
