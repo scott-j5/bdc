@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get('DJANGO_DEBUG'))
+DEBUG = 0
+#DEBUG = int(os.environ.get('DJANGO_DEBUG'))
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
 
@@ -217,17 +218,22 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-SERVER_EMAIL = 'noreply@bigdogcampers.co.uk'
+SERVER_EMAIL = os.environ.get('EMAIL_USER')
+SEND_BROKEN_LINK_EMAILS = True
 
 ADMINS = [
 	("Scott", "admin@byitegroup.com"),
 	("Scott", "scotty.james95@gmail.com")
 ]
+MANAGERS = [
+	("Scott", "admin@byitegroup.com"),
+	("Scott", "scotty.james95@gmail.com")
+]
+
 
 # RECAPTCHA SETTINGS
 RECAPTCHA_PUBLIC_KEY = '6LemP8AbAAAAAI1HTkJNCurg9sbq9ZU0rbm3lgDB'
 RECAPTCHA_PRIVATE_KEY = '6LemP8AbAAAAAEKBVzAhQIYmeUcYQ--AOcjarIkW'
-
 
 
 #S3 storage settings
@@ -241,9 +247,6 @@ AWS_DEFAULT_ACL = None
 # S3 folder to upload media files to
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'media_storages.MediaStorage'
-
-
-
 
 
 # TO BE DELETED ONCE ALLAUTH DEFAULT_AUTO_FIELD UPDATES ARE RELEASED

@@ -41,13 +41,13 @@ def testimonials_view(request):
 
 def error_403(request, exception):
     context = {}
-    return render(request, 'core/403.html', context)
+    return render(request, 'core/403.html', context, status=403)
 
 
 def error_404(request, exception):
     context = {}
-    return render(request, 'core/404.html', context)
+    return render(request, 'core/404.html', context, status=404)
 
 def error_500(request):
     context = {}
-    return render(request, 'core/500.html', context)
+    return render(request, 'core/500.html', context, status=500)
