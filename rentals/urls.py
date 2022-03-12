@@ -4,15 +4,23 @@ from .views import (
 	MyRentals,
 	RentalFulfilmentListView,
 	RentalFulfilmentDetailView,
+
+	RentalFulfilmentCreateView,
+	RentalFulfilmentConfirmExtras,
+	RentalFulfilmentConfirmDetails,
 )
 
 urlpatterns = [
-	path('rentals/product/<slug:slug>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
-	path('rentals/user/<int:pk>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
-	path('rentals/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
-	path('rentals/my-rentals/<int:pk>/', MyRentals.as_view(), name='my-rentals'),
-	path('rentals/my-rentals/', MyRentals.as_view(), name='my-rentals'),
-    path('rentals/rental/price-check/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
-	path('rentals/rental/price-check/<slug:slug>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
-	path('rentals/rental/<int:pk>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
+	path('product/<slug:slug>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+	path('user/<int:pk>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+	path('list/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+	path('my-rentals/<int:pk>/', MyRentals.as_view(), name='my-rentals'),
+	path('my-rentals/', MyRentals.as_view(), name='my-rentals'),
+    path('rental/price-check/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
+	path('rental/price-check/<slug:slug>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
+	path('rental/<int:pk>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
+
+	path('rental/add/', RentalFulfilmentCreateView.as_view(), name='rental-fulfilment-add'),
+	path('rental/<int:pk>/extras/', RentalFulfilmentConfirmExtras.as_view(), name='rental-fulfilment-extras'),
+	path('rental/<int:pk>/details/', RentalFulfilmentConfirmDetails.as_view(), name='rental-fulfilment-details'),
 ]

@@ -1,0 +1,16 @@
+{% extends 'rentals/base_rental_flow.html' %}
+{% load crispy_forms_tags %}
+
+{% block step_number %}4{% endblock step_number %}
+
+{% block title %}
+Confirm your extras
+{% endblock title %}
+
+{% block subheading %}
+Need anything extra to have the trip of a lifetime? Let us know here.
+{% endblock subheading %}
+
+{% block rental_flow_content %}
+{% crispy form %}
+{% endblock rental_flow_content %}

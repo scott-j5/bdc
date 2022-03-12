@@ -1,6 +1,7 @@
 from core.forms import DateRangeFormMulti
 from core.utils import parse_date_range
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import BadRequest
 from django.shortcuts import render
@@ -9,9 +10,15 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 from products.models import Product
 
-from .forms import FuilfilmentDateRangeForm
+from .forms import (
+	AdminRentalFulfilmentCreateForm,
+	FuilfilmentDateRangeForm,
+	RentalFulfilmentCreateForm,
+	RentalFulfilmentExtrasForm
+)
 from .models import RentalFulfilment
 
 # Create your views here.
@@ -24,7 +31,7 @@ class RentalFulfilmentListView(UserPassesTestMixin, ListView):
 
 	def get_queryset(self):
 		user_id = self.kwargs.get('pk', self.request.user.id)
-		return RentalFulfilment.objects.filter(rental_user__id=user_id)
+		return RentalFulfilment.objects.filter(fulfilling_user__id=user_id)
 
 
 class RentalFulfilmentDetailView(UserPassesTestMixin, DetailView):
@@ -75,10 +82,58 @@ class MyRentals(UserPassesTestMixin, ListView):
 		if not self.kwargs.get('pk', False):
 			self.kwargs['user_set'] = True
 			self.kwargs['pk'] = self.request.user.id
-		return RentalFulfilment.objects.filter(rental_user__id=self.kwargs['pk'])
+		return RentalFulfilment.objects.filter(fulfilling_user__id=self.kwargs['pk'])
 
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
 		user_id = self.kwargs.get('pk', self.request.user.id)
 		context['base_user'] = {"user": User.objects.get(id=user_id)}
 		return context
+
+
+class RentalFulfilmentCreateView(LoginRequiredMixin, CreateView):
+	model = RentalFulfilment
+	template_name = 'rentals/rental_add.html'
+
+	def get_form_class(self, *args, **kwargs):
+		if self.request.user.is_staff:
+			return AdminRentalFulfilmentCreateForm
+		else:
+			return RentalFulfilmentCreateForm
+
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+
+		kwargs.update({
+			'request': self.request,
+		})
+		return kwargs
+
+	def get_success_url(self):
+		return reverse_lazy('rental-fulfilment-extras', kwargs={'pk': self.object.id,})
+
+
+class RentalFulfilmentConfirmExtras(UserPassesTestMixin, UpdateView):
+	model = RentalFulfilment
+	form_class = RentalFulfilmentExtrasForm
+	template_name = 'rentals/rental_confirm_extras.html'
+
+	def test_func(self):
+		obj = self.get_object()
+		return self.object.fulfilling_user == self.request.user or self.request.user.is_staff
+
+	def get_success_url(self):
+		return reverse_lazy('rental-fulfilment-confirm-details', kwargs={'pk': self.object.id,})
+
+
+class RentalFulfilmentConfirmDetails(UserPassesTestMixin, FormView):
+	form_class = ''
+	template_name = 'rentals/rental_confirm.html'
+
+	def test_func(self):
+		return self.instance.fulfilling_user == self.request.user or self.request.user.is_staff
+
+	def get_success_url(self):
+		if self.request.user.is_staff and self.request.user:
+			return reverse_lazy('my-rentals')
+		return reverse_lazy('my-rentals')

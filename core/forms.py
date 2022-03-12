@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import PrependedText
@@ -136,6 +138,8 @@ class DateRangeForm(forms.Form):
 			range_list = parse_date_range(stay)
 			cleaned_data['check_in'] = range_list[0]
 			cleaned_data['check_out'] = range_list[1]
+		if (cleaned_data['check_out'] - cleaned_data['check_in']).total_seconds() <= 0:
+			raise ValidationError(_("Check out must not be before Check in."))
 		return cleaned_data
 
 

@@ -248,14 +248,20 @@
 									<div class="row py-2 d-flex align-items-center">
 										<hr>
 										<div class="col-6">
-											<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+											<form method="POST" action="{% url 'rental-fulfilment-add' %}">
+												{% csrf_token %}
+												<div class="d-none">
+													{{ rental_create_form|crispy }}
+												</div>
+												<button type="submit" value="submit" class="btn btn-danger m-0 w-100"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+											</form>
 										</div>
 										<div class="col-6 text-end"><strong>{{ rental_fulfilment.rental_price|price }}</strong></div>
 										{% if request.user.is_staff %}
 										<div class="col-12 d-grid mt-3">
 											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger spinner-btn m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
 										</div>
-										{% endif  %}
+										{% endif %}
 									</div>
 								</div>
 							</div>
@@ -304,7 +310,15 @@
 										</div>
 										<div class="col-6 d-grid">
 										{% endif  %}
-										<button type="button" class="btn btn-danger m-0"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+										<form method="POST" action="{% url 'rental-fulfilment-add' %}">
+											{% csrf_token %}
+											<div class="d-none">
+												{{ rental_create_form|crispy }}
+											</div>
+											<button type="submit" value="submit" class="btn btn-danger m-0 w-100"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
+										</form>
+										
+										
 										{% if request.user.is_staff %}
 										</div>
 										{% endif %}

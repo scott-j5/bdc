@@ -1,5 +1,6 @@
 import math
 import random
+import datetime
 
 from core.models import get_sentinel_user
 from core.utils import get_sentinel_date, daterange
@@ -39,6 +40,7 @@ class Product(models.Model):
 	description_short = models.TextField(null=True, blank=True)
 	description_long = models.TextField(null=True, blank=True)
 	rentable = models.BooleanField(default=False)
+	min_turnaround = models.IntegerField(default=1, blank=True, null=True, help_text="RENTALS ONLY: Minimum time between return and re-rental in Hours")
 	base_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, help_text="On rentable items, rates are calculated and charged hourly!")
 	available = models.BooleanField(default=False)
 	qty = models.IntegerField(default=0)
@@ -110,36 +112,49 @@ class ProductImage(models.Model):
 
 class ProductFulfilment(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.SET(get_sentinel_product))
+	fulfilling_user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), blank=False, null=False)
 	fulfilment_date_time = models.DateTimeField(default=timezone.now)
-	fulfilled_product_base_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2)
-	fulfilled_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2)
+	fulfilled_product_base_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records the product base price at time of fulfilment")
+	fulfilled_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records actual fulfilled price")
+	price_override = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2, help_text="Override default pricing")
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		if not kwargs.get('fulfilment_date_time'):
-			self.fulfilment_date_time = timezone.now()
+		# Set fulfilment date time to now or passed value]
+		fulfilment_date_time = kwargs.get('fulfilment_date_time', timezone.now())
+		if isinstance(fulfilment_date_time, datetime.date):
+			if timezone.is_naive(fulfilment_date_time):
+				self.fulfilment_date_time = timezone.make_aware(fulfilment_date_time)
+			else:
+				self.fulfilment_date_time = fulfilment_date_time
+		else:
+			self.fulfilment_date_time = timezone.make_aware(datetime.datetime.strptime(kwargs.get('fulfilment_date_time'), '%Y-%m-%d'))
+
 
 	def __str__(self):
 		return f"{ self.product.name } - (${ self.fulfilled_price }) { self.fulfilment_date_time }"
 
 	@property
 	def fulfilment_price(self):
-		fulfilment_price = self.product.base_price
-		for adj in self.active_price_adjustments:
-			#Apply Additions (additions are non-compounding)
-			if adj.adj_amount > 0:
-				if adj.adj_type == 'PER':
-					fulfilment_price = fulfilment_price + ((self.product.base_price * adj.adj_amount) / 100)
-				elif adj.adj_type == 'DOL':
-					fulfilment_price = fulfilment_price + adj.adj_amount
+		if self.price_override is not None:
+			self.fulfilment_price = self.price_override
+		else:
+			fulfilment_price = self.product.base_price
+			for adj in self.active_price_adjustments:
+				#Apply Additions (additions are non-compounding)
+				if adj.adj_amount > 0:
+					if adj.adj_type == 'PER':
+						fulfilment_price = fulfilment_price + ((self.product.base_price * adj.adj_amount) / 100)
+					elif adj.adj_type == 'DOL':
+						fulfilment_price = fulfilment_price + adj.adj_amount
 
-		for adj in self.active_price_adjustments:
-			#Apply Deductions (deductions are negatively compounding)
-			if adj.adj_amount < 0:
-				if adj.adj_type == 'PER':
-					fulfilment_price = fulfilment_price + ((fulfilment_price * adj.adj_amount) / 100)
-				elif adj.adj_type == 'DOL':
-					fulfilment_price = fulfilment_price + adj.adj_amount
+			for adj in self.active_price_adjustments:
+				#Apply Deductions (deductions are negatively compounding)
+				if adj.adj_amount < 0:
+					if adj.adj_type == 'PER':
+						fulfilment_price = fulfilment_price + ((fulfilment_price * adj.adj_amount) / 100)
+					elif adj.adj_type == 'DOL':
+						fulfilment_price = fulfilment_price + adj.adj_amount
 		return round(fulfilment_price, 2)
 
 	@property

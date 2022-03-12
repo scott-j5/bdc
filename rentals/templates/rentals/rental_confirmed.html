@@ -1,0 +1,17 @@
+{% extends 'rentals/base_rental_flow.html' %}
+{% load crispy_forms_tags %}
+
+{% block step_number %}12{% endblock step_number %}
+
+{% block title %}
+You're all set! 
+{% endblock title %}
+
+{% block subheading %}
+Check your emails for confirmation of your rental, we cant wait for you to meet {{ rental_fulfilment.product.name|capfirst }}
+{% endblock subheading %}
+
+{% block rental_flow_content %}
+Put rental info here
+and a link to my-rentals
+{% endblock rental_flow_content %}

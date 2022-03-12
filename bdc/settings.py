@@ -24,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 0
-#DEBUG = int(os.environ.get('DJANGO_DEBUG'))
+DEBUG = int(os.environ.get('DJANGO_DEBUG'))
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
 
@@ -232,8 +231,8 @@ MANAGERS = [
 
 
 # RECAPTCHA SETTINGS
-RECAPTCHA_PUBLIC_KEY = '6LemP8AbAAAAAI1HTkJNCurg9sbq9ZU0rbm3lgDB'
-RECAPTCHA_PRIVATE_KEY = '6LemP8AbAAAAAEKBVzAhQIYmeUcYQ--AOcjarIkW'
+RECAPTCHA_PUBLIC_KEY = '6Ley4cEeAAAAAAAoUsibytP95zsTJE2RY7pofyEs'
+RECAPTCHA_PRIVATE_KEY = '6Ley4cEeAAAAAFnw96Y_UaU_BOKqT0F1o_G6nkpv'
 
 
 #S3 storage settings
@@ -252,6 +251,7 @@ DEFAULT_FILE_STORAGE = 'media_storages.MediaStorage'
 # TO BE DELETED ONCE ALLAUTH DEFAULT_AUTO_FIELD UPDATES ARE RELEASED
 import allauth.app_settings
 allauth.app_settings.SOCIALACCOUNT_ENABLED = True
+
 
 SOCIALACCOUNT_PROVIDERS = {
 	'google': {

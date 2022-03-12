@@ -42,7 +42,7 @@ bg-gray-100
 					<div class="col-12 col-md-6 col-lg-4 mx-auto">
 						<div class="card card-blog card-plain">
 							<div class="position-relative square">
-								<a class="d-block position-absolute top-0 h-100 w-100 blur-shadow-image">
+								<a href="{% url 'van-detail' van.slug %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" class="d-block position-absolute top-0 h-100 w-100 blur-shadow-image">
 									<img src="{{ van.thumbnail.image.url }}" alt="product-img" class="img-fluid shadow border-radius-lg fit-cover">
 								</a>
 								<div class="colored-shadow"></div>
