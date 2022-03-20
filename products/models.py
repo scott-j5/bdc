@@ -125,6 +125,7 @@ class ProductFulfilmentManager(models.Manager):
 		obj = self.instantiate_fulfilment(product, fulfilling_user, fulfilment_date_time)
 		obj.full_clean()
 		obj.save()
+		return obj
 
 
 

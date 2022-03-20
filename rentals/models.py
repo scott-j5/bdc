@@ -141,13 +141,16 @@ class RentalExtra(Product):
 
 class RentalFulfilmentManager(models.Manager):
 	# Generate a completed rental fulfilment from a product and dates
-	def instantiate_rental_fulfilment(self, product):
-
+	def instantiate_rental_fulfilment(self, product, rental_start, rental_end, fulfilling_user=None):
+		fulfilment = RentalFulfilment()
 		return fulfilment
 
 	# Generate a complete rental fulfilment from a profuct fulfilment
-	def create_rental_fulfilment(self, product, fulfilling_user=None, ):
-
+	def create_rental_fulfilment(self, product, rental_start, rental_end, fulfilling_user=None):
+		obj = self.instantiate_rental_fulfilment(self, product, rental_start, rental_end, fulfilling_user)
+		obj.full_clean()
+		obj.save()
+		return obj
 
 
 class RentalFulfilment(ProductFulfilment):
