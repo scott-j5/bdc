@@ -16,10 +16,12 @@ from products.models import Product
 from .forms import (
 	AdminRentalFulfilmentCreateForm,
 	FuilfilmentDateRangeForm,
+	RentalDriverFormSet,
+	RentalDriverFormsetHelper,
 	RentalFulfilmentCreateForm,
 	RentalFulfilmentExtrasForm
 )
-from .models import RentalFulfilment
+from .models import RentalDriver, RentalFulfilment
 
 # Create your views here.
 class RentalFulfilmentListView(UserPassesTestMixin, ListView):
@@ -120,18 +122,34 @@ class RentalFulfilmentConfirmExtras(UserPassesTestMixin, UpdateView):
 
 	def test_func(self):
 		obj = self.get_object()
-		return self.object.fulfilling_user == self.request.user or self.request.user.is_staff
+		return obj.fulfilling_user == self.request.user or self.request.user.is_staff
 
 	def get_success_url(self):
-		return reverse_lazy('rental-fulfilment-confirm-details', kwargs={'pk': self.object.id,})
+		return reverse_lazy('rental-fulfilment-details', kwargs={'pk': self.object.id,})
 
 
 class RentalFulfilmentConfirmDetails(UserPassesTestMixin, FormView):
-	form_class = ''
-	template_name = 'rentals/rental_confirm.html'
+	form_class = RentalDriverFormSet
+	template_name = 'rentals/rental_confirm_details.html'
 
 	def test_func(self):
-		return self.instance.fulfilling_user == self.request.user or self.request.user.is_staff
+		obj = self.get_object()
+		return obj.fulfilling_user == self.request.user or self.request.user.is_staff
+
+	def get_object(self):
+		self.object = get_object_or_404(RentalFulfilment, pk=self.kwargs.get('pk'))
+		return self.object
+
+	def get_context_data(self):
+		ctx = super().get_context_data()
+		ctx.update({
+			'helper': RentalDriverFormsetHelper(rental_fulfilment_id=self.object.id),
+		})
+		return ctx
+
+	def form_valid(self, form):
+		self.form = form
+		return HttpResponseRedirect(self.get_success_url())
 
 	def get_success_url(self):
 		if self.request.user.is_staff and self.request.user:

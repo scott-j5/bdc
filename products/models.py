@@ -44,7 +44,7 @@ class Product(models.Model):
 	base_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, help_text="On rentable items, rates are calculated and charged hourly!")
 	available = models.BooleanField(default=False)
 	qty = models.IntegerField(default=0)
-	features = models.ManyToManyField(ProductFeature)
+	features = models.ManyToManyField(ProductFeature, blank=True)
 
 	def __str__(self):
 		return self.name
@@ -110,6 +110,24 @@ class ProductImage(models.Model):
 		return f"{self.product.name} - {self.image.name}"
 
 
+class ProductFulfilmentManager(models.Manager):
+	def instantiate_fulfilment(self, product, fulfilling_user=None, fulfilment_date_time=timezone.now()):
+		if isinstance(fulfilment_date_time, datetime.date):
+			if timezone.is_naive(fulfilment_date_time):
+				self.fulfilment_date_time = timezone.make_aware(fulfilment_date_time)
+			else:
+				self.fulfilment_date_time = fulfilment_date_time
+		else:
+			self.fulfilment_date_time = timezone.make_aware(datetime.datetime.strptime(kwargs.get('fulfilment_date_time'), '%Y-%m-%d'))
+		return ProductFulfilment(product=product, fulfilling_user=fulfilling_user, fulfilment_date_time=fulfilment_date_time)
+
+	def create_fulfilment(self, product, fulfilling_user=None, fulfilment_date_time=timezone.now()):
+		obj = self.instantiate_fulfilment(product, fulfilling_user, fulfilment_date_time)
+		obj.full_clean()
+		obj.save()
+
+
+
 class ProductFulfilment(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.SET(get_sentinel_product))
 	fulfilling_user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), blank=False, null=False)
@@ -118,18 +136,7 @@ class ProductFulfilment(models.Model):
 	fulfilled_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records actual fulfilled price")
 	price_override = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2, help_text="Override default pricing")
 
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		# Set fulfilment date time to now or passed value]
-		fulfilment_date_time = kwargs.get('fulfilment_date_time', timezone.now())
-		if isinstance(fulfilment_date_time, datetime.date):
-			if timezone.is_naive(fulfilment_date_time):
-				self.fulfilment_date_time = timezone.make_aware(fulfilment_date_time)
-			else:
-				self.fulfilment_date_time = fulfilment_date_time
-		else:
-			self.fulfilment_date_time = timezone.make_aware(datetime.datetime.strptime(kwargs.get('fulfilment_date_time'), '%Y-%m-%d'))
-
+	objects = ProductFulfilmentManager()
 
 	def __str__(self):
 		return f"{ self.product.name } - (${ self.fulfilled_price }) { self.fulfilment_date_time }"

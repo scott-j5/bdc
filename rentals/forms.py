@@ -11,16 +11,10 @@ from django.utils.translation import gettext_lazy as _
 
 from core.forms import DateRangeFormMulti, DateRangeForm
 from core.widgets import DatePicker
-from core.layout import SpinnerSubmit
-from crispy_forms.layout import (
-	Layout,
-	Field,
-	Div,
-	Submit
-)
+from core.layout import SpinnerSubmit, SpinnerSubmitBlock
 
 from .settings import RENTAL_CHECK_IN_TIME, RENTAL_CHECK_OUT_TIME
-from .models import RentalFulfilment, RentalProduct
+from .models import RentalDriver, RentalFulfilment, RentalProduct
 
 
 class RentalDateRangeForm(DateRangeForm):
@@ -159,6 +153,146 @@ class AdminRentalFulfilmentCreateForm(RentalFulfilmentCreateForm):
 
 
 class RentalFulfilmentExtrasForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.helper = FormHelper()
+		self.helper.form_action = reverse_lazy('rental-fulfilment-extras', kwargs={'pk':self.instance.id})
+		self.helper.form_method = 'POST'
+		self.helper.form_id = 'rental-fulfilment-extras-form'
+		self.helper.html5_required = True
+		self.helper.layout = Layout(
+            Div(
+				Div(
+					Div(
+						'rental_extras',
+						css_class="col-12",
+					),
+					Div(
+						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+						css_class="d-grid col-12"
+					),
+					css_class="row"
+				),
+			)
+		)
+
+	class Meta: 
+		model = RentalFulfilment
+		fields = ['rental_extras']
+
+
+class RentalFulfilmentExtrasForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.helper = FormHelper()
+		self.helper.form_action = reverse_lazy('rental-fulfilment-extras', kwargs={'pk':self.instance.id})
+		self.helper.form_method = 'POST'
+		self.helper.form_id = 'rental-fulfilment-extras-form'
+		self.helper.html5_required = True
+		self.helper.layout = Layout(
+            Div(
+				Div(
+					Div(
+						'rental_extras',
+						css_class="col-12",
+					),
+					Div(
+						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+						css_class="d-grid col-12"
+					),
+					css_class="row"
+				),
+			)
+		)
+
 	class Meta:
 		model = RentalFulfilment
 		fields = ['rental_extras']
+
+
+class RentalDriverForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)
+		super().__init__(*args, **kwargs)
+		self.helper = FormHelper()
+		self.helper.form_action = reverse_lazy('rental-fulfilment-detail', kwargs={'pk':rental_fulfilment_id})
+		self.helper.form_method = 'POST'
+		self.helper.form_id = 'rental-fulfilment-drivers-form'
+		self.helper.html5_required = True
+		self.helper.layout = Layout(
+            Div(
+				Div(
+					Div(
+						'first_name',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'last_name',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'dob',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'licence_front',
+						css_class="col-12 col-md-6",
+					),
+					Div(
+						'licence_back',
+						css_class="col-12 col-md-6",
+					),
+					Div(
+						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+						css_class="d-grid col-12"
+					),
+					css_class="row"
+				),
+			)
+		)
+
+	class Meta:
+		model = RentalDriver
+		fields = ['user', 'first_name', 'last_name', 'dob', 'licence_front', 'licence_back']
+
+
+class RentalDriverFormsetHelper(FormHelper):
+	def __init__(self, *args, **kwargs):
+		rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)
+		super().__init__(*args, **kwargs)
+		self.form_action = reverse_lazy('rental-fulfilment-detail', kwargs={'pk':rental_fulfilment_id})
+		self.form_method = 'POST'
+		self.form_id = 'rental-fulfilment-drivers-form'
+		self.html5_required = True
+		self.layout = Layout(
+            Div(
+				Div(
+					Div(
+						'first_name',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'last_name',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'dob',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'licence_front',
+						css_class="col-12 col-md-6",
+					),
+					Div(
+						'licence_back',
+						css_class="col-12 col-md-6",
+					),
+					css_class="row"
+				),
+				css_class='formset-group',
+			)
+		)
+		self.add_input(SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger float-end', icon='<i class="icon-125" data-feather="chevrons-right"></i>', template="core/custom_crispy_templates/spinner_submit_button.html"))
+		
+
+RentalDriverFormSet = forms.formset_factory(RentalDriverForm, extra=2, can_delete=True)

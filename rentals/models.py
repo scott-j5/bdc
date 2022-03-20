@@ -3,6 +3,7 @@ import json
 import math
 
 from core.models import get_sentinel_user
+from core.templatetags.price_tags import price
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -133,20 +134,21 @@ class RentalProduct(Product):
 
 
 class RentalExtra(Product):
-	pass
+	
+	def __str__(self):
+		return f'{self.name} - {price(self.base_price)}'
 
 
-'''
-#Cant be changed within a month of rental
-class RentalDriver(models.Model):
-	rental_fulfilment = models.ForeignKey(RentalFulfilment, null=False, blank=False, on_delete=models.CASCADE)
-	user = models.ForeignKey(User, null=False, blank=False, on_delete=models.SET(get_sentinel_user()))
-	first_name = models.CharField(max_length=150, null=True, blank=True)
-	last_name = models.CharField(max_length=150, null=True, blank=True)
-	dob = models.DateField()
-	licence_front = CropItImageField()
-	licence_back = CropItImageField()
-'''
+class RentalFulfilmentManager(models.Manager):
+	# Generate a completed rental fulfilment from a product and dates
+	def instantiate_rental_fulfilment(self, product):
+
+		return fulfilment
+
+	# Generate a complete rental fulfilment from a profuct fulfilment
+	def create_rental_fulfilment(self, product, fulfilling_user=None, ):
+
+
 
 class RentalFulfilment(ProductFulfilment):
 	rental_fulfilled_product = models.ForeignKey(ProductFulfilment, on_delete=models.SET(get_sentinel_product), related_name='fulfilled_product')
@@ -156,6 +158,7 @@ class RentalFulfilment(ProductFulfilment):
 	rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2)
 	rental_extras = models.ManyToManyField(RentalExtra)
 
+	objects = RentalFulfilmentManager()
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -203,6 +206,10 @@ class RentalFulfilment(ProductFulfilment):
 			return f"{self.duration_hours} Hour"
 
 	@property
+	def drivers(self):
+		return self.rental_driver_set.all().count()
+
+	@property
 	def fulfilment_price(self):
 		return self.rental_price if self.rental_price else self._calculate_price()
 
@@ -234,7 +241,7 @@ class RentalFulfilment(ProductFulfilment):
 	
 	def clean(self, *args, **kwargs):
 		# Need to impliment check for overlapping rentals Including buffer
-		if self.clashing_rentals.length() > 0:
+		if len(self.clashing_rentals) > 0:
 			raise ValidationError(_('This rental conflicts with another.'))
 		if timezone.now() >= self.__class__.objects.get(pk=self.pk).rental_start:
 			raise ValidationError(_('Rental cannot be changed after the rental has commenced.'))
@@ -248,8 +255,19 @@ class RentalFulfilment(ProductFulfilment):
 		return super().clean(*args, **kwargs)
 
 	def save(self, *args, **kwargs):
-		self.full_clean()
+		#self.full_clean()
 		return super().save(*args, **kwargs)
+
+
+#Cant be changed within a month of rental
+class RentalDriver(models.Model):
+	rental_fulfilment = models.ForeignKey(RentalFulfilment, null=False, blank=False, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, null=False, blank=False, on_delete=models.SET(get_sentinel_user))
+	first_name = models.CharField(max_length=150, null=True, blank=True)
+	last_name = models.CharField(max_length=150, null=True, blank=True)
+	dob = models.DateField()
+	licence_front = CropItImageField()
+	licence_back = CropItImageField()
 
 
 class RentalPriceAdjustment(PriceAdjustment):
