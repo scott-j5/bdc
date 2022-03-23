@@ -11,8 +11,8 @@ def retrieve(name):
         # To handle the auto-generation of documentations.
         return False
 
-#Hour or Days
-RENTAL_DURATION_PERIOD = retrieve('RENTAL_PERIOD') or 'days'
+#Bool, If false, charges hourly
+CHARGE_RENTAL_DAILY = retrieve('CHARGE_RENTAL_DAILY') or True
 
 #Check-in time
 RENTAL_CHECK_IN_TIME = retrieve('RENTAL_CHECK_IN_TIME') or datetime.datetime.strptime('15:00', '%H:%M').time()

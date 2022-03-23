@@ -39,6 +39,10 @@ def daterange(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
+def datediff_days(delta):
+	days, seconds = delta.days, delta.seconds
+	return days
+
 def datediff_hours(delta):
 	days, seconds = delta.days, delta.seconds
 	return days * 24 + seconds // 3600

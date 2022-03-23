@@ -25,7 +25,7 @@ class VanListView(ListView):
 		if self.request.GET:
 			form = DateRangeFormMulti(self.request.GET)
 			if form.is_valid():
-				qs = Van.objects.fulfil([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
+				qs = Van.objects.available().get_prices([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
 		else:
 			qs = Van.objects.all()
 		return qs

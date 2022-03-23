@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (
 	RentalExtra,
-	RentalFulfilment,
+	Rental,
 	RentalInformation,
 	RentalPriceAdjustment,
 	RentalRules
@@ -10,7 +10,7 @@ from .models import (
 
 # Register your models here.
 admin.site.register(RentalExtra)
-admin.site.register(RentalFulfilment)
+admin.site.register(Rental)
 admin.site.register(RentalInformation)
 admin.site.register(RentalPriceAdjustment)
 admin.site.register(RentalRules)
