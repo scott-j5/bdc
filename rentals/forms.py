@@ -27,6 +27,16 @@ class RentalDateRangeForm(DateRangeForm):
 		return cleaned_data
 
 
+class RentalDateRangeFormMulti(DateRangeFormMulti):
+	def clean(self, *args, **kwargs):
+		cleaned_data = super().clean(*args, **kwargs)
+		cleaned_data['check_in'] = datetime.combine(cleaned_data['check_in'].date(), RENTAL_CHECK_IN_TIME)
+		cleaned_data['check_out'] = datetime.combine(cleaned_data['check_out'].date(), RENTAL_CHECK_OUT_TIME)
+		if (cleaned_data['check_out'] - cleaned_data['check_in']).total_seconds() <= 0:
+			raise ValidationError(_("Check out must not be before Check in."))
+		return cleaned_data
+
+
 class FuilfilmentDateRangeForm(DateRangeFormMulti):
 	fulfilment_date_time = forms.DateTimeField(widget=DatePicker(attrs={"placeholder": "Purchase Date", "data-flatpickr_args": {"enableTime": True,"dateFormat": "Y-m-dTH:i:S"}}), label=False, required=False)
 

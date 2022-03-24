@@ -10,7 +10,7 @@ from django.views.generic import DetailView, ListView
 from products.models import ProductFulfilment
 from products.views import CompleteProductUpdateView, ProductDeleteView
 from rentals.models import RentalFulfilment, RentalRules, RentalInformation
-from rentals.forms import RentalFulfilmentCreateForm, RentalDateRangeForm
+from rentals.forms import RentalFulfilmentCreateForm, RentalDateRangeForm, RentalDateRangeFormMulti
 
 from .models import (
 	Van,
@@ -23,7 +23,7 @@ class VanListView(ListView):
 
 	def get_queryset(self):
 		if self.request.GET:
-			form = DateRangeFormMulti(self.request.GET)
+			form = RentalDateRangeFormMulti(self.request.GET)
 			if form.is_valid():
 				qs = Van.objects.fulfil([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
 		else:

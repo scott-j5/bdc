@@ -26,7 +26,7 @@ class RentalProductManager(models.Manager):
 	# Return all rental products available within a date range
 	# dt_range: list: [start, end]
 	def available(self, dt_range):
-		qs = self.get_query_set()
+		qs = self.get_queryset()
 		unavailable_products = RentalFulfilment.objects.filter(
 			Q(rental_start__range=(dt_range[0], dt_range[1]))
 			| Q(rental_end__range=(dt_range[0], dt_range[1]))
@@ -52,7 +52,7 @@ class RentalProductManager(models.Manager):
 		# Desired length of rental
 		length = abs(dt_range[0] - dt_range[1])
 		available_ids = []
-		qs = self.get_query_set()
+		qs = self.get_queryset()
 		for rental_product in qs:
 			available = rental_product.available_dates
 			for period in available:
@@ -139,16 +139,6 @@ class RentalExtra(Product):
 		return f'{self.name} - {price(self.base_price)}'
 
 
-class RentalFulfilmentManager(models.Manager):
-	# Generate a completed rental fulfilment from a product and dates
-	def instantiate_rental_fulfilment(self, product):
-
-		return fulfilment
-
-	# Generate a complete rental fulfilment from a profuct fulfilment
-	def create_rental_fulfilment(self, product, fulfilling_user=None, ):
-
-
 
 class RentalFulfilment(ProductFulfilment):
 	rental_fulfilled_product = models.ForeignKey(ProductFulfilment, on_delete=models.SET(get_sentinel_product), related_name='fulfilled_product')
@@ -157,8 +147,6 @@ class RentalFulfilment(ProductFulfilment):
 	rental_end_inc_turnaround = models.DateTimeField(default=timezone.now, blank=False, null=False)
 	rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2)
 	rental_extras = models.ManyToManyField(RentalExtra)
-
-	objects = RentalFulfilmentManager()
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
