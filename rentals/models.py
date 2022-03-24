@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from invoicing.models import PriceAdjustment
-from products.models import BaseProduct, Product, ProductFulfilment, get_sentinel_product
+from products.models import Product, ProductFulfilment, get_sentinel_product
 from core.utils import datediff_days, datediff_hours, get_date_overlap
 from django.utils.translation import gettext_lazy as _
 
@@ -27,7 +27,7 @@ class RentalProductManager(models.Manager):
 	# dt_range: list: [start, end]
 	def available(self, dt_range):
 		qs = self.get_query_set()
-		unavailable_products = Rental.objects.filter(
+		unavailable_products = RentalFulfilment.objects.filter(
 			Q(rental_start__range=(dt_range[0], dt_range[1]))
 			| Q(rental_end__range=(dt_range[0], dt_range[1]))
 			| Q(rental_start__lte=dt_range[0], rental_end__gte=dt_range[1])
@@ -39,7 +39,7 @@ class RentalProductManager(models.Manager):
 	def get_prices(self, dt_range):
 		qs = self._chain()
 		for obj in qs:
-			rental = Rental(product=obj, rental_start=dt_range[0], rental_end=dt_range[1])
+			rental = RentalFulfilment(product=obj, rental_start=dt_range[0], rental_end=dt_range[1])
 			fulfilled_rental = ProductFulfilment(product=rental)
 			obj.rental_price = fulfilled_rental.price
 		return obj
@@ -128,6 +128,11 @@ class RentalProduct(Product):
 			| Q(rental_start__lte=dt_range[0], rental_end_inc_turnaround__gt=end_inc_turnaround)
 		).count()
 		return False if clashing_rentals > 0 else True
+	
+	@staticmethod
+	def get_price_help_text():
+		verbose_charge_period = 'daily' if CHARGE_RENTAL_DAILY else 'hourly'
+		return f"Rentable item. This is the equivelant { verbose_charge_period } rate before adjustments!"
 
 
 class RentalExtra(Product):
@@ -136,8 +141,7 @@ class RentalExtra(Product):
 		return f'{self.name} - {price(self.base_price)}'
 
 
-class Rental(BaseProduct):
-	rental_product = models.ForeignKey(RentalProduct, on_delete=models.SET(get_sentinel_product), related_name='rental_product')
+class RentalFulfilment(ProductFulfilment):
 	rental_start = models.DateTimeField(blank=False, null=False)
 	rental_end = models.DateTimeField(blank=False, null=False)
 	rental_end_inc_turnaround = models.DateTimeField(default=timezone.now, blank=False, null=False)
@@ -147,7 +151,7 @@ class Rental(BaseProduct):
 	@property
 	def active_price_adjustments(self):
 		# Select adjustments where start date or end date is within rental period or that begin before rental and end after rental
-		price_adjustments = self.rental_product.rentalpriceadjustment_set.filter(
+		price_adjustments = self.product.rentalpriceadjustment_set.filter(
 			Q(period_start__range=(self.rental_start, self.rental_end))
 			| Q(period_end__range=(self.rental_start, self.rental_end))
 			| Q(period_start__lte=self.rental_start, period_end__gte=self.rental_end)
@@ -158,7 +162,7 @@ class Rental(BaseProduct):
 	def clashing_rentals(self):
 		excl_id = self.id if self.id is not None else -1
 		# Select Rental Fulfilments where rental start or rental end are within an existing rental period or that end after self.rental start or begin before self.rental end
-		return Rental.objects.filter(
+		return RentalFulfilment.objects.filter(
 			Q(rental_start__range=(self.rental_start, self.rental_end))
 			| Q(rental_end__range=(self.rental_start, self.rental_end))
 			| Q(rental_start__lte=self.rental_start, rental_end__gte=self.rental_end)
@@ -227,7 +231,7 @@ class RentalPriceAdjustment(PriceAdjustment):
 
 #Cant be changed within a month of rental
 class RentalDriver(models.Model):
-	rental = models.ForeignKey(Rental, null=False, blank=False, on_delete=models.CASCADE)
+	rental_fulfilment = models.ForeignKey(RentalFulfilment, null=False, blank=False, on_delete=models.CASCADE)
 	user = models.ForeignKey(User, null=False, blank=False, on_delete=models.SET(get_sentinel_user))
 	first_name = models.CharField(max_length=150, null=True, blank=True)
 	last_name = models.CharField(max_length=150, null=True, blank=True)

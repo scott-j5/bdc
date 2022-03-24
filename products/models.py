@@ -36,31 +36,21 @@ class ProductFeature(models.Model):
 		super().clean(*args, **kwargs)	
 
 
-class BaseProduct(models.Model):
+class Product(models.Model):
 	slug = models.SlugField(blank=True, null=False, unique=True, help_text="Url appropriate characters only, no spaces")
 	name = models.CharField(max_length=50, blank=False, null=False, unique=True)
 	description_short = models.TextField(null=True, blank=True)
-
-	def __init__(self, *args, **kwargs):
-		verbose_charge_period = 'daily' if CHARGE_RENTAL_DAILY else 'hourly'
-		self._price = _price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name="Price", help_text=f"On rentable items, rates are calculated and charged { verbose_charge_period }!")
-		super().__init__(self, *args, **kwargs)
-
-	def __str__(self):
-		return self.name
-
-	@property
-	def price(self):
-		return self._price
-
-
-class Product(BaseProduct):
 	description_long = models.TextField(null=True, blank=True)
 	#Is rentable needed?
 	rentable = models.BooleanField(default=False)
+	base_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name="Price")
 	qty = models.IntegerField(default=0)
 	features = models.ManyToManyField(ProductFeature, blank=True)
 	available = models.BooleanField(default=False)
+
+	def __init__(self, *args, **kwargs):
+		self.base_price.help_text = self.get_price_help_text
+		super().__init__(*args, **kwargs)
 
 	def __str__(self):
 		return self.name
@@ -110,6 +100,10 @@ class Product(BaseProduct):
 		if self.qty <= 0:
 			self.available = False
 		super().clean()
+	
+	@staticmethod
+	def get_price_help_text(self):
+		return f"Base price before adjustments are made."
 
 
 class ProductImage(models.Model):
