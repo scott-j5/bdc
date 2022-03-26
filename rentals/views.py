@@ -15,9 +15,9 @@ from products.models import Product
 
 from .forms import (
 	AdminRentalFulfilmentCreateForm,
-	FuilfilmentDateRangeForm,
 	RentalDriverFormSet,
 	RentalDriverFormsetHelper,
+	RentalFuilfilmentDateRangeForm,
 	RentalFulfilmentCreateForm,
 	RentalFulfilmentExtrasForm
 )
@@ -50,12 +50,13 @@ class RentalFulfilmentDetailView(UserPassesTestMixin, DetailView):
 			slug = self.kwargs.get('slug') if self.kwargs.get('slug') else self.request.GET.get('product', "")
 			# Return new dry instance
 			product = get_object_or_404(Product, slug=slug)
-			if product.rentable == True:
-				form = FuilfilmentDateRangeForm(self.request.GET)
+			try:
+				product.rentalproduct
+				form = RentalFuilfilmentDateRangeForm(self.request.GET)
 				if form.is_valid():
 					fulfilment_date_time = form.cleaned_data['fulfilment_date_time'] if self.request.GET.get('fulfilment_date_time') else timezone.now()
 					obj = RentalFulfilment(product=product, fulfilment_date_time=fulfilment_date_time, rental_start=form.cleaned_data['check_in'], rental_end=form.cleaned_data['check_out'])
-			else:
+			except:
 				raise BadRequest(_("The product selected is not available to rent!"))
 				return None
 		return obj
@@ -65,10 +66,10 @@ class RentalFulfilmentDetailView(UserPassesTestMixin, DetailView):
 		if self.object.id is None:
 			form_action = reverse_lazy('rental-fulfilment-detail', kwargs={'slug': self.object.product.slug})
 			if self.request.GET:
-				context["form"] = FuilfilmentDateRangeForm(self.request.GET, action=form_action, submit_text="Change Dates", flatpickr_args={"disable":[]})
+				context["form"] = RentalFuilfilmentDateRangeForm(self.request.GET, action=form_action, submit_text="Change Dates", flatpickr_args={"disable":self.object.product.rentalproduct.flatpickr_unavailable})
 				context["form"].full_clean()
 			else:
-				context["form"] = FuilfilmentDateRangeForm(action=form_action, submit_text="Check Pricing", flatpickr_args={"disable":unavailable})
+				context["form"] = RentalFuilfilmentDateRangeForm(action=form_action, submit_text="Check Pricing", flatpickr_args={"disable":self.object.product.rentalproduct.flatpickr_unavailable})
 		return context
 
 

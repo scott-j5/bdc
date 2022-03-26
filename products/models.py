@@ -3,13 +3,15 @@ import random
 import datetime
 
 from core.models import get_sentinel_user
-from core.utils import get_sentinel_date, daterange
+from core.utils import get_sentinel_date, daterange, format_price
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from imageit.models import ScaleItImageField
 from invoicing.models import PriceAdjustment
+
+from rentals.settings import CHARGE_RENTAL_DAILY, VERBOSE_CHARGE_PERIOD
 
 # Create your models here.
 def get_sentinel_product():
@@ -39,12 +41,10 @@ class Product(models.Model):
 	name = models.CharField(max_length=50, blank=False, null=False, unique=True)
 	description_short = models.TextField(null=True, blank=True)
 	description_long = models.TextField(null=True, blank=True)
-	rentable = models.BooleanField(default=False)
-	min_turnaround = models.IntegerField(default=1, blank=True, null=True, help_text="RENTALS ONLY: Minimum time between return and re-rental in Hours")
-	base_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, help_text="On rentable items, rates are calculated and charged hourly!")
-	available = models.BooleanField(default=False)
+	base_price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name="Price", help_text=f"On Rentable items price is the equivelant { VERBOSE_CHARGE_PERIOD } rate before adjustments!")
 	qty = models.IntegerField(default=0)
 	features = models.ManyToManyField(ProductFeature, blank=True)
+	available = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.name
@@ -94,6 +94,10 @@ class Product(models.Model):
 		if self.qty <= 0:
 			self.available = False
 		super().clean()
+	
+	@staticmethod
+	def get_price_help_text():
+		return f"Base price before adjustments are made."
 
 
 class ProductImage(models.Model):
@@ -125,24 +129,27 @@ class ProductFulfilmentManager(models.Manager):
 		obj = self.instantiate_fulfilment(product, fulfilling_user, fulfilment_date_time)
 		obj.full_clean()
 		obj.save()
-
+		return obj
 
 
 class ProductFulfilment(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.SET(get_sentinel_product))
+	audit_product_base_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records the product base price at time of fulfilment")
 	fulfilling_user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), blank=False, null=False)
 	fulfilment_date_time = models.DateTimeField(default=timezone.now)
-	fulfilled_product_base_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records the product base price at time of fulfilment")
-	fulfilled_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records actual fulfilled price")
+	_fulfilment_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records actual fulfilled price")
 	price_override = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2, help_text="Override default pricing")
 
 	objects = ProductFulfilmentManager()
 
 	def __str__(self):
-		return f"{ self.product.name } - (${ self.fulfilled_price }) { self.fulfilment_date_time }"
+		return f"{ self.product.name } - ({ format_price(self._fulfilment_price) }) { self.fulfilment_date_time }"
 
 	@property
 	def fulfilment_price(self):
+		return self._fulfilment_price if self._fulfilment_price else self._calculate_price()
+
+	def _calculate_price(self):
 		if self.price_override is not None:
 			self.fulfilment_price = self.price_override
 		else:
@@ -166,20 +173,21 @@ class ProductFulfilment(models.Model):
 
 	@property
 	def active_price_adjustments(self):
+		#include logic
 		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time)
 
 	@property
 	def active_deals(self):
-		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time, deal=True)
+		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time, display_to_user=True)
 
 	def save(self, *args, **kwargs):
-		if not self.fulfilled_product_base_price:
-			self.fulfilled_product_base_price = self.product.base_price
-		self.fulfilled_price = self.fulfilment_price
+		if not self.audit_product_base_price:
+			self.audit_product_base_price = self.product.base_price
+		self._fulfilment_price = self.fulfilment_price
 		# Add info about adjustments here? fk to adj?
 		return super().save(*args, **kwargs)
 
 
 class ProductPriceAdjustment(PriceAdjustment):
 	products = models.ManyToManyField(Product, blank=True)
-	deal = models.BooleanField(default=False)
+	display_to_user = models.BooleanField(default=False)

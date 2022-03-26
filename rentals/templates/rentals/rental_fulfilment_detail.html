@@ -31,10 +31,13 @@
 									{% endif %}
 								</div>
 							</div>
-							{% if not object.product_available %}
+							{% if object.rental_clash %}
+							{{ object.clashing_rentals }}
 							<div class="row">
-								<div class="col alert alert-danger text-center">
-									<p class="m-0">{{ object.product.name }} is not available for these dates!</p>
+								<div class="col">
+									<div class="alert alert-danger text-center">
+										<p class="m-0">{{ object.product.name }} is not available for these dates!</p>
+									</div>
 								</div>
 							</div>
 							{% endif %}
@@ -49,16 +52,16 @@
 									<h6 class="m-0">{{ object.product.name }}s base rate:</h6>
 								</div>
 								<div class="col-4 d-flex align-items-center justify-content-end">
-									{{ object.product.base_price|price }}/hr
+									{{ object.product.base_price|price }}/{{ charge_period }}
 								</div>
 								
-								{% if object.rental_fulfilled_product.active_price_adjustments|length > 0 %}
+								{% if object.active_price_adjustments|length > 0 %}
 								<div class="col-12">
 									<hr class="my-3">
 								</div>
 								<div class="col-12">
 									<ul class="list-group list-group-flush ps-4">
-										{% for adj in object.rental_fulfilled_product.active_price_adjustments %}
+										{% for adj in object.active_price_adjustments %}
 											<li class="list-group-item pe-0">
 												<div class="row">
 													<div class="col-8">
@@ -81,7 +84,7 @@
 									<h6>Actual base rate:</h6>
 								</div>
 								<div class="col-4 text-end">
-									<h6>{{ object.rental_fulfilled_product.fulfilment_price|price }}/hr</h6>
+									<h6>{{ object.adjusted_rental_rate|price }}/{{ charge_period }}</h6>
 								</div>
 							</div>
 
@@ -89,23 +92,23 @@
 							<div class="row p-4">
 								<div class="col-12 text-center pb-4">
 									<h2>Rental Calculations</h2>
-									<small class="text-light text-dark">Note: Adjustments to rental rates are applied per hour for every hour they impact on the selected rental period. Any percentage changes applied here are done so based off {{ object.name }}s actual hourly rate ({{ object.fulfilment_price|price }}/hr)</small>
+									<small class="text-light text-dark">Note: Rental adjustments are only applied for the period of the rental where they apply. % adjustments are calculated per {{ charge_period }} based off the actual base rate above ({{ object.adjusted_rental_rate|price }})</small>
 								</div>
 								<div class="col-8">
 									<h6 class="m-0">Rental base rate:</h6>
-									<small class="text-light text-dark">({{ object.rental_fulfilled_product.fulfilment_price|price }}/hr X {{ object.duration }})</small>
+									<small class="text-light text-dark">({{ object.adjusted_rental_rate|price }}/{{ charge_period }} X {{ object.duration_humanize }})</small>
 								</div>
 								<div class="col-4 d-flex align-items-center justify-content-end">
-									{{ object.base_rate|price }}
+									{{ object.unfulfilled_rental_price|price }}
 								</div>
 								
-								{% if object.active_price_adjustments|length > 0 %}
+								{% if object.active_rental_price_adjustments|length > 0 %}
 								<div class="col-12">
 									<hr class="my-3">
 								</div>
 								<div class="col-12">
 									<ul class="list-group list-group-flush ps-4">
-										{% for adj in object.active_price_adjustments %}
+										{% for adj in object.active_rental_price_adjustments %}
 											<li class="list-group-item pe-0">
 												<div class="row">
 													<div class="col-8">
@@ -113,7 +116,7 @@
 														<small class="text-light text-dark">({{ adj.period_start }} - {{ adj.period_end }})</small>
 													</div>
 													<div class="col-4 d-flex align-items-center justify-content-end">
-														<small>{{ adj.amount_humanize }}</small>
+														<small>{{ adj.amount_humanize }}/{{ charge_period }}</small>
 													</div>
 												</div>
 											</li>

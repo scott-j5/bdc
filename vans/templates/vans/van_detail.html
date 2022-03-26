@@ -227,9 +227,9 @@
 									<div class="row">
 										<div class="col-8">
 											<a class="text-reset" data-bs-toggle="collapse" href="#mobile-change-date" role="button" aria-expanded="false" aria-controls="mobile-change-date">
-												<p class="m-0 p-0">{{ rental_fulfilment.duration }} rental</p>
+												<p class="m-0 p-0">{{ rental_fulfilment.duration_humanize }} rental</p>
 												<small class="text-black-50">({{ rental_fulfilment.rental_start|date:"d/m/y" }} - {{ rental_fulfilment.rental_end|date:"d/m/y" }}) <i class="collapse-closed bi bi-pencil-square"></i></small>
-												{% for pa in rental_fulfilment.rental_fulfilled_product.active_deals %}
+												{% for pa in rental_fulfilment.product.active_deals %}
 												<p class="p-0 m-0">
 													<small class="text-danger">
 														{{ pa.amount_humanize_long }}
@@ -238,7 +238,7 @@
 												{% endfor %}
 											</a>
 										</div>
-										<div class="col-4 text-end">{{ rental_fulfilment.rental_price|price }}</div>
+										<div class="col-4 text-end">{{ rental_fulfilment.fulfilment_price|price }}</div>
 									</div>
 									<div class="row collapse" id="mobile-change-date">
 										<div class="col">
@@ -256,7 +256,7 @@
 												<button type="submit" value="submit" class="btn btn-danger m-0 w-100"><i class="icon-125" data-feather="chevrons-right"></i> &nbsp; Book Now</button>
 											</form>
 										</div>
-										<div class="col-6 text-end"><strong>{{ rental_fulfilment.rental_price|price }}</strong></div>
+										<div class="col-6 text-end"><strong>{{ rental_fulfilment.fulfilment_price|price }}</strong></div>
 										{% if request.user.is_staff %}
 										<div class="col-12 d-grid mt-3">
 											<a href="{% url 'rental-fulfilment-detail' %}{% if request.GET %}?product={{ object.slug }}&{{ request.GET.urlencode }}{% endif %}" type="button" class="btn btn-danger spinner-btn m-0"><i class="icon-125" data-feather="dollar-sign"></i> &nbsp; See price</a>
@@ -287,7 +287,7 @@
 									<h3>Your trip</h3>
 									<div class="row">
 										<div class="col-8">
-											<p class="m-0 p-0">{{ rental_fulfilment.duration }} rental</p>
+											<p class="m-0 p-0">{{ rental_fulfilment.duration_humanize }} rental</p>
 											<small class="text-black-50">({{ rental_fulfilment.rental_start }} - {{ rental_fulfilment.rental_end }})</small>
 											{% for pa in rental_fulfilment.rental_fulfilled_product.active_deals %}
 											<p class="p-0 m-0">

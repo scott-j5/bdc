@@ -25,7 +25,7 @@ class VanListView(ListView):
 		if self.request.GET:
 			form = RentalDateRangeFormMulti(self.request.GET)
 			if form.is_valid():
-				qs = Van.objects.fulfil([form.cleaned_data["check_in"], form.cleaned_data["check_out"]])
+				qs = Van.objects.available(rental_start=form.cleaned_data["check_in"], rental_end=form.cleaned_data["check_out"])
 		else:
 			qs = Van.objects.all()
 		return qs
@@ -36,7 +36,7 @@ class VanListView(ListView):
 		if self.request.GET:
 			context["form"] = DateRangeFormMulti(self.request.GET, action=reverse_lazy("van-list"), submit_text="Change Dates", flatpickr_args={})
 			if context["form"].is_valid() and len(self.object_list) <= 0:
-				context['alt_rentals'] = Van.objects.nearby([context["form"].cleaned_data['check_in'], context["form"].cleaned_data['check_out']])
+				context['alt_rentals'] = Van.objects.nearby(rental_start=context["form"].cleaned_data['check_in'], rental_end=context["form"].cleaned_data['check_out'])
 		else:
 			context["form"] = DateRangeFormMulti(action=reverse_lazy("van-list"), submit_text="Check Pricing", flatpickr_args={})
 		return context
@@ -54,7 +54,6 @@ class VanDetailView(DetailView):
 			context["form"] = RentalDateRangeForm(self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":self.object.flatpickr_unavailable})
 			if context["form"].is_valid():
 				fulfilment_date_time = timezone.make_aware(datetime.datetime.strptime(self.request.GET.get('fulfilment_date'), '%Y-%m-%d')) if self.request.GET.get('fulfilment_date') else timezone.now()
-				rental_dates = [context['form'].cleaned_data['check_in'], context['form'].cleaned_data['check_out']] 
 				context["rental_fulfilment"] = RentalFulfilment(product=self.object, fulfilment_date_time=fulfilment_date_time, rental_start=context['form'].cleaned_data['check_in'], rental_end=context['form'].cleaned_data['check_out'])
 				context["rental_create_form"] = RentalFulfilmentCreateForm(instance=context["rental_fulfilment"])
 		else:

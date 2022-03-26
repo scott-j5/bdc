@@ -7,6 +7,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
 from core.forms import DateRangeFormMulti, DateRangeForm
@@ -20,8 +21,10 @@ from .models import RentalDriver, RentalFulfilment, RentalProduct
 class RentalDateRangeForm(DateRangeForm):
 	def clean(self, *args, **kwargs):
 		cleaned_data = super().clean(*args, **kwargs)
-		cleaned_data['check_in'] = datetime.combine(cleaned_data['check_in'].date(), RENTAL_CHECK_IN_TIME)
-		cleaned_data['check_out'] = datetime.combine(cleaned_data['check_out'].date(), RENTAL_CHECK_OUT_TIME)
+		if RENTAL_CHECK_IN_TIME:
+			cleaned_data['check_in'] = make_aware(datetime.combine(cleaned_data['check_in'].date(), RENTAL_CHECK_IN_TIME))
+		if RENTAL_CHECK_OUT_TIME:
+			cleaned_data['check_out'] = make_aware(datetime.combine(cleaned_data['check_out'].date(), RENTAL_CHECK_OUT_TIME))
 		if (cleaned_data['check_out'] - cleaned_data['check_in']).total_seconds() <= 0:
 			raise ValidationError(_("Check out must not be before Check in."))
 		return cleaned_data
@@ -30,14 +33,16 @@ class RentalDateRangeForm(DateRangeForm):
 class RentalDateRangeFormMulti(DateRangeFormMulti):
 	def clean(self, *args, **kwargs):
 		cleaned_data = super().clean(*args, **kwargs)
-		cleaned_data['check_in'] = datetime.combine(cleaned_data['check_in'].date(), RENTAL_CHECK_IN_TIME)
-		cleaned_data['check_out'] = datetime.combine(cleaned_data['check_out'].date(), RENTAL_CHECK_OUT_TIME)
+		if RENTAL_CHECK_IN_TIME:
+			cleaned_data['check_in'] = make_aware(datetime.combine(cleaned_data['check_in'].date(), RENTAL_CHECK_IN_TIME))
+		if RENTAL_CHECK_OUT_TIME:
+			cleaned_data['check_out'] = make_aware(datetime.combine(cleaned_data['check_out'].date(), RENTAL_CHECK_OUT_TIME))
 		if (cleaned_data['check_out'] - cleaned_data['check_in']).total_seconds() <= 0:
 			raise ValidationError(_("Check out must not be before Check in."))
 		return cleaned_data
 
 
-class FuilfilmentDateRangeForm(DateRangeFormMulti):
+class RentalFuilfilmentDateRangeForm(RentalDateRangeFormMulti):
 	fulfilment_date_time = forms.DateTimeField(widget=DatePicker(attrs={"placeholder": "Purchase Date", "data-flatpickr_args": {"enableTime": True,"dateFormat": "Y-m-dTH:i:S"}}), label=False, required=False)
 
 	def clean(self, **kwargs):

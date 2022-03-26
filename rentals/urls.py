@@ -11,10 +11,10 @@ from .views import (
 )
 
 urlpatterns = [
-	path('product/<slug:slug>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
-	path('user/<int:pk>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+	path('list/product/<slug:slug>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+	path('list/user/<int:pk>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
 	path('list/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
-	path('my-rentals/<int:pk>/', MyRentals.as_view(), name='my-rentals'),
+	path('my-rentals/user/<int:pk>/', MyRentals.as_view(), name='my-rentals'),
 	path('my-rentals/', MyRentals.as_view(), name='my-rentals'),
     path('rental/price-check/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
 	path('rental/price-check/<slug:slug>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),

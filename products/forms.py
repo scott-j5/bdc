@@ -52,10 +52,6 @@ class ProductForm(forms.ModelForm):
 							'available',
 							css_class="col-md-4 d-flex justify-content-center"
 						),
-						Column(
-							'rentable',
-							css_class="col-md-4 d-flex justify-content-center"
-						),
 						css_class="align-items-center"
                     ),
                 ),
@@ -63,7 +59,7 @@ class ProductForm(forms.ModelForm):
 
 	class Meta:
 		model = Product
-		fields = ['name', 'slug', 'description_short', 'description_long', 'rentable', 'base_price', 'available', 'qty']
+		fields = ['name', 'slug', 'description_short', 'description_long', 'base_price', 'available', 'qty']
 
 
 class ProductImageFormHelper(FormHelper):
