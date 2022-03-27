@@ -1,7 +1,6 @@
 // Bootstrap functions (used in variables)
 @import "~bootstrap/scss/functions";
 
-
 //Variables
 // Custom Variables
 @import "soft-design-system-pro/custom/variables";
@@ -21,7 +20,13 @@
 
 //Bootstrap
 @import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/helpers";
+//Bootstrap utility api -Ensures custom utilities are applied
+@import "custom/utilities.scss";
 @import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/utilities/api";
+
+
 @import "~bootstrap/scss/root";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
@@ -44,7 +49,7 @@
 @import "~bootstrap/scss/accordion";
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/close";
-@import "~bootstrap/scss/helpers";
+
 
 @import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/offcanvas";
@@ -64,6 +69,3 @@
 
 //Custom Styles
 @import "custom/custom.scss";
-
-//Bootstrap utility api -Ensures custom utilities are applied
-@import "~bootstrap/scss/utilities/api";

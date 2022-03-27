@@ -15,7 +15,7 @@ from core.widgets import DatePicker
 from core.layout import SpinnerSubmit, SpinnerSubmitBlock
 
 from .settings import RENTAL_CHECK_IN_TIME, RENTAL_CHECK_OUT_TIME
-from .models import RentalDriver, RentalFulfilment, RentalProduct
+from .models import RentalDriver, RentalExtra, RentalFulfilment, RentalProduct
 
 
 class RentalDateRangeForm(DateRangeForm):
@@ -40,6 +40,15 @@ class RentalDateRangeFormMulti(DateRangeFormMulti):
 		if (cleaned_data['check_out'] - cleaned_data['check_in']).total_seconds() <= 0:
 			raise ValidationError(_("Check out must not be before Check in."))
 		return cleaned_data
+
+
+class RentalProductDateRangeForm(RentalDateRangeForm):
+	product = forms.ModelChoiceField(queryset=RentalProduct.objects.all())
+
+	def clean(self, *args, **kwargs):
+		cleaned_data = super().clean(*args, **kwargs)
+		if not cleaned_data["product"].is_available(cleaned_data["check_in"], cleaned_data["check_out"]):
+			raise ValidationError(_("This Product is not available for the selected dates"))
 
 
 class RentalFuilfilmentDateRangeForm(RentalDateRangeFormMulti):
@@ -82,35 +91,63 @@ class RentalFulfilmentCreateForm(forms.ModelForm):
 	rental_end = forms.DateTimeField(widget=DatePicker(attrs={"placeholder": "Rental End", "data-flatpickr_args": {"enableTime": True,"dateFormat": "Y-m-dTH:i:S"}}), label=False, required=False)
 
 	def __init__(self, *args, **kwargs):
+		self.request = kwargs.pop('request', None)
+		hidden = kwargs.pop('hidden', False)
 		super().__init__(*args, **kwargs)
 		self.helper = FormHelper()
 		self.helper.form_action = reverse_lazy('rental-fulfilment-add')
-		self.helper.form_method = 'POST'
 		self.helper.form_id = 'rental-fulfilment-create-form'
 		self.helper.html5_required = False
-		self.helper.layout = Layout(
-            Div(
+		if hidden:
+			self.helper.layout = Layout(
 				Div(
 					Div(
-						'product',
-						css_class="col-12",
+						Div(
+							Field(
+								'product',
+								type="hidden",
+							),
+							Field(
+								'rental_start',
+								type="hidden",
+							),
+							Field(
+								'rental_end',
+								type="hidden",
+							),
+						),
+						Div(
+							SpinnerSubmit("submit", 'Book Now', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+							css_class="d-grid col-12"
+						),
+						css_class="row"
 					),
-					Div(
-						'rental_start',
-						css_class="col-12",
-					),
-					Div(
-						'rental_end',
-						css_class="col-12",
-					),
-					Div(
-						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
-						css_class="d-grid col-12"
-					),
-					css_class="row"
-				),
+				)
 			)
-		)
+		else:
+			self.helper.layout = Layout(
+				Div(
+					Div(
+						Div(
+							'product',
+							css_class="col-12",
+						),
+						Div(
+							'rental_start',
+							css_class="col-12",
+						),
+						Div(
+							'rental_end',
+							css_class="col-12",
+						),
+						Div(
+							SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+							css_class="d-grid col-12"
+						),
+						css_class="row"
+					),
+				)
+			)
 
 	class Meta:
 		model = RentalFulfilment
@@ -168,6 +205,8 @@ class AdminRentalFulfilmentCreateForm(RentalFulfilmentCreateForm):
 
 
 class RentalFulfilmentExtrasForm(forms.ModelForm):
+	rental_extras = forms.ModelMultipleChoiceField(queryset=RentalExtra.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
+
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.helper = FormHelper()
@@ -196,44 +235,15 @@ class RentalFulfilmentExtrasForm(forms.ModelForm):
 		fields = ['rental_extras']
 
 
-class RentalFulfilmentExtrasForm(forms.ModelForm):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.helper = FormHelper()
-		self.helper.form_action = reverse_lazy('rental-fulfilment-extras', kwargs={'pk':self.instance.id})
-		self.helper.form_method = 'POST'
-		self.helper.form_id = 'rental-fulfilment-extras-form'
-		self.helper.html5_required = True
-		self.helper.layout = Layout(
-            Div(
-				Div(
-					Div(
-						'rental_extras',
-						css_class="col-12",
-					),
-					Div(
-						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
-						css_class="d-grid col-12"
-					),
-					css_class="row"
-				),
-			)
-		)
-
-	class Meta:
-		model = RentalFulfilment
-		fields = ['rental_extras']
-
-
 class RentalDriverForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)
 		super().__init__(*args, **kwargs)
 		self.helper = FormHelper()
-		self.helper.form_action = reverse_lazy('rental-fulfilment-detail', kwargs={'pk':rental_fulfilment_id})
+		self.helper.form_action = reverse_lazy('rental-fulfilment-drivers', kwargs={'pk':rental_fulfilment_id})
 		self.helper.form_method = 'POST'
 		self.helper.form_id = 'rental-fulfilment-drivers-form'
-		self.helper.html5_required = True
+		self.helper.html5_required = False
 		self.helper.layout = Layout(
             Div(
 				Div(
@@ -275,10 +285,10 @@ class RentalDriverFormsetHelper(FormHelper):
 	def __init__(self, *args, **kwargs):
 		rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)
 		super().__init__(*args, **kwargs)
-		self.form_action = reverse_lazy('rental-fulfilment-detail', kwargs={'pk':rental_fulfilment_id})
+		self.form_action = reverse_lazy('rental-fulfilment-drivers', kwargs={'pk':rental_fulfilment_id})
 		self.form_method = 'POST'
 		self.form_id = 'rental-fulfilment-drivers-form'
-		self.html5_required = True
+		self.html5_required = False
 		self.layout = Layout(
             Div(
 				Div(

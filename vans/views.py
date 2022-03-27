@@ -10,7 +10,7 @@ from django.views.generic import DetailView, ListView
 from products.models import ProductFulfilment
 from products.views import CompleteProductUpdateView, ProductDeleteView
 from rentals.models import RentalFulfilment, RentalRules, RentalInformation
-from rentals.forms import RentalFulfilmentCreateForm, RentalDateRangeForm, RentalDateRangeFormMulti
+from rentals.forms import RentalFulfilmentCreateForm, RentalProductDateRangeForm, RentalDateRangeForm, RentalDateRangeFormMulti
 
 from .models import (
 	Van,
@@ -25,10 +25,8 @@ class VanListView(ListView):
 		if self.request.GET:
 			form = RentalDateRangeFormMulti(self.request.GET)
 			if form.is_valid():
-				qs = Van.objects.available(rental_start=form.cleaned_data["check_in"], rental_end=form.cleaned_data["check_out"])
-		else:
-			qs = Van.objects.all()
-		return qs
+				return Van.objects.available(rental_start=form.cleaned_data["check_in"], rental_end=form.cleaned_data["check_out"])
+		return Van.objects.all()
 
 	#Get nearby stays of similar length!
 	def get_context_data(self, **kwargs):
@@ -51,13 +49,15 @@ class VanDetailView(DetailView):
 		context["rental_information"] = RentalInformation.objects.all()
 		context["rental_rules"] = RentalRules.objects.all()
 		if self.request.GET:
-			context["form"] = RentalDateRangeForm(self.request.GET, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":self.object.flatpickr_unavailable})
+			form_data = self.request.GET.copy()
+			form_data['product'] = self.object.id
+			context["form"] = RentalProductDateRangeForm(form_data, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Change Dates", flatpickr_args={"disable":self.object.flatpickr_unavailable})
 			if context["form"].is_valid():
 				fulfilment_date_time = timezone.make_aware(datetime.datetime.strptime(self.request.GET.get('fulfilment_date'), '%Y-%m-%d')) if self.request.GET.get('fulfilment_date') else timezone.now()
 				context["rental_fulfilment"] = RentalFulfilment(product=self.object, fulfilment_date_time=fulfilment_date_time, rental_start=context['form'].cleaned_data['check_in'], rental_end=context['form'].cleaned_data['check_out'])
-				context["rental_create_form"] = RentalFulfilmentCreateForm(instance=context["rental_fulfilment"])
+				context["rental_create_form"] = RentalFulfilmentCreateForm(hidden=True, instance=context["rental_fulfilment"])
 		else:
-			context["form"] = RentalDateRangeForm(action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":self.object.flatpickr_unavailable})
+			context["form"] = RentalProductDateRangeForm(initial={"product": self.object.id}, action=reverse_lazy("van-detail", kwargs={'slug': self.object.slug}), submit_text="Check Pricing", flatpickr_args={"disable":self.object.flatpickr_unavailable})
 		return context
 
 

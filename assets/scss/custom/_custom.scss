@@ -1,6 +1,5 @@
 // Custom variables are imported independently in app.scss
 
-@import 'utilities.scss';
 @import 'dropdown.scss';
 @import 'typography.scss';
 @import 'navbar.scss';
@@ -170,3 +169,17 @@
 .rotate-90{
 	transform: rotate(-90deg);
 }
+
+/*
+.ul-2-col{
+	columns: 2;
+	-webkit-columns: 2;
+	-moz-columns: 2;
+}
+
+.ul-3-col{
+	columns: 3;
+	-webkit-columns: 3;
+	-moz-columns: 3;
+}
+*/

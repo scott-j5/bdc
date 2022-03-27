@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 
 from imageit.models import ScaleItImageField, CropItImageField
 
-from .settings import CHARGE_RENTAL_DAILY, RENTAL_CHECK_IN_TIME, VERBOSE_CHARGE_PERIOD
+from .settings import CHARGE_RENTAL_DAILY, RENTAL_CHECK_IN_TIME
 
 # Create your models here.
 class RentalProductManager(models.Manager):
@@ -69,7 +69,7 @@ class RentalProduct(Product):
 	def available_dates(self):
 		available = []
 		unavailable = self.unavailable_dates.order_by('rental_start')
-		available_start = timezone.make_aware(datetime.strptime('0001-01-01', '%Y-%m-%d'))
+		available_start = timezone.make_aware(datetime.strptime('1111-01-01', '%Y-%m-%d'))
 		for unavailable_start, unavailable_end in unavailable:
 			# Check for overlap between the start of current unavailable period and next available_period_start
 			# If available_period starts after next unavailable_period_start then dont append available range 
@@ -78,7 +78,7 @@ class RentalProduct(Product):
 				available_range = {"start": available_start, "end": unavailable_start}
 				available.append(available_range)
 			available_start = unavailable_end
-		available.append({"start": available_start, "end": timezone.make_aware(datetime.strptime('9999-12-31', '%Y-%m-%d'))})
+		available.append({"start": available_start, "end": timezone.make_aware(datetime.strptime('9998-12-31', '%Y-%m-%d'))})
 		return available
 
 	# Returns a list of datetimes where the rental product is unavailable
@@ -110,13 +110,13 @@ class RentalProduct(Product):
 	def is_available(self, rental_start, rental_end):
 		end_inc_turnaround = rental_end + timedelta(hours=self.min_turnaround)
 
-		# Select Rental Fulfilments where rental start or rental end are within the specified range
+		# Select Rental Fulfilments rental start or rental end are within the specified range
 		# or that end after range start or begin before range end
 		# Rental fulfil where start > rental_end_inc_turnaround or end < rental_start
-		clashing_rentals = Rental.objects.filter(
+		clashing_rentals = RentalFulfilment.objects.filter(
 			Q(rental_start__range=(rental_start, end_inc_turnaround))
-			| Q(rental_end_inc_turnaround__range=(rental_start, end_inc_turnaround))
-			| Q(rental_start__lte=rental_start, rental_end_inc_turnaround__gt=end_inc_turnaround)
+			| Q(_rental_end_inc_turnaround__range=(rental_start, end_inc_turnaround))
+			| Q(rental_start__lte=rental_start, _rental_end_inc_turnaround__gt=end_inc_turnaround)
 		).count()
 		return False if clashing_rentals > 0 else True
 	
@@ -235,6 +235,14 @@ class RentalFulfilment(ProductFulfilment):
 			#Adjust total price accordingly
 			#Take deductions from additions
 		
+		# Add the price of any extras
+		for extra in self.rental_extras_set.all():
+			adjustment_val = adjustment_val + extra.base_price
+
+		# Add the price of additional drivers
+		drivers_count = max(self.rental_driver_set.all().count() - 1, 0)
+		adjustment_val = adjustment_val + (25 * drivers_count)
+
 		return round(base_rental_price + adjustment_val, 2)
 	
 	def save(self, *args, **kwargs):
@@ -246,7 +254,7 @@ class RentalFulfilment(ProductFulfilment):
 			raise ValidationError(_('This rental conflicts with another.'))
 
 		if not self._unfulfilled_rental_price:
-			self._unfulfilled_rental_price = self.unfulfilled_rental_price()
+			self._unfulfilled_rental_price = self.unfulfilled_rental_price
 		return super().save(*args, **kwargs)
 
 
@@ -260,9 +268,9 @@ class RentalDriver(models.Model):
 	user = models.ForeignKey(User, null=False, blank=False, on_delete=models.SET(get_sentinel_user))
 	first_name = models.CharField(max_length=150, null=True, blank=True)
 	last_name = models.CharField(max_length=150, null=True, blank=True)
-	dob = models.DateField()
-	licence_front = CropItImageField()
-	licence_back = CropItImageField()
+	dob = models.DateField(blank=True)
+	licence_front = CropItImageField(blank=True)
+	licence_back = CropItImageField(blank=True)
 
 
 class RentalRules(models.Model):

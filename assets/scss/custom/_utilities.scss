@@ -1,6 +1,17 @@
 $utilities: map-merge(
 	$utilities,
 	(
+		"ul-col": (
+			property: columns,
+			class: "ul-col",
+			responsive: true,
+			values: (
+				1: 1,
+				2: 2,
+				3: 3,
+			)
+		),
+
 		"color": (
 			property: color,
 			class: text,
@@ -44,4 +55,4 @@ $utilities: map-merge(
 			)
 		),
 	)
-)
+);

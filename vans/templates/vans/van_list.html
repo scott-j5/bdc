@@ -73,7 +73,7 @@ bg-gray-100
 					{% if alt_rentals|length > 0 %}
 						<div class="row justify-content-center">
 							<div class="col-md-9">
-								<h5 class="text-light text-dark mb-5">However, we found these options close to your prefered stay.</h5>
+								<h5 class="text-light text-dark mt-5 mb-3">However, we found these options close to your prefered stay.</h5>
 							</div>
 						</div>
 						<div class="row">
@@ -81,13 +81,13 @@ bg-gray-100
 								<div class="col-12 col-md-6 col-lg-4 mx-auto text-start">
 									<div class="card card-blog card-plain">
 										<div class="position-relative square">
-											<a class="d-block position-absolute top-0 h-100 w-100 blur-shadow-image">
+											<a href="{% url 'van-detail' van.slug %}" class="d-block position-absolute top-0 h-100 w-100 blur-shadow-image">
 												<img src="{{ van.thumbnail.image.url }}" alt="product-img" class="img-fluid shadow border-radius-lg fit-cover">
 											</a>
 											<div class="colored-shadow"></div>
 										</div>
 										<div class="card-body px-1 pt-3">
-											<a href="{% url 'van-detail' van.slug %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}">
+											<a href="{% url 'van-detail' van.slug %}">
 												<p class="text-gradient text-danger mb-2 text-sm">{{ van.make }} {{ van.model }} • Sleeps {{ van.sleeps }} • Seats {{ van.seats }}</p>
 													<h5>
 														{{ van.name }}
@@ -106,7 +106,7 @@ bg-gray-100
 					{% else %}
 						<div class="row justify-content-center">
 							<div class="col-md-9 my-7">
-								<h5 class="text-light text-dark">We even searched high and low for rentals of desired duration within 30 days of your desired travel dates</h5>
+								<h5 class="text-light text-dark">We even searched high and low for rentals of desired duration within 30 days of your preferred travel dates</h5>
 								<p class="px-8 my-5"><small>If you have your heart set on one of our vans, check out its detail page and it's calandar will show exactly when it is next available for rent.</small></p>
 							</div>
 						</div>
