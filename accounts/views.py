@@ -29,7 +29,21 @@ class ProfileDetail(LoginRequiredMixin, DetailView):
 class ProfileConnectionsView(LoginRequiredMixin, ConnectionsView):
 	template_name = 'accounts/profile_connections.html'
 
+	def get(self, *args, **kwargs):
+		#If no user id is provided default to request.user
+		if not self.kwargs.get('pk', False):
+			self.kwargs['user_set'] = True
+			self.kwargs['pk'] = self.request.user.id
+		return super().get(*args, **kwargs)
+
 
 class ProfileEmailView(LoginRequiredMixin, EmailView):
 	template_name = 'accounts/profile_email.html'
 	success_url = reverse_lazy("profile-email")
+
+	def get(self, *args, **kwargs):
+		#If no user id is provided default to request.user
+		if not self.kwargs.get('pk', False):
+			self.kwargs['user_set'] = True
+			self.kwargs['pk'] = self.request.user.id
+		return super().get(*args, **kwargs)

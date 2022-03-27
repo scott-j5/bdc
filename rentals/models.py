@@ -211,9 +211,8 @@ class RentalFulfilment(ProductFulfilment):
 			total_unfulfilled_rental_price = self.adjusted_rental_rate * self.duration_hours
 		return total_unfulfilled_rental_price
 	
-	# Calculates final fulfilment price of the rental
-	# Applies RentalPriceAdjustments to unfulfilled_rental_price
-	def _calculate_price(self):
+	@property
+	def fulfilled_rental_price(self):
 		base_rental_price = self.unfulfilled_rental_price
 		adjustment_val = 0
 		
@@ -235,15 +234,23 @@ class RentalFulfilment(ProductFulfilment):
 			#Adjust total price accordingly
 			#Take deductions from additions
 		
+		return round(base_rental_price + adjustment_val, 2)
+
+	# Calculates final fulfilment price of the rental
+	# Applies RentalPriceAdjustments to unfulfilled_rental_price
+	def _calculate_price(self):
+		rental_price = self.fulfilled_rental_price
+		adjustment_val = 0
+		
 		# Add the price of any extras
-		for extra in self.rental_extras_set.all():
+		for extra in self.rental_extras.all():
 			adjustment_val = adjustment_val + extra.base_price
 
 		# Add the price of additional drivers
-		drivers_count = max(self.rental_driver_set.all().count() - 1, 0)
+		drivers_count = max(self.rentaldriver_set.all().count() - 1, 0)
 		adjustment_val = adjustment_val + (25 * drivers_count)
 
-		return round(base_rental_price + adjustment_val, 2)
+		return round(rental_price + adjustment_val, 2)
 	
 	def save(self, *args, **kwargs):
 		rental_product = RentalProduct.objects.get(id=self.product.id)

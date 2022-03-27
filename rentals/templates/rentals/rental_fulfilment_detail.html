@@ -5,7 +5,6 @@
 
 {% block banner %}
 {{ block.super }}
-{% include 'core/staff_only_header.html' %}
 {% endblock banner %}
 
 {% block content %}
@@ -15,120 +14,79 @@
 		<div class="container over-filter">
 			<div class="row justify-content-center">
 				<div class="col-md-8 text-center">
-					<h1 class="title text-white text-light"> Price check for {{ object.product.name }}</h1>
+					<h1 class="title text-white text-light"> {{ object.duration_humanize }} stay with {{ object.product.name }}</h1>
 					<h5 class="description text-white text-light">
-						See below for greater transparancy of how {{ object.product.name }}s rates are calculated over the specified dates.
+						Review and edit the details of your rental
 					</h5>
 					<br/>
 				</div>
 				<div class="col-md-9">
 					<div class="card card-raised card-form-horizontal no-transition">
 						<div class="card-body p-3 pb-0">
-							<div class="row">
-								<div class="col">
-									{% if form %}
-										{% crispy form %}
-									{% endif %}
-								</div>
-							</div>
-							{% if object.rental_clash %}
-							{{ object.clashing_rentals }}
-							<div class="row">
-								<div class="col">
-									<div class="alert alert-danger text-center">
-										<p class="m-0">{{ object.product.name }} is not available for these dates!</p>
-									</div>
-								</div>
-							</div>
-							{% endif %}
-							<!-- Base Fulfilment rate adjustments -->
+							<!-- Rental Details -->
 							<div class="row p-4">
 								<div class="col-12 text-center pb-4">
-									<h2>Base Rate Calculations</h2>
-									<p>Based on purchase time of: {{ object.fulfilment_date_time }}</p>
-									<small class="text-light text-dark">Note: All additions are applied first, then any deductions are applied negatively compounding to the inflated rate.</small>
-								</div>
+									<h2>Details</h2>
+									{% if request.is_staff %}<p>Booked at: {{ object.fulfilment_date_time }}</p>{% endif %}								</div>
 								<div class="col-8">
-									<h6 class="m-0">{{ object.product.name }}s base rate:</h6>
+									<h6 class="m-0">{{ object.duration_humanize }} rental</h6>
+									<small>{{ object.rental_start|date:"g:ia l jS M." }} - {{ object.rental_end|date:"g:ia l jS M. Y" }}</small>
 								</div>
 								<div class="col-4 d-flex align-items-center justify-content-end">
-									{{ object.product.base_price|price }}/{{ charge_period }}
+									{{ object.fulfilled_rental_price|price }}
 								</div>
-								
-								{% if object.active_price_adjustments|length > 0 %}
-								<div class="col-12">
-									<hr class="my-3">
-								</div>
-								<div class="col-12">
-									<ul class="list-group list-group-flush ps-4">
-										{% for adj in object.active_price_adjustments %}
-											<li class="list-group-item pe-0">
-												<div class="row">
-													<div class="col-8">
-														<p class="m-0 text-dark">{{ adj.name }}</p>
-														<small class="text-light text-dark">({{ adj.period_start }} - {{ adj.period_end }})</small>
-													</div>
-													<div class="col-4 d-flex align-items-center justify-content-end">
-														<small>{{ adj.amount_humanize }}</small>
-													</div>
-												</div>
-											</li>
-										{% endfor %}
-									</ul>	
-								</div>
-								{% endif %}
-								<div class="col-12">
-									<hr class="my-3">
-								</div>
-								<div class="col-8">
-									<h6>Actual base rate:</h6>
-								</div>
-								<div class="col-4 text-end">
-									<h6>{{ object.adjusted_rental_rate|price }}/{{ charge_period }}</h6>
-								</div>
-							</div>
 
-							<!-- Rental rate adjustments -->
-							<div class="row p-4">
-								<div class="col-12 text-center pb-4">
-									<h2>Rental Calculations</h2>
-									<small class="text-light text-dark">Note: Rental adjustments are only applied for the period of the rental where they apply. % adjustments are calculated per {{ charge_period }} based off the actual base rate above ({{ object.adjusted_rental_rate|price }})</small>
-								</div>
-								<div class="col-8">
-									<h6 class="m-0">Rental base rate:</h6>
-									<small class="text-light text-dark">({{ object.adjusted_rental_rate|price }}/{{ charge_period }} X {{ object.duration_humanize }})</small>
-								</div>
-								<div class="col-4 d-flex align-items-center justify-content-end">
-									{{ object.unfulfilled_rental_price|price }}
-								</div>
-								
-								{% if object.active_rental_price_adjustments|length > 0 %}
 								<div class="col-12">
 									<hr class="my-3">
+									<h6 class="m-0">{% if object.rental_extras.all|length > 0 %}Extras{% else %}No Extras{% endif %}</h6>
 								</div>
 								<div class="col-12">
 									<ul class="list-group list-group-flush ps-4">
-										{% for adj in object.active_rental_price_adjustments %}
+									{% if object.rental_extras.all|length > 0 %}
+										{% for extra in object.rental_extras.all %}
 											<li class="list-group-item pe-0">
 												<div class="row">
 													<div class="col-8">
-														<p class="m-0 text-dark">{{ adj.name }}</p>
-														<small class="text-light text-dark">({{ adj.period_start }} - {{ adj.period_end }})</small>
+														<p class="m-0 text-dark">{{ extra.name }}</p>
 													</div>
 													<div class="col-4 d-flex align-items-center justify-content-end">
-														<small>{{ adj.amount_humanize }}/{{ charge_period }}</small>
+														<small>{{ extra.base_price|price }}</small>
 													</div>
 												</div>
 											</li>
 										{% endfor %}
+									{% endif %}
+									</ul>	
+								</div>	
+
+
+								<div class="col-12">
+									<hr class="my-3">
+									<h6 class="m-0">{% if object.rentaldriver_set.all|length > 0 %}Drivers{% else %}No Drivers Listed{% endif %}</h6>
+								</div>
+								<div class="col-12">
+									<ul class="list-group list-group-flush ps-4">
+									{% if object.rentaldriver_set.all|length > 0 %}
+										{% for driver in object.rentaldriver_set.all %}
+											<li class="list-group-item pe-0">
+												<div class="row">
+													<div class="col-8">
+														<p class="m-0 text-dark">{{ driver.first_name }} {{ driver.last_name }}</p>
+													</div>
+													<div class="col-4 d-flex align-items-center justify-content-end">
+														<small>{% if forloop.first %}-{% else %}{{ 25|price }}{% endif %}</small>
+													</div>
+												</div>
+											</li>
+										{% endfor %}
+									{% endif %}
 									</ul>	
 								</div>
-								{% endif %}
 								<div class="col-12">
 									<hr class="my-3">
 								</div>
 								<div class="col-8">
-									<h6>Rental Total:</h6>
+									<h6>Total:</h6>
 								</div>
 								<div class="col-4 text-end">
 									<h6>{{ object.fulfilment_price|price }}</h6>

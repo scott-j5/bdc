@@ -40,5 +40,6 @@ urlpatterns = [
 	path('about-us/', about_us_view, name='about-us'),
 	path('faqs/', faqs_view, name='faqs'),
 	path('pricing/', pricing_view, name='pricing'),
+	path('pre-trip-checklist/', pricing_view, name='pre-trip-checklist'),
 	path('testimonials/', testimonials_view, name='testimonials'),
 ]

@@ -183,7 +183,7 @@ class ProductFulfilment(models.Model):
 	def save(self, *args, **kwargs):
 		if not self.audit_product_base_price:
 			self.audit_product_base_price = self.product.base_price
-		self._fulfilment_price = self.fulfilment_price
+		self._fulfilment_price = self._calculate_price()
 		# Add info about adjustments here? fk to adj?
 		return super().save(*args, **kwargs)
 

@@ -62,10 +62,10 @@ class VanDetailView(DetailView):
 
 
 class VanUpdateView(PermissionRequiredMixin, CompleteProductUpdateView):
-	permission_required = 'van.change_van'
+	permission_required = 'vans.change_van'
 	raise_exception = True
 
 
-
-class VanDeleteView(ProductDeleteView):
-	pass
+class VanDeleteView(PermissionRequiredMixin, ProductDeleteView):
+	permission_required = 'vans.delete_van'
+	raise_exception = True
