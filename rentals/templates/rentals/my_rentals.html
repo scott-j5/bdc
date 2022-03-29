@@ -1,25 +1,41 @@
 {% extends 'accounts/profile_base.html' %}
+{% load static %}
 {% load price_tags %}
 
+{% block account-content %}
+HEY
+
+{% endblock account-content %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "My Rentals" %}{% endblock %}
+
 {% block profile_content %}
+	<div class="mt-3">
+		<h1 class="h3 text-light d-inline-block mb-0 align-middle">{% if request.user.id == usr.id %}My {% endif %}Rentals</h1>
+	</div>
+	<hr/>
 	{% if object_list|length > 0 %}
-		<div class="row p-4">
+		<div class="row">
 			<div class="col-12">
-				<ul class="list-group list-group-flush ps-4 bg-transparent">
+				<ul class="list-group list-group-flush bg-transparent">
 					{% for rf in object_list %}
-						<a href="{% url 'rental-fulfilment-detail' rf.id %}">
-							<li class="list-group-item pe-0 bg-transparent">
+						<li class="list-group-item pe-0 ps-0 bg-transparent">
+							<a href="{% url 'rental-fulfilment-detail' rf.id %}">
 								<div class="row">
 									<div class="col-8">
-										<p class="m-0 text-light text-normal">{{ rf.product.name }}</p>
+										<p class="m-0 text-light text-normal"> {{ rf.product.name }}</p>
 										<small class="text-light text-normal">({{ rf.rental_start }} - {{ rf.rental_end }})</small>
 									</div>
 									<div class="col-4 d-flex align-items-center justify-content-end">
-										<small class="text-light text-normal">{{ rf.fulfilment_price|price }}</small>
+										<small class="text-light text-normal">{{ rf.fulfilment_price|price }}  <i class="fa fa-chevron-right text-secondary"></i></small>
 									</div>
 								</div>
-							</li>
-						</a>
+							</a>
+						</li>
 					{% endfor %}
 				</ul>	
 			</div>

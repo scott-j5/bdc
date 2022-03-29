@@ -1,0 +1,7 @@
+{% if messages %}
+	{% for message in messages %}
+		<div class="container-fluid p-0 m-0 border-0 rounded-0">
+			<div class="alert alert-{{ message.tags }} text-center m-0" role="alert">{{ message.tags|title }}! {{ message }}</div>
+		</div>
+	{% endfor %}
+{% endif %}

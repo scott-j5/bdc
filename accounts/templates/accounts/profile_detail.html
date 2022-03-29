@@ -10,18 +10,32 @@
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}{% trans "Profile" %}{% endblock %}
 
 {% block profile_content %}
 	<div class="mt-3">
 		<h1 class="h3 text-light d-inline-block mb-0 align-middle">Profile</h1>
-		{% if user.id == object.user.id %}
-		<a class="btn btn-sm btn-outline-danger rounded-pill mb-0 ms-3"><i class="fa fa-edit"></i> Edit</a>
+		{% if request.user.is_staff or request.user.id == usr.id %}
+		<a href="{% url 'profile-update' usr.id %}" class="btn btn-sm btn-outline-danger rounded-pill mb-0 ms-3"><i class="fa fa-edit"></i> Edit</a>
 		{% endif %}
 	</div>
 	<hr/>
 	<div class="">
-		<p class="text-light"><strong>Username:</strong> {{ object.user.username }}</p>
-		<p class="text-light"><strong>Name:</strong> {{ object.user.first_name }} {{ object.user.last_name }}</p>
+		<div class="d-flex justify-content-between">
+			<p class="d-inline-block text-light"><strong>Username:</strong></p>
+			<p class="d-inline-block">{{ usr.username }}</p>
+		</div>
+		<div class="d-flex justify-content-between">
+			<p class="d-inline-block text-light"><strong>Name:</strong></p>
+			<p class="d-inline-block">{{ usr.first_name }} {{ usr.last_name }}</p>
+		</div>
+		<div class="d-flex justify-content-between">
+			<p class="d-inline-block text-light"><strong>D.O.B:</strong></p>
+			<p class="d-inline-block">{{ usr.profile.dob }}</p>
+		</div>
+		<div class="d-flex justify-content-between">
+			<p class="d-inline-block text-light"><strong>Date Joined:</strong></p>
+			<p class="d-inline-block">{{ usr.date_joined }}</p>
+		</div>
 	</div>
 {% endblock profile_content %}

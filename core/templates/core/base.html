@@ -30,6 +30,9 @@
 	{% endblock styles %}
 </head>
 <body class="{% block body_class %}{% endblock body_class %}">
+	{% block messages %}
+		{% include 'core/messages.html' %}
+	{% endblock messages %}
 	{% block banner %}
 	{% endblock %}
 	<div class="position-relative">

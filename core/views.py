@@ -51,3 +51,6 @@ def error_404(request, exception):
 def error_500(request):
     context = {}
     return render(request, 'core/500.html', context, status=500)
+
+def testemail_view(request):
+	return render(request, 'core/email/base_email.html')

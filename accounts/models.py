@@ -11,11 +11,10 @@ class UserProfile(models.Model):
 
 	user = models.OneToOneField(User, primary_key=True, verbose_name='user', related_name='profile', on_delete=models.CASCADE)
 	avatar = CropItImageField(max_width=300, max_height=300, quality=90, blank=True, null=True, upload_to=get_upload_path)
-
+	dob = models.DateField(null=True, blank=True)
 
 	def __str__(self):
 		return self.user.email
-
 
 	@property
 	def display_name(self):

@@ -19,59 +19,75 @@
 			<div class="row justify-content-center">
 				<div class="col-12 col-md-9">
 					<div class="row">
-						<div class="col-12 col-md-4 pe-0">
-							<div class="px-6">
-								<div class="d-block w-100">
-									<div class="position-relative square">
-										{% if base_user.user.profile.avatar_url %}
-											<img class="avatar-circle position-absolute top-0 shadow-lg" alt="Profile Image" src="{{ base_user.user.profile.avatar_url }}"/>
-										{% elif 0 %}
-										{% else %}
-											<div class="avatar-circle position-absolute top-0 border border-secondary">
-												<div class="w-100 h-100 d-flex align-items-center justify-content-center">
-													<a href="{% url 'profile-update' %}" class="text-secondary text-center">
-														<i class="fa fa-plus icon-150"></i></br>
-														<small>Add profile picture</small>
-													</a>
-												</div>
+						<div class="col-12 col-md-4 pe-md-0">
+							<div class="row mb-3 mb-md-0">
+								<div class="col-4 col-md-12">
+									<div class="px-md-6">
+										<div class="d-block w-100">
+											<div class="position-relative square">
+												{% if usr.profile.avatar_url %}
+													<img class="avatar-circle position-absolute top-0 shadow-lg" alt="Profile Image" src="{{ usr.profile.avatar_url }}"/>
+												{% else %}
+													<div class="avatar-circle position-absolute top-0 border border-secondary">
+														<div class="w-100 h-100 d-flex align-items-center justify-content-center">
+															<a href="{% url 'profile-update' usr.id %}" class="text-secondary text-center">
+																<i class="fa fa-plus icon-150"></i></br>
+																<small>Add profile picture</small>
+															</a>
+														</div>
+													</div>
+												{% endif %}
 											</div>
-										{% endif %}
+										</div>
+									</div>
+								</div>
+								<div class="col-8 col-md-12">
+									<div class="mt-3 text-md-center">
+										<h1 class="h5 text-light text-break">{{ usr.profile.display_name }}</h1>
+										{% if usr.is_staff %}<p>Staff</p>{% endif %}
+										<a class="d-block d-md-none text-light" data-bs-toggle="collapse" href="#profile-menu-collapse" role="button" aria-expanded="false" aria-controls="profile-menu-collapse">
+											Menu <i class="fa fa-chevron-down"></i>
+										</a>
 									</div>
 								</div>
 							</div>
-							<div class="mt-3 text-center">
-								<h1 class="h3 text-light text-break">{{ base_user.display_name }}</h1>
-								{% if base_user.user.is_staff %}<p>Staff</p>{% endif %}
-							</div>
-							<hr/>
-							{% if view.kwargs.user_set == True %}
-								<div class="mt-3 text-">
-									<a href="{% url 'profile' %}"><h6 class="text-light">Profile</h6></a>
+
+
+							<div class="collapse d-md-block" id="profile-menu-collapse">
+								<hr/>
+								{% if request.user.id == usr.id %}
+									<div class="mt-3">
+										<a href="{% url 'profile' %}"><h6 class="text-light">Profile</h6></a>
+									</div>
+									<div class="mt-3">
+										<a href="{% url 'my-rentals' %}"><h6 class="text-light">My Rentals</h6></a>
+									</div>
+									<div class="mt-3">
+										<a href="{% url 'profile-email' %}"><h6 class="text-light">Email Management</h6></a>
+									</div>
+									<div class="mt-3">
+										<a href="{% url 'profile-connections' %}"><h6 class="text-light">Linked Accounts</h6></a>
+									</div>
+									<!--
+									<div class="mt-3">
+										<h6 class="text-light">Settings</h6>
+									</div>-->
+									<div class="mt-3">
+										<a href="{% url 'account_reset_password' %}"><h6 class="text-light">Change Password</h6></a>
+									</div>
+									<div class="mt-3">
+										<a href="{% url 'account_logout' %}"><h6 class="text-light">Log out</h6></a>
+									</div>
+								{% else %}
+									<div class="mt-3">
+										<a href="{% url 'profile' usr.id %}"><h6 class="text-light">Profile</h6></a>
+									</div>
+									<div class="mt-3">
+										<a href="{% url 'my-rentals' usr.id %}"><h6 class="text-light">Rentals</h6></a>
+									</div>
+								{% endif %}
+								<hr/>
 								</div>
-								<div class="mt-3 text-">
-									<a href="{% url 'my-rentals' %}"><h6 class="text-light">My Rentals</h6></a>
-								</div>
-								<div class="mt-3 text-">
-									<a href="{% url 'profile-email' %}"><h6 class="text-light">Email Management</h6></a>
-								</div>
-								<div class="mt-3 text-">
-									<a href="{% url 'profile-connections' %}"><h6 class="text-light">Linked Accounts</h6></a>
-								</div>
-								<div class="mt-3 text-">
-									<h6 class="text-light">Settings</h6>
-								</div>
-								<div class="mt-3 text-">
-									<a href="{% url 'account_reset_password' %}"><h6 class="text-light">Change Password</h6></a>
-								</div>
-							{% else %}
-								<div class="mt-3 text-">
-									<a href="{% url 'profile' view.kwargs.pk %}"><h6 class="text-light">Profile</h6></a>
-								</div>
-								<div class="mt-3 text-">
-									<a href="{% url 'my-rentals' view.kwargs.pk %}"><h6 class="text-light">Rentals</h6></a>
-								</div>
-							{% endif %}
-							<hr/>
 						</div>
 						<div class="col-12 col-md-8">
 							{% block profile_content %}

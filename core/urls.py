@@ -7,6 +7,7 @@ from .views import (
 	home_view,
 	pricing_view,
 	testimonials_view,
+	testemail_view,
 )
 
 #Custom regex url pattern match for an individual date eg. '/bookings/2021-12-12'
@@ -42,4 +43,5 @@ urlpatterns = [
 	path('pricing/', pricing_view, name='pricing'),
 	path('pre-trip-checklist/', pricing_view, name='pre-trip-checklist'),
 	path('testimonials/', testimonials_view, name='testimonials'),
+	path('testemail/', testemail_view, name='testemail'),
 ]

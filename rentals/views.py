@@ -132,7 +132,7 @@ class MyRentals(UserPassesTestMixin, ListView):
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
 		user_id = self.kwargs.get('pk', self.request.user.id)
-		context['base_user'] = {"user": User.objects.get(id=user_id)}
+		context['usr'] = User.objects.get(id=user_id)
 		return context
 
 

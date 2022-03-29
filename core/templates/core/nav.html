@@ -362,11 +362,12 @@
 												<span>Profile</span>
 											</a>
 										</li>
+										<!--
 										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
 											<a class="border-radius-md pe-3 d-block" href="#">
 												<span>Settings</span>
 											</a>
-										</li>
+										</li>-->
 										<li class="nav-item text-end list-group-item border-0 p-0 my-1">
 											<a class="border-radius-md pe-3 d-block" href="{% url 'account_reset_password' %}">
 												<span>Change Password</span>
@@ -389,16 +390,17 @@
 										Admin
 									</a>
 									{% endif %}
-									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
+									<a href="{% url 'my-rentals' %}" class="dropdown-item p-2 ps-0 border-bottom">
 										My Rentals
 									</a>
 									<a href="{% url 'profile' %}" class="dropdown-item p-2 ps-0 border-bottom">
 										Profile
 									</a>
+									<!--
 									<a href="#" class="dropdown-item p-2 ps-0 border-bottom">
 										Settings
-									</a>
-									<a href="{% url 'account_reset_password' %}" class="dropdown-item p-2 ps-0">
+									</a>-->
+									<a href="{% url 'account_reset_password' %}" class="dropdown-item p-2 ps-0 border-bottom">
 										Change Password
 									</a>
 									<a href="{% url 'account_logout' %}" class="dropdown-item p-2 ps-0">

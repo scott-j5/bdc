@@ -4,7 +4,7 @@ from django.forms.widgets import TextInput
 
 class DatePicker(TextInput):
 	
-	def __init__(self, attrs=None):
+	def __init__(self, attrs={}):
 		defaults = {
 				"minDate": "today",
 				"position": "auto center",
@@ -13,7 +13,6 @@ class DatePicker(TextInput):
 				"dateFormat": "Y-m-d",
 			}
 		#For time input "enableTime": True,"dateFormat": "Y-m-dTH:i:S",
-
 
 		#If additional flatpickr configs are passed apply them
 		if attrs.get('data-flatpickr_args') is not None:
@@ -25,7 +24,7 @@ class DatePicker(TextInput):
 
 class DateRangePicker(DatePicker):
 
-	def __init__(self, attrs=None):
+	def __init__(self, attrs={}):
 		# Ensure flatpickr is initialised in range mode
 		if attrs.get('data-flatpickr_args') is not None:
 			attrs['data-flatpickr_args'].update({'mode': 'range'})
