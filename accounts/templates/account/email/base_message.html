@@ -1,0 +1,13 @@
+{% extends 'core/email/base_email.html' %}
+{% load i18n %}{% autoescape off %}
+
+{% block content_title %}
+	{% blocktrans with site_name=current_site.name %}Hello from {{ site_name }}!{% endblocktrans %}
+{% endblock content_title %}
+
+{% block content_extra %}
+{% endblock content_extra %}
+
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Thank you for using {{ site_name }}!
+{{ site_domain }}{% endblocktrans %}
+{% endautoescape %}

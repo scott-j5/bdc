@@ -25,14 +25,14 @@
 					<div class="dropdown-menu dropdown-menu-animation dropdown-md dropdown-menu-end dropdown-menu-md-start p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
 						<div class="">
 							<a href="{% url 'van-list' %}" class="dropdown-item border-radius-md">
-								<strong>All Vans</strong>
+								<strong class="text-dark">All Vans</strong>
 							</a>
 							{% for van in vans %}
-								<a href="{% url 'van-detail' van.slug %}" class="dropdown-item border-radius-md">
+								<a href="{% url 'van-detail' van.slug %}" class="dropdown-item border-radius-md text-dark">
 									{{ van.name|capfirst }}
 								</a>
 							{% endfor %}
-							<a href="{% url 'blog-list' %}?tags=build" class="dropdown-item border-radius-md">
+							<a href="{% url 'blog-list' %}?tags=build" class="dropdown-item border-radius-md text-dark">
 								Coming soon...
 							</a>
 						</div>
