@@ -159,6 +159,7 @@ class AdminRentalFulfilmentCreateForm(RentalFulfilmentCreateForm):
 
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)
+		print(f'HEYYYYY{self.request.user.is_staff}')
 		super().__init__(*args, **kwargs)
 		self.helper.html5_required = True
 		self.helper.layout = Layout(
@@ -312,7 +313,10 @@ class RentalDriverFormsetHelper(FormHelper):
 						'licence_back',
 						css_class="col-12 col-md-6",
 					),
-					css_class="row"
+					HTML(
+						"<hr/>",
+					),
+					css_class="row",
 				),
 				css_class='formset-group',
 			)

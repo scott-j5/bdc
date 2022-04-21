@@ -9,7 +9,7 @@ from django.views.generic import DetailView, ListView
 
 from products.models import ProductFulfilment
 from products.views import CompleteProductUpdateView, ProductDeleteView
-from rentals.models import RentalFulfilment, RentalRules, RentalInformation
+from rentals.models import RentalFulfilment, RentalRules, RentalInformation, rental_fulfilment_price_factory
 from rentals.forms import RentalFulfilmentCreateForm, RentalProductDateRangeForm, RentalDateRangeForm, RentalDateRangeFormMulti
 
 from .models import (
@@ -25,7 +25,8 @@ class VanListView(ListView):
 		if self.request.GET:
 			form = RentalDateRangeFormMulti(self.request.GET)
 			if form.is_valid():
-				return Van.objects.available(rental_start=form.cleaned_data["check_in"], rental_end=form.cleaned_data["check_out"])
+				vans = Van.objects.available(rental_start=form.cleaned_data["check_in"], rental_end=form.cleaned_data["check_out"])
+				return rental_fulfilment_price_factory(qs=vans, rental_start=form.cleaned_data["check_in"], rental_end=form.cleaned_data["check_out"])
 		return Van.objects.all()
 
 	#Get nearby stays of similar length!

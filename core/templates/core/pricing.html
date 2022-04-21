@@ -1,6 +1,38 @@
 {% extends 'core/base.html' %}
+{% load static %}
+{% load price_tags %}
 
 {% block head_title %}Pricing{% endblock %}
 
+
 {% block content %}
+<header class="position-relative">
+	<div class="d-flex justify-content-center page-header min-vh-100 position-relative">
+		<video autoplay muted loop class="position-absolute w-100 h-100 fit-cover" poster="">
+			<source src="{% static 'video/BIG_DOG_CAMPERS_FINAL_EDIT_1080p_web.mp4' %}" type="video/mp4">
+		</video>
+		<div class="filter"></div>
+		<div class="container over-filter">
+			<div class="row justify-content-center pt-7 pt-md-0">
+				<div class="col-12 col-md-8 text-center">
+					<h1 class="title text-white text-light">How much will my trip cost?</h1>
+					<h2 class="fs-5 description text-white text-light">
+						Pricing specific to your trip will be shown after you select your desired travel dates.
+						<br>
+						<br>
+						Our pricing varies throughout the year and is dependant on a number of factors including: The length of your stay, the time of year you wish to travel & how many drivers you require. But on average you can expect to pay anywhere between {{ 100|price }} and {{ 150|price }} per night.
+						<br>
+						We also have a number of extras available if required.
+					</h2>
+					<br/>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-12 col-md-8 mx-auto text-center">
+					<h3 class="description text-light text-dark"><a class="btn btn-rounded btn-lg btn-danger fs-5" href="{% url 'van-list' %}">Explore our vans</a></h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
 {% endblock content %}

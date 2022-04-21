@@ -27,7 +27,7 @@ HEY
 							<a href="{% url 'rental-fulfilment-detail' rf.id %}">
 								<div class="row">
 									<div class="col-8">
-										<p class="m-0 text-light text-normal"> {{ rf.product.name }}</p>
+										<p class="m-0 text-light text-normal"> {{ rf.product.name }} - {{ rf.duration_humanize_plural }}</p>
 										<small class="text-light text-normal">({{ rf.rental_start }} - {{ rf.rental_end }})</small>
 									</div>
 									<div class="col-4 d-flex align-items-center justify-content-end">
@@ -43,7 +43,7 @@ HEY
 	{% else %}
 		<div class="row h-100 align-items-center">
 			<div class="col-12 d-flex flex-column align-items-center justify-content-center">
-				<div><h3>No rentals found</h3></div>
+				<div><h3 class="text-light">No rentals found</h3></div>
 				<div><a href="{% url 'van-list' %}" class="btn btn-rounded btn-danger">Start planning your first trip now</a></div>
 			</div>
 		</div>

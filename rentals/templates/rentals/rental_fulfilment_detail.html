@@ -38,7 +38,15 @@
 
 								<div class="col-12">
 									<hr class="my-3">
-									<h6 class="m-0">{% if object.rental_extras.all|length > 0 %}Extras{% else %}No Extras{% endif %}</h6>
+									<div class="d-flex justify-content-between">
+										{% if object.rental_extras.all|length > 0 %}
+											<h6 class="m-0">Extras </h6>
+											<a href="{% url 'rental-fulfilment-extras' object.id %}"><i class="fa fa-edit text-danger"></i></a>
+										{% else %}
+											<h6 class="m-0">No Extras </h6>
+											<a href="{% url 'rental-fulfilment-extras' object.id %}"><i class="fa fa-plus text-danger"></i></a>
+										{% endif %}
+									</div>
 								</div>
 								<div class="col-12">
 									<ul class="list-group list-group-flush ps-4">
@@ -47,7 +55,7 @@
 											<li class="list-group-item pe-0">
 												<div class="row">
 													<div class="col-8">
-														<p class="m-0 text-dark">{{ extra.name }}</p>
+														<small class="m-0">{{ extra.name }}</small>
 													</div>
 													<div class="col-4 d-flex align-items-center justify-content-end">
 														<small>{{ extra.base_price|price }}</small>
@@ -62,7 +70,15 @@
 
 								<div class="col-12">
 									<hr class="my-3">
-									<h6 class="m-0">{% if object.rentaldriver_set.all|length > 0 %}Drivers{% else %}No Drivers Listed{% endif %}</h6>
+									<div class="d-flex justify-content-between">
+										{% if object.rentaldriver_set.all|length > 0 %}
+											<h6 class="m-0">Drivers </h6>
+											<a href="{% url 'rental-fulfilment-drivers' object.id %}"><i class="fa fa-edit text-danger"></i></a>
+										{% else %}
+											<h6 class="m-0">No Drivers Listed </h6>
+											<a href="{% url 'rental-fulfilment-drivers' object.id %}"><i class="fa fa-plus text-danger"></i></a>
+										{% endif %}
+									</div>
 								</div>
 								<div class="col-12">
 									<ul class="list-group list-group-flush ps-4">
@@ -71,7 +87,7 @@
 											<li class="list-group-item pe-0">
 												<div class="row">
 													<div class="col-8">
-														<p class="m-0 text-dark">{{ driver.first_name }} {{ driver.last_name }}</p>
+														<small class="m-0">{{ driver.first_name }} {{ driver.last_name }}</small>
 													</div>
 													<div class="col-4 d-flex align-items-center justify-content-end">
 														<small>{% if forloop.first %}-{% else %}{{ 25|price }}{% endif %}</small>

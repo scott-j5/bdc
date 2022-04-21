@@ -64,7 +64,7 @@ class RentalFulfilmentPriceCheckView(UserPassesTestMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		if self.object.id is None:
-			form_action = reverse_lazy('rental-fulfilment-detail', kwargs={'slug': self.object.product.slug})
+			form_action = reverse_lazy('rental-fulfilment-price-check', kwargs={'slug': self.object.product.slug})
 			if self.request.GET:
 				context["form"] = RentalFuilfilmentDateRangeForm(self.request.GET, action=form_action, submit_text="Change Dates", flatpickr_args={"disable":self.object.product.rentalproduct.flatpickr_unavailable})
 				context["form"].full_clean()

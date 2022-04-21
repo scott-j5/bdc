@@ -61,37 +61,6 @@ INSTALLED_APPS = [
 	'vans',
 ]
 
-'''    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
-        }
-    }'''
-# Provider specific settings
-SOCIALACCOUNT_PROVIDERS = {
-	'google': {
-		# For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
-
-ACCOUNT_PRESERVE_USERNAME_CASING = False
-
-ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display_name_with_date'
-
-
 
 
 MIDDLEWARE = [
@@ -271,7 +240,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 
-ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display_name_with_date'
+ACCOUNT_USER_DISPLAY = 'accounts.utils.user_display_name'
 
 
 DJRICHTEXTFIELD_CONFIG = {

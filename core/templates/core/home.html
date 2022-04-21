@@ -16,7 +16,7 @@ bg-gray-100
 		</video>
 		<div class="filter"></div>
 		<div class="container over-filter">
-			<div class="row justify-content-center">
+			<div class="row pt-4 pt-md-0 justify-content-center">
 				<div class="col-md-8 text-center">
 					<h1 class="title text-white text-light"> Plan the road trip of a lifetime</h1>
 					<h2 class="fs-5 description text-white text-light">
@@ -36,13 +36,27 @@ bg-gray-100
 				<div class="col text-center">
 					<br>
 					<h3 class="fs-5 description">
-						<a href="#" class="text-white text-light">Watch the video</a>
+						<a href="#" class="text-white text-light" data-bs-toggle="modal" data-bs-target="#video-modal">Watch the video</a>
 					</h3>
 				</div>
 			</div>
 		</div>
 	</div>
 </header>
+<!-- VIDEO MODAL -->
+
+<!-- Modal -->
+<div class="modal fade" id="video-modal" tabindex="-1" aria-labelledby="video-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+        <iframe style="width:100%;min-height:50vh;" src="https://www.youtube.com/embed/PX0euqxEcnc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END VIDEO MODAL -->
+
 
 
 <!-- INTRO -->
@@ -202,12 +216,12 @@ bg-gray-100
 <!-- END BLOGS -->
 
 <!--ABOUT US -->
-<div class="section">
+<div class="section" id="about-us">
 	<div class="container pt-7">
 		<div class="row pb-7">
 			<div class="col-md-8 mx-auto text-center">
 				<h2 class="title text-light text-dark">About us</h2>
-				<h5 class="description text-light text-dark pt-2">Josh and I have hand crafted a beautiful adventure campervan which is available for hire! After spending many years travelling the world separately, we both settled down in our native country of Scotland. With a joint love for carpentry and working with our hands, we felt it was a good idea to work together on the project of converting an empty shell white van into a lovely home on wheels. The result is 'Rudy'. We took our time, choosing not to cut corners as we wanted to create the most comfortable, warm and cosy space we possibly could. We really hope you enjoy your journey and are more than happy to offer help with planning your route, pointing you towards hidden gem spots to park up and stay. We hope to make more vans in the future so any feedback would be greatly appreciated. Happy camping! Liam & Josh.<a class="" href="{% url 'about-us' %}"> <u>Explore More...</u></a></h5>
+				<h5 class="description text-light text-dark pt-2">Josh and I have hand crafted a beautiful adventure campervan which is available for hire! After spending many years travelling the world separately, we both settled down in our native country of Scotland. With a joint love for carpentry and working with our hands, we felt it was a good idea to work together on the project of converting an empty shell white van into a lovely home on wheels. The result is 'Rudy'. We took our time, choosing not to cut corners as we wanted to create the most comfortable, warm and cosy space we possibly could. We really hope you enjoy your journey and are more than happy to offer help with planning your route, pointing you towards hidden gem spots to park up and stay. We hope to make more vans in the future so any feedback would be greatly appreciated. Happy camping! Liam & Josh.</h5>
 			</div>
 		</div>
 	</div>

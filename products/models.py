@@ -37,7 +37,7 @@ class ProductFeature(models.Model):
 
 
 class Product(models.Model):
-	slug = models.SlugField(blank=True, null=False, unique=True, help_text="Url appropriate characters only, no spaces")
+	slug = models.SlugField(unique=True, blank=True, null=False, help_text="Url appropriate characters only, no spaces")
 	name = models.CharField(max_length=50, blank=False, null=False, unique=True)
 	description_short = models.TextField(null=True, blank=True)
 	description_long = models.TextField(null=True, blank=True)
@@ -147,29 +147,34 @@ class ProductFulfilment(models.Model):
 
 	@property
 	def fulfilment_price(self):
-		return self._fulfilment_price if self._fulfilment_price else self._calculate_price()
+		return self._calculate_price()
+		#return self._fulfilment_price if self._fulfilment_price else self._calculate_price()
 
 	def _calculate_price(self):
-		if self.price_override is not None:
-			self.fulfilment_price = self.price_override
+		if hasattr(self, '_calculated_price'):
+			return self._calculated_price
 		else:
-			fulfilment_price = self.product.base_price
-			for adj in self.active_price_adjustments:
-				#Apply Additions (additions are non-compounding)
-				if adj.adj_amount > 0:
-					if adj.adj_type == 'PER':
-						fulfilment_price = fulfilment_price + ((self.product.base_price * adj.adj_amount) / 100)
-					elif adj.adj_type == 'DOL':
-						fulfilment_price = fulfilment_price + adj.adj_amount
+			if self.price_override is not None:
+				self.fulfilment_price = self.price_override
+			else:
+				fulfilment_price = self.product.base_price
+				for adj in self.active_price_adjustments:
+					#Apply Additions (additions are non-compounding)
+					if adj.adj_amount > 0:
+						if adj.adj_type == 'PER':
+							fulfilment_price = fulfilment_price + ((self.product.base_price * adj.adj_amount) / 100)
+						elif adj.adj_type == 'DOL':
+							fulfilment_price = fulfilment_price + adj.adj_amount
 
-			for adj in self.active_price_adjustments:
-				#Apply Deductions (deductions are negatively compounding)
-				if adj.adj_amount < 0:
-					if adj.adj_type == 'PER':
-						fulfilment_price = fulfilment_price + ((fulfilment_price * adj.adj_amount) / 100)
-					elif adj.adj_type == 'DOL':
-						fulfilment_price = fulfilment_price + adj.adj_amount
-		return round(fulfilment_price, 2)
+				for adj in self.active_price_adjustments:
+					#Apply Deductions (deductions are negatively compounding)
+					if adj.adj_amount < 0:
+						if adj.adj_type == 'PER':
+							fulfilment_price = fulfilment_price + ((fulfilment_price * adj.adj_amount) / 100)
+						elif adj.adj_type == 'DOL':
+							fulfilment_price = fulfilment_price + adj.adj_amount
+			self._calculated_price = round(fulfilment_price, 2)
+			return self._calculated_price
 
 	@property
 	def active_price_adjustments(self):

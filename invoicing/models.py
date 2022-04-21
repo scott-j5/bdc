@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class PriceAdjustment(models.Model):
 	ADJ_TYPES = [('PER', '%'), ('DOL', '$')]
-	slug = models.SlugField(blank=True, null=False)
+	slug = models.SlugField(unique=True, blank=True, null=False)
 	name = models.CharField(max_length=50, blank=False, null=False)
 	description = models.TextField(null=True, blank=True)
 	period_start = models.DateTimeField(blank=False, null=False)

@@ -36,3 +36,7 @@ class UserProfile(models.Model):
 			return url
 		else:
 			return ''
+
+	@property
+	def initial(self):
+		return self.display_name[:1]

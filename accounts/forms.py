@@ -11,6 +11,19 @@ from core.widgets import DatePicker
 
 from .models import UserProfile
 
+class SignupForm(forms.Form):
+	flatpickr_args = {"data-flatpickr_args": {"minDate": '1800-01-01', "maxDate": 'today'}}
+	avatar = CropItImageFormField()
+	first_name = forms.CharField()
+	last_name = forms.CharField
+	dob = forms.DateField(widget=DatePicker(attrs=flatpickr_args))
+
+	def __init__(self, *args, **kwargs):
+		pass
+
+	def signup(self, request, user):
+		pass
+
 
 class UserUpdateForm(forms.ModelForm):
 

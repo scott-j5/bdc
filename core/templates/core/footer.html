@@ -1,5 +1,5 @@
 {% load static %}
-<hr class="horizontal dark my-5">
+<hr class="horizontal dark mb-5 mt-0">
 <footer class="footer">
     <div class="container">
       <div class="row">
@@ -36,7 +36,7 @@
             <h6 class="text-danger text-sm">Company</h6>
             <ul class="flex-column ms-n3 nav">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about-us' %}">
+                <a class="nav-link" href="{% url 'home' %}#about-us">
                   About Us
                 </a>
               </li>
@@ -119,10 +119,7 @@
         <div class="col-12">
           <div class="text-center">
             <p class="my-4 text-sm">
-			  All rights reserved. Copyright © 
-			  <script>
-                document.write(new Date().getFullYear())
-			  </script>
+			  All rights reserved. Copyright © <span id="year-date"></span>
 			  <br>
 			  Yet another tasty <a href="https://byitegroup.com" target="_blank">Byite</a>.
             </p>

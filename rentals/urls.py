@@ -23,7 +23,7 @@ urlpatterns = [
 	path('rental/<int:pk>/', RentalFulfilmentDetailView.as_view(), name='rental-fulfilment-detail'),
 
     path('rental/price-check/', RentalFulfilmentPriceCheckView.as_view(), name='rental-fulfilment-price-check'),
-	path('rental/price-check/<slug:slug>/', RentalFulfilmentPriceCheckView.as_view(), name='rental-fulfilment-price-check'),
+	path('rental/price-check/product/<slug:slug>/', RentalFulfilmentPriceCheckView.as_view(), name='rental-fulfilment-price-check'),
 	path('rental/price-check/<int:pk>/', RentalFulfilmentPriceCheckView.as_view(), name='rental-fulfilment-price-check'),
 
 	path('terms/', RentalFulfilmentTerms.as_view(), name='rental-fulfilment-terms'),

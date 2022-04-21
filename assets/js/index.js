@@ -1,5 +1,6 @@
 // Global
 //import "./modules/blog_list";
+import "./modules/bdc.js";
 import "./modules/bootstrap";
 import "./modules/feather";
 import "./modules/flatpickr";

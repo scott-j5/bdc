@@ -57,7 +57,7 @@ bg-gray-100
 									<p class="text-muted">
 										{{ van.description_short }}
 									</p>
-									<button type="button" class="btn btn-outline-primary btn-sm">{% if van.rental_price %}{{ van.rental_price|price }}{% else %}Select dates to see pricing{% endif %}</button>
+									<button type="button" class="btn btn-outline-primary btn-sm">{% if van.fulfilment_price %}{{ van.fulfilment_price|price }}{% else %}Select dates to see pricing{% endif %}</button>
 								</a>
 							</div>
 						</div>

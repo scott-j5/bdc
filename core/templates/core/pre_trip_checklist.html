@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block head_title %}Pre-Trip Checklist{% endblock %}
+
+{% block content %}
+<header class="position-relative">
+	<div class="d-flex justify-content-center page-header min-vh-100 position-relative">
+		<video autoplay muted loop class="position-absolute w-100 h-100 fit-cover" poster="">
+			<source src="{% static 'video/BIG_DOG_CAMPERS_FINAL_EDIT_1080p_web.mp4' %}" type="video/mp4">
+		</video>
+		<div class="filter"></div>
+		<div class="container over-filter">
+			<div class="row justify-content-center pt-7 pt-md-0">
+				<div class="col-md-8 text-center">
+					<h1 class="title text-white text-light">Ready. Set. Drive!</h1>
+					<h2 class="fs-5 description text-white text-light">
+						Before you head off on your adventure, look over our pre-trip checklist below to make sure you get the most out of your rental experience.
+					</h2>
+					<br/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col text-center">
+					<br>
+					<h3 class="fs-5 description">
+						<i class="fa fa-chevron-down text-white"></i>
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			
+		</div>
+	</div>
+</div>
+{% endblock content %}

@@ -136,7 +136,7 @@ class RentalFulfilment(ProductFulfilment):
 	rental_start = models.DateTimeField(blank=False, null=False)
 	rental_end = models.DateTimeField(blank=False, null=False)
 	_rental_end_inc_turnaround = models.DateTimeField(default=timezone.now, blank=False, null=False)
-	#_adjusted_rental_rate = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Unfulfilled rate for rental. to be multiplied by duration")
+	_fulfilled_rental_rate = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Fulfilled rate for rental. (rate after adjustments) to be multiplied by duration")
 	_unfulfilled_rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Total cost of the rental before applying rental adjustments")
 	rental_extras = models.ManyToManyField(RentalExtra, blank=True)
 
@@ -157,7 +157,6 @@ class RentalFulfilment(ProductFulfilment):
 	@property
 	def clashing_rentals(self):
 		excl_id = self.id if self.id is not None else -1
-		print(self.rental_end_inc_turnaround)
 		# Select Rental Fulfilments where rental start or rental end are within an existing rental period or that end after self.rental start or begin before self.rental end
 		return RentalFulfilment.objects.filter(
 			Q(product=self.product),
@@ -193,12 +192,21 @@ class RentalFulfilment(ProductFulfilment):
 			return f"{self.duration_days} Night"
 
 	@property
+	def duration_humanize_plural(self):
+		if self.duration_hours <= 24 and not CHARGE_RENTAL_DAILY:
+			pluralize = "s" if self.duration_hours > 1 else ""
+			return f"{self.duration_hours} Hour{pluralize}"
+		else:
+			pluralize = "s" if self.duration_days > 1 else ""
+			return f"{self.duration_days} Night{pluralize}"
+
+	@property
 	def drivers(self):
 		return self.rental_driver_set.all().count()
 
 	# Calculates the rental rate after product price adjustments
 	@property
-	def adjusted_rental_rate(self):
+	def fulfilled_rental_rate(self):
 		# Call super _calculate_price() to calculate the rental rate
 		return super()._calculate_price()
 
@@ -206,9 +214,9 @@ class RentalFulfilment(ProductFulfilment):
 	@property 
 	def unfulfilled_rental_price(self):
 		if CHARGE_RENTAL_DAILY:
-			total_unfulfilled_rental_price = self.adjusted_rental_rate * self.duration_days
+			total_unfulfilled_rental_price = self.fulfilled_rental_rate * self.duration_days
 		else:
-			total_unfulfilled_rental_price = self.adjusted_rental_rate * self.duration_hours
+			total_unfulfilled_rental_price = self.fulfilled_rental_rate * self.duration_hours
 		return total_unfulfilled_rental_price
 	
 	@property
@@ -225,7 +233,7 @@ class RentalFulfilment(ProductFulfilment):
 			# Take the hourly or daily fulfilment price and Apply Additions and deductions to total price
 			# Based on the time period with which the price adjustment applies
 			if adj.adj_type == 'PER':
-				adjustment_val = adjustment_val + (((self.adjusted_rental_rate * adj.adj_amount) / 100) * applicable_range)
+				adjustment_val = adjustment_val + (((self.fulfilled_rental_rate * adj.adj_amount) / 100) * applicable_range)
 			elif adj.adj_type == 'DOL':
 				adjustment_val = adjustment_val + (adj.adj_amount * applicable_range)
 
@@ -239,18 +247,25 @@ class RentalFulfilment(ProductFulfilment):
 	# Calculates final fulfilment price of the rental
 	# Applies RentalPriceAdjustments to unfulfilled_rental_price
 	def _calculate_price(self):
-		rental_price = self.fulfilled_rental_price
-		adjustment_val = 0
-		
-		# Add the price of any extras
-		for extra in self.rental_extras.all():
-			adjustment_val = adjustment_val + extra.base_price
+		if hasattr(self, '_calculated_rental_price'):
+			return self._calculated_rental_price
+		else:
+			rental_price = self.fulfilled_rental_price
+			adjustment_val = 0
+			
+			# Add the price of any extras
+			# Don't apply to non-db objects bc they will have no many to many relation
+			if self.id is not None:
+				extras = self.rental_extras.all()
+				for extra in extras:
+					adjustment_val = adjustment_val + extra.base_price
 
-		# Add the price of additional drivers
-		drivers_count = max(self.rentaldriver_set.all().count() - 1, 0)
-		adjustment_val = adjustment_val + (25 * drivers_count)
-
-		return round(rental_price + adjustment_val, 2)
+				# Add the price of additional drivers
+				drivers_count = max(self.rentaldriver_set.all().count() - 1, 0)
+				adjustment_val = adjustment_val + (25 * drivers_count)
+			
+			self._calculated_rental_price = round(rental_price + adjustment_val, 2)
+			return self._calculated_rental_price
 	
 	def save(self, *args, **kwargs):
 		rental_product = RentalProduct.objects.get(id=self.product.id)
@@ -260,9 +275,20 @@ class RentalFulfilment(ProductFulfilment):
 		if self.rental_clash:
 			raise ValidationError(_('This rental conflicts with another.'))
 
+		if not self._fulfilled_rental_rate:
+			self._fulfilled_rental_rate = self.fulfilled_rental_rate
+		
 		if not self._unfulfilled_rental_price:
 			self._unfulfilled_rental_price = self.unfulfilled_rental_price
 		return super().save(*args, **kwargs)
+
+
+# Return a dry (uncommited) list of fulfilments to obtain pricing
+def rental_fulfilment_price_factory(qs, rental_start, rental_end, fulfilment_date_time=timezone.now()):
+	for idx, rp in enumerate(qs):
+		rf = RentalFulfilment(product=rp, rental_start=rental_start, rental_end=rental_end)
+		qs[idx].fulfilment_price = rf.fulfilment_price
+	return qs
 
 
 class RentalPriceAdjustment(PriceAdjustment):
@@ -278,6 +304,8 @@ class RentalDriver(models.Model):
 	dob = models.DateField(blank=True)
 	licence_front = CropItImageField(blank=True)
 	licence_back = CropItImageField(blank=True)
+	proof_of_address_1 = ScaleItImageField(blank=True)
+	proof_of_address_1 = ScaleItImageField(blank=True)
 
 
 class RentalRules(models.Model):
@@ -288,65 +316,3 @@ class RentalRules(models.Model):
 class RentalInformation(models.Model):
 	title = models.CharField(max_length=300, null=False, blank=False)
 	description = models.TextField(null=True, blank=True)
-
-
-
-
-
-'''
-
-class RentalFulfilment(ProductFulfilment):
-	rental_fulfilled_product = models.ForeignKey(ProductFulfilment, on_delete=models.SET(get_sentinel_product), related_name='fulfilled_product')
-	rental_start = models.DateTimeField(blank=False, null=False)
-	rental_end = models.DateTimeField(blank=False, null=False)
-	rental_end_inc_turnaround = models.DateTimeField(default=timezone.now, blank=False, null=False)
-	rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2)
-	rental_extras = models.ManyToManyField(RentalExtra)
-
-	objects = RentalFulfilmentManager()
-
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		# If a product (not fulfilment) is specified a product fulfilment is created automatically
-		if kwargs.get("product"):
-			self.rental_fulfilled_product = ProductFulfilment(product=kwargs.get("product"), fulfilment_date_time=self.fulfilment_date_time)
-		if kwargs.get("rental_fulfilled_product"):
-			self.product = kwargs.get("rental_fulfilled_product").product
-		if hasattr(self, 'rental_fulfilled_product'):
-			self.rental_price = self._calculate_price()
-			self.fulfilled_product_base_price = (self.rental_fulfilled_product.fulfilment_price * self.duration_hours)
-
-
-
-	@property
-	def fulfilment_price(self):
-		return self.rental_price if self.rental_price else self._calculate_price()
-
-	@property
-	def product_available(self):
-		return self.product.rentalproduct.is_available([self.rental_start, self.rental_end])
-
-
-	
-	def clean(self, *args, **kwargs):
-		# Need to impliment check for overlapping rentals Including buffer
-		if len(self.clashing_rentals) > 0:
-			raise ValidationError(_('This rental conflicts with another.'))
-		if timezone.now() >= self.__class__.objects.get(pk=self.pk).rental_start:
-			raise ValidationError(_('Rental cannot be changed after the rental has commenced.'))
-		self.rental_fulfilled_product = ProductFulfilment(fulfilling_user=self.fulfilling_user, product=self.product, fulfilment_date_time=self.fulfilment_date_time)
-		self.rental_fulfilled_product.save()
-		self.rental_end_inc_turnaround = self.rental_end + timedelta(hours=self.rental_fulfilled_product.product.min_turnaround)
-		if not self.fulfilled_product_base_price:
-			self.fulfilled_product_base_price = (self.rental_fulfilled_product.fulfilment_price * self.duration_hours)
-		if not self.rental_price:
-			self.rental_price = self._calculate_price()
-		return super().clean(*args, **kwargs)
-
-	def save(self, *args, **kwargs):
-		#self.full_clean()
-		return super().save(*args, **kwargs)
-
-
-
-'''

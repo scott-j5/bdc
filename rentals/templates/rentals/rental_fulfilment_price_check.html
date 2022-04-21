@@ -83,7 +83,7 @@
 									<h6>Actual base rate:</h6>
 								</div>
 								<div class="col-4 text-end">
-									<h6>{{ object.adjusted_rental_rate|price }}/{{ charge_period }}</h6>
+									<h6>{{ object.fulfilled_rental_rate|price }}/{{ charge_period }}</h6>
 								</div>
 							</div>
 
@@ -91,11 +91,11 @@
 							<div class="row p-4">
 								<div class="col-12 text-center pb-4">
 									<h2>Rental Calculations</h2>
-									<small class="text-light text-dark">Note: Rental adjustments are only applied for the period of the rental where they apply. % adjustments are calculated per {{ charge_period }} based off the actual base rate above ({{ object.adjusted_rental_rate|price }})</small>
+									<small class="text-light text-dark">Note: Rental adjustments are only applied for the period of the rental where they apply. % adjustments are calculated per {{ charge_period }} based off the actual base rate above ({{ object.fulfilled_rental_rate|price }})</small>
 								</div>
 								<div class="col-8">
 									<h6 class="m-0">Rental base rate:</h6>
-									<small class="text-light text-dark">({{ object.adjusted_rental_rate|price }}/{{ charge_period }} X {{ object.duration_humanize }})</small>
+									<small class="text-light text-dark">({{ object.fulfilled_rental_rate|price }}/{{ charge_period }} X {{ object.duration_humanize }})</small>
 								</div>
 								<div class="col-4 d-flex align-items-center justify-content-end">
 									{{ object.unfulfilled_rental_price|price }}
@@ -122,6 +122,17 @@
 										{% endfor %}
 									</ul>	
 								</div>
+								{% endif %}
+								{% if object.price_override %}
+									<div class="col-12">
+										<hr class="my-3">
+									</div>
+									<div class="col-8">
+										<h6>Price Override:</h6>
+									</div>
+									<div class="col-4 text-end">
+										<h6>{{ object.price_override|price }}</h6>
+									</div>
 								{% endif %}
 								<div class="col-12">
 									<hr class="my-3">

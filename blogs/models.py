@@ -13,7 +13,7 @@ from imageit.models import ScaleItImageField, CropItImageField
 # Create your models here.
 class Tag(models.Model):
 	name = models.CharField(max_length=100, unique=True)
-	slug = models.SlugField(max_length=100, default=1)
+	slug = models.SlugField(unique=True, max_length=100, default=1)
 
 	def __str__(self):
 		return f'{self.name}'
@@ -21,7 +21,7 @@ class Tag(models.Model):
 
 class Series(models.Model):
     name = models.CharField(max_length=150)
-    slug = models.SlugField(max_length=150)
+    slug = models.SlugField(unique=True, max_length=150)
 
 
 class Blog(models.Model):

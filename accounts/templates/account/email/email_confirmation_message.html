@@ -14,15 +14,16 @@
 				<tr>
 					<td>
 						<p>You're receiving this e-mail because this e-mail address has been used to create an account on {{ site_domain }}.</p>
-						To verify this email, go to <a href="{{ activate_url }}">{{ activate_url }}</a> or click the button below
+						To verify this email, click below or go to<br>
+						<a href="{{ activate_url }}">{{ activate_url }}</a>
 					</td>
 				</tr>
 				<tr>
 					<td class="button">
 						<div><!--[if mso]>
-						<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://" style="height:45px;v-text-anchor:middle;width:155px;" arcsize="15%" strokecolor="#ffffff" fillcolor="#ff6f6f">
+						<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ activate_url }}" style="height:45px;v-text-anchor:middle;width:155px;" arcsize="15%" strokecolor="#ffffff" fillcolor="#ff6f6f">
 							<w:anchorlock/>
-							<center style="color:#ffffff;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;">My Account</center>
+							<center style="color:#ffffff;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;">Verify</center>
 						</v:roundrect>
 						<![endif]--><a class="button-mobile" href="{{ activate_url }}"
 						style="background-color:#f5593d;border-radius:5px;color:#ffffff;display:inline-block;font-family:'Cabin', Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;line-height:45px;text-align:center;text-decoration:none;width:155px;-webkit-text-size-adjust:none;mso-hide:all;">Verify</a></div>

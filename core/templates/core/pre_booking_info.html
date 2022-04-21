@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block head_title %}Pre-Booking Information{% endblock %}
+
+
+{% block content %}
+<header class="position-relative">
+	<div class="d-flex justify-content-center page-header min-vh-100 position-relative">
+		<video autoplay muted loop class="position-absolute w-100 h-100 fit-cover" poster="">
+			<source src="{% static 'video/BIG_DOG_CAMPERS_FINAL_EDIT_1080p_web.mp4' %}" type="video/mp4">
+		</video>
+		<div class="filter"></div>
+		<div class="container over-filter">
+			<div class="row justify-content-center pt-7 pt-md-0">
+				<div class="col-12 col-md-8 text-center">
+					<h1 class="title text-white text-light">Ready to book?</h1>
+					<h2 class="fs-5 description text-white text-light">
+						Explore our pre-booking information below to ensure you are fully prepared.
+					</h2>
+					<br/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col text-center">
+					<br>
+					<h3 class="fs-5 description">
+						<i class="fa fa-chevron-down text-white"></i>
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-12 col-md-10 m-auto mt-6">
+			<h3 class="">Streamline booking by creating an account</h3>
+			<hr>
+			<div class="ps-4">Login or sign up for an account <a href="{% url 'account_login' %}">HERE</a></a></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			{% include "rentals/base_rental_terms.html" %}
+		</div>
+	</div>
+</div>
+{% endblock content %}

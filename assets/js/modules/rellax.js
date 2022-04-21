@@ -1,7 +1,10 @@
 import Rellax from "rellax"; 
  
  // Accepts any class name
-  var rellax = new Rellax('.rellax');
+ if (document.querySelectorAll(".rellax").length >= 0){
+	var rellax = new Rellax('.rellax');
+ };
+  
 
 
 
