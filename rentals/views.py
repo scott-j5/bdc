@@ -21,7 +21,8 @@ from .forms import (
 	RentalDriverFormsetHelper,
 	RentalFuilfilmentDateRangeForm,
 	RentalFulfilmentCreateForm,
-	RentalFulfilmentExtrasForm
+	RentalFulfilmentExtrasForm,
+	RentalFulfilmentExtraInformationForm
 )
 from .models import RentalDriver, RentalFulfilment
 
@@ -177,6 +178,19 @@ class RentalFulfilmentCreateView(LoginRequiredMixin, CreateView):
 		if not self.request.user.is_staff:
 			form.instance.fulfilling_user = self.request.user
 		return super().form_valid(form)
+
+	def get_success_url(self):
+		return reverse_lazy('rental-fulfilment-extra-information', kwargs={'pk': self.object.id,})
+
+
+class RentalFulfilmentConfirmExtraInformation(UserPassesTestMixin, UpdateView):
+	model = RentalFulfilment
+	form_class = RentalFulfilmentExtraInformationForm
+	template_name = 'rentals/rental_confirm_extra_information.html'
+
+	def test_func(self):
+		obj = self.get_object()
+		return obj.fulfilling_user == self.request.user or self.request.user.is_staff
 
 	def get_success_url(self):
 		return reverse_lazy('rental-fulfilment-extras', kwargs={'pk': self.object.id,})

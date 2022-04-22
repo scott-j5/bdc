@@ -1,0 +1,40 @@
+{% extends "rentals/base_rental_flow.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load price_tags %}
+
+{% block step_number %}1{% endblock step_number %}
+
+{% block title %}
+{{ object.duration_humanize }} stay with {{ object.product.name }}
+{% endblock title %}
+
+{% block subheading %}
+Review & enter additional information
+{% endblock subheading %}
+
+{% block rental_flow_content %}
+<div class="row">
+	<div class="col-12 col-md-10 m-auto">
+		<div class="row justify-content-center py-2">
+			<div class="col-4 m-auto text-center">
+				<h1 class="text-light text-dark m-0 position-relative">{{ object.rental_start|date:"g:i" }}<sup class="text-secondary fs-6 position-absolute">{{ object.rental_start|date:"A" }}</sup></h1>
+				<p class="text-normal text-secondary m-0">{{ object.rental_start|date:"D jS F" }}</p>
+			</div>
+			<div class="col-2 m-auto text-center align-items-center py-4">
+				<h1><i class="fa fa-arrow-right text-danger"></i></h1>
+			</div>
+			<div class="col-4 m-auto text-center">
+				<h1 class="text-light text-dark m-0 position-relative">{{ object.rental_end|date:"g:i" }}<sup class="text-secondary fs-6 position-absolute">{{ object.rental_end|date:"A" }}</sup></h1>
+				<p class="text-normal text-secondary m-0">{{ object.rental_end|date:"D jS F" }}</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row my-3">
+	<div class="col-12 col-md-10 m-auto">
+		{% crispy form %}
+	</div>
+</div>
+
+{% endblock rental_flow_content %}

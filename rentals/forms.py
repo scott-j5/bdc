@@ -204,6 +204,36 @@ class AdminRentalFulfilmentCreateForm(RentalFulfilmentCreateForm):
 		fields = ['fulfilling_user', 'product', 'rental_start', 'rental_end']
 
 
+class RentalFulfilmentExtraInformationForm(forms.ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.helper = FormHelper()
+		self.helper.form_action = reverse_lazy('rental-fulfilment-extra-information', kwargs={'pk':self.instance.id})
+		self.helper.form_method = 'POST'
+		self.helper.form_id = 'rental-fulfilment-extra-information-form'
+		self.helper.html5_required = True
+		self.helper.layout = Layout(
+            Div(
+				Div(
+					Div(
+						'pickup_location',
+						css_class="col-12",
+					),
+					Div(
+						SpinnerSubmit("submit", 'Save & Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+						css_class="d-grid col-12"
+					),
+					css_class="row"
+				),
+			)
+		)
+
+	class Meta: 
+		model = RentalFulfilment
+		fields = ['pickup_location']
+
+
 class RentalFulfilmentExtrasForm(forms.ModelForm):
 	rental_extras = forms.ModelMultipleChoiceField(queryset=RentalExtra.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
 

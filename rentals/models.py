@@ -134,12 +134,20 @@ class RentalExtra(Product):
 
 
 class RentalFulfilment(ProductFulfilment):
+	class Status(models.TextChoices):
+		CONFIRMED = 'CNF', _('Confirmed')
+		PENDING = 'PND', _('Pending')
+		DENIED = 'DND', _('Denied')
+		COMPLETED = 'CMP', _('Completed')
+
+	status = models.CharField(max_length=3, choices=Status.choices, default=Status.PENDING)
 	rental_start = models.DateTimeField(blank=False, null=False)
 	rental_end = models.DateTimeField(blank=False, null=False)
 	_rental_end_inc_turnaround = models.DateTimeField(default=timezone.now, blank=False, null=False)
 	_fulfilled_rental_rate = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Fulfilled rate for rental. (rate after adjustments) to be multiplied by duration")
 	_unfulfilled_rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Total cost of the rental before applying rental adjustments")
 	rental_extras = models.ManyToManyField(RentalExtra, blank=True)
+	pickup_location = models.CharField(max_length=100, null=True, blank=True, help_text="Leave blank if not required")
 
 	def __str__(self):
 		return f"{self.product.name} - {self.duration_humanize} {format_price(self.fulfilment_price)} ({self.rental_start} - {self.rental_end})"
