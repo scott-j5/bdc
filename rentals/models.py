@@ -2,19 +2,20 @@ from datetime import datetime, timedelta
 import json
 import math
 
-from core.models import get_sentinel_user
-from core.templatetags.price_tags import price
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
+from imageit.models import ScaleItImageField, CropItImageField
+
+from core.models import get_sentinel_user
+from core.templatetags.price_tags import price
 from invoicing.models import PriceAdjustment
 from products.models import Product, ProductFulfilment, get_sentinel_product
 from core.utils import datediff_days, datediff_hours, get_date_overlap,format_price
-from django.utils.translation import gettext_lazy as _
-
-from imageit.models import ScaleItImageField, CropItImageField
 
 from .settings import CHARGE_RENTAL_DAILY, RENTAL_CHECK_IN_TIME
 
@@ -295,18 +296,55 @@ class RentalPriceAdjustment(PriceAdjustment):
 	products = models.ManyToManyField(RentalProduct)
 
 
-#Cant be changed within a month of rental
+# Cant be changed within a month of rental
 class RentalDriver(models.Model):
+	class Status(models.TextChoices):
+		APPROVED = 'APP', _('Approved')
+		AWAITING_REVIEW = 'ARV', _('Awaiting Review')
+		ACTION_REQUIRED = 'ARQ', _('Action Required')
+		DENIED = 'DND', _('Denied')
+		INCOMPLETE = 'INC', _('Incomplete')
+
 	rental_fulfilment = models.ForeignKey(RentalFulfilment, null=False, blank=False, on_delete=models.CASCADE)
-	user = models.ForeignKey(User, null=False, blank=False, on_delete=models.SET(get_sentinel_user))
-	first_name = models.CharField(max_length=150, null=True, blank=True)
-	last_name = models.CharField(max_length=150, null=True, blank=True)
+	status = models.CharField(max_length=3, choices=Status.choices, default=Status.AWAITING_REVIEW)
+	first_name = models.CharField(max_length=150, null=False, blank=False)
+	last_name = models.CharField(max_length=150, null=False, blank=False)
 	dob = models.DateField(blank=True)
+	licence_check_code = models.CharField(max_length=20, blank=True, null=True, verbose_name='DVLA Check code', help_text=mark_safe('Click <a href="https://www.gov.uk/view-driving-licence" target="_blank"><u>HERE</u></a> for more information'))
 	licence_front = CropItImageField(blank=True)
 	licence_back = CropItImageField(blank=True)
 	proof_of_address_1 = ScaleItImageField(blank=True)
-	proof_of_address_1 = ScaleItImageField(blank=True)
+	proof_of_address_2 = ScaleItImageField(blank=True)
+	note = models.TextField(blank=True, null=True)
 
+	@property
+	def approved(self):
+		self.status in {self.Status.APPROVED}
+
+	@property
+	def status_class(self):
+		return {
+			self.Status.APPROVED: 'success',
+			self.Status.AWAITING_REVIEW: 'info',
+			self.Status.ACTION_REQUIRED: 'warning',
+			self.Status.DENIED: 'danger',
+			self.Status.INCOMPLETE: 'secondary',
+		}.get(self.status, 'info')
+	
+	def save(self, *args, **kwargs):
+		# Change status to incomplete if any fields are missing
+		if (self.first_name is None
+			or self.last_name is None
+			or self.dob is None
+			or self.licence_check_code is None
+			or not self.licence_front.name
+			or not self.licence_back.name
+			or not self.proof_of_address_1.name
+			or not self.proof_of_address_2.name):
+				self.status = self.Status.INCOMPLETE
+		else:
+			self.status = self.Status.AWAITING_REVIEW
+		super().save(*args, **kwargs)
 
 class RentalRules(models.Model):
 	title = models.CharField(max_length=300, null=False, blank=False)

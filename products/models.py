@@ -137,6 +137,7 @@ class ProductFulfilment(models.Model):
 	audit_product_base_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records the product base price at time of fulfilment")
 	fulfilling_user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), blank=False, null=False)
 	fulfilment_date_time = models.DateTimeField(default=timezone.now)
+	updated_on = models.DateTimeField(default=timezone.now)
 	_fulfilment_price = models.DecimalField(null=False, blank=True, max_digits=10, decimal_places=2, help_text="Records actual fulfilled price")
 	price_override = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2, help_text="Override default pricing")
 
@@ -186,6 +187,7 @@ class ProductFulfilment(models.Model):
 		return self.product.productpriceadjustment_set.filter(period_start__lte=self.fulfilment_date_time, period_end__gte=self.fulfilment_date_time, display_to_user=True)
 
 	def save(self, *args, **kwargs):
+		self.updated_on = timezone.now()
 		if not self.audit_product_base_price:
 			self.audit_product_base_price = self.product.base_price
 		self._fulfilment_price = self._calculate_price()

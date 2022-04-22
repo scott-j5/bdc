@@ -15,6 +15,8 @@ from products.models import Product
 
 from .forms import (
 	AdminRentalFulfilmentCreateForm,
+	RentalDriverAddForm,
+	RentalDriverUpdateForm,
 	RentalDriverFormSet,
 	RentalDriverFormsetHelper,
 	RentalFuilfilmentDateRangeForm,
@@ -195,7 +197,7 @@ class RentalFulfilmentConfirmExtras(UserPassesTestMixin, UpdateView):
 
 class RentalFulfilmentConfirmDrivers(UserPassesTestMixin, FormView):
 	form_class = RentalDriverFormSet
-	template_name = 'rentals/rental_confirm_details.html'
+	template_name = 'rentals/rental_confirm_drivers.html'
 
 	def test_func(self):
 		obj = self.get_object()
@@ -221,3 +223,55 @@ class RentalFulfilmentConfirmDrivers(UserPassesTestMixin, FormView):
 		if self.request.user.is_staff and self.request.user:
 			return reverse_lazy('my-rentals')
 		return reverse_lazy('my-rentals')
+
+
+class RentalFulfilmentDriverCreateView(UserPassesTestMixin, CreateView):
+	model = RentalDriver
+	form_class = RentalDriverAddForm
+	template_name = 'rentals/rental_driver_form.html'
+
+	def dispatch(self, request, *args, **kwargs):
+		self.rental_id = kwargs.get('rental_pk')
+		self.rental = get_object_or_404(RentalFulfilment, id=int(self.rental_id))
+		return super().dispatch(request, *args, **kwargs)
+
+	def test_func(self):
+		return self.rental.fulfilling_user == self.request.user or self.request.user.is_staff
+	
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs.update({
+			"rental_fulfilment_id": self.rental_id,
+		})
+		return kwargs
+
+	def get_context_data(self, *args, **kwargs):
+		ctx = super().get_context_data(*args, **kwargs)
+		ctx.update({
+			'object': self.rental,
+		})
+		return ctx
+
+	def form_invalid(self, form):
+		print(form)
+		return super().form_invalid(form)
+
+	def form_valid(self, form):
+		form.instance.rental_fulfilment = self.rental
+		return super().form_valid(form)
+
+	def get_success_url(self):
+		return reverse_lazy('rental-fulfilment-drivers', kwargs={'pk': self.rental_id,})
+
+
+class RentalFulfilmentDriverUpdateView(UserPassesTestMixin, UpdateView):
+	model = RentalDriver
+	form_class = RentalDriverUpdateForm
+	template_name = 'rentals/rental_driver_form.html'
+
+	def test_func(self):
+		self.object = self.get_object()
+		return self.object.rental_fulfilment.fulfilling_user == self.request.user or self.request.user.is_staff
+
+	def get_success_url(self):
+		return reverse_lazy('rental-fulfilment-drivers', kwargs={'pk': self.object.rental_fulfilment.id})

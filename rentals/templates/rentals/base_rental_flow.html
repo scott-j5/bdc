@@ -9,18 +9,17 @@
 
 
 {% block content %}
-
 <div class="container">
-	<div class="section">
-		<div class="row min-vh-50 pt-8">
+	<div class="section pt-0 pt-md-5">
+		<div class="row pt-8">
 			<div class="col-12 col-md-10 m-auto text-center">
-				<div class="mb-3">
-					<h1 class="text-light text-dark">{% block title %}{% endblock title %}</h1>
-					<h4 class="text-light text-dark">
+				<div class="mb-4">
+					<h1 class="text-light text-dark">{% block title %}{{ object.duration_humanize }} stay with {{ object.product.name }}{% endblock title %}</h1>
+					<h5 class="text-light text-dark">
 						{% block subheading %}{% endblock subheading %}
-					</h4>
+					</h5>
 				</div>
-				<div class="position-relative">
+				<div class="position-relative mb-4" style="height:64px;">
 					<!-- Road -->
 					<div class="row position-absolute justify-content-end justify-content-md-center w-100 py-4">
 						<div class="d-flex align-items-center h-auto w-100">
@@ -35,11 +34,47 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-12">
-				{% block rental_flow_content %}
-				{% endblock rental_flow_content %}
-			</div>
+	</div>
+</div>
+
+{% block rental_nav %}
+<div class="overflow-x-scroll overflow-y-visible border-bottom">
+	<div class="container py-1">
+		<ul class="nav nav-tabs nav-justified flex-nowrap gap-5" id="faqs-tabs" role="tablist">			
+			<li class="nav-item" role="presentation">
+				<a class="nav-link text-reset p-4" id="pills-details-tab">
+					<h3><i class="fa fa-calendar-day"></i></h3>
+					<p class="m-0">Details</p>
+				</a>
+			</li>
+			<li class="nav-item" role="presentation">
+				<a href="{% url 'rental-fulfilment-extras' object.id %}" class="nav-link text-reset p-4" id="pills-extras-tab">
+					<h3><i class="fa fa-list-check"></i></h3>
+					<p class="m-0">Extras</p>
+				</a>
+			</li>
+			<li class="nav-item pe-4" role="presentation">
+				<a href="{% url 'rental-fulfilment-drivers' object.id %}" class="nav-link text-reset p-4" id="pills-drivers-tab">
+					<h3><i class="fa-regular fa-id-card"></i></h3>
+					<p class="m-0">Drivers</p>
+				</a>
+			</li>
+			<li class="nav-item pe-4" role="presentation">
+				<a href="{% url 'rental-fulfilment-detail' object.id %}" class="nav-link text-reset p-4" id="pills-summary-tab">
+					<h3><i class="fa fa-dollar-sign"></i></h3>
+					<p class="m-0">Summary</p>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+{% endblock rental_nav %}
+
+<div class="container">	
+	<div class="row">
+		<div class="col-12 mb-7">
+			{% block rental_flow_content %}
+			{% endblock rental_flow_content %}
 		</div>
 	</div>
 </div>

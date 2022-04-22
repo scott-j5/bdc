@@ -12,5 +12,9 @@ Add a new booking
 {% endblock subheading %}
 
 {% block rental_flow_content %}
-{% crispy form %}
+<div class="row">
+	<div class="col-12 col-md-10 m-auto">
+		{% crispy form %}
+	</div>
+</div>
 {% endblock rental_flow_content %}

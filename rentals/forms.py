@@ -159,7 +159,6 @@ class AdminRentalFulfilmentCreateForm(RentalFulfilmentCreateForm):
 
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request', None)
-		print(f'HEYYYYY{self.request.user.is_staff}')
 		super().__init__(*args, **kwargs)
 		self.helper.html5_required = True
 		self.helper.layout = Layout(
@@ -223,7 +222,7 @@ class RentalFulfilmentExtrasForm(forms.ModelForm):
 						css_class="col-12",
 					),
 					Div(
-						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+						SpinnerSubmit("submit", 'Save & Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
 						css_class="d-grid col-12"
 					),
 					css_class="row"
@@ -236,12 +235,14 @@ class RentalFulfilmentExtrasForm(forms.ModelForm):
 		fields = ['rental_extras']
 
 
-class RentalDriverForm(forms.ModelForm):
+class RentalDriverAddForm(forms.ModelForm):
+	dob = forms.DateField(widget=DatePicker(attrs={"placeholder": "", "data-flatpickr_args": {"minDate": False}}))
+
 	def __init__(self, *args, **kwargs):
-		rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)
+		self.rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)
 		super().__init__(*args, **kwargs)
 		self.helper = FormHelper()
-		self.helper.form_action = reverse_lazy('rental-fulfilment-drivers', kwargs={'pk':rental_fulfilment_id})
+		self.helper.form_action = self.get_form_action()
 		self.helper.form_method = 'POST'
 		self.helper.form_id = 'rental-fulfilment-drivers-form'
 		self.helper.html5_required = False
@@ -250,15 +251,19 @@ class RentalDriverForm(forms.ModelForm):
 				Div(
 					Div(
 						'first_name',
-						css_class="col-12 col-md-4",
+						css_class="col-12 col-md-6",
 					),
 					Div(
 						'last_name',
-						css_class="col-12 col-md-4",
+						css_class="col-12 col-md-6",
 					),
 					Div(
 						'dob',
-						css_class="col-12 col-md-4",
+						css_class="col-12 col-md-6",
+					),
+					Div(
+						'licence_check_code',
+						css_class="col-12 col-md-6",
 					),
 					Div(
 						'licence_front',
@@ -269,7 +274,15 @@ class RentalDriverForm(forms.ModelForm):
 						css_class="col-12 col-md-6",
 					),
 					Div(
-						SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
+						'proof_of_address_1',
+						css_class="col-12 col-md-6",
+					),
+					Div(
+						'proof_of_address_2',
+						css_class="col-12 col-md-6",
+					),
+					Div(
+						SpinnerSubmit("submit", 'Confirm Driver', css_class='crispy-btn btn-danger', icon='<i class="fa fa-check"></i>'),
 						css_class="d-grid col-12"
 					),
 					css_class="row"
@@ -277,9 +290,17 @@ class RentalDriverForm(forms.ModelForm):
 			)
 		)
 
+	def get_form_action(self):
+		return reverse_lazy('rental-fulfilment-driver-add', kwargs={'rental_pk':self.rental_fulfilment_id})
+
 	class Meta:
 		model = RentalDriver
-		fields = ['user', 'first_name', 'last_name', 'dob', 'licence_front', 'licence_back']
+		fields = ['first_name', 'last_name', 'dob', 'licence_check_code', 'licence_front', 'licence_back', 'proof_of_address_1', 'proof_of_address_2']
+
+
+class RentalDriverUpdateForm(RentalDriverAddForm):		
+	def get_form_action(self):
+		return reverse_lazy('rental-fulfilment-driver-update', kwargs={'rental_pk': self.instance.rental_fulfilment.id, 'pk':self.instance.id})
 
 
 class RentalDriverFormsetHelper(FormHelper):
@@ -324,4 +345,4 @@ class RentalDriverFormsetHelper(FormHelper):
 		self.add_input(SpinnerSubmit("submit", 'Continue', css_class='crispy-btn btn-danger float-end', icon='<i class="icon-125" data-feather="chevrons-right"></i>', template="core/custom_crispy_templates/spinner_submit_button.html"))
 		
 
-RentalDriverFormSet = forms.formset_factory(RentalDriverForm, extra=2, can_delete=True)
+RentalDriverFormSet = forms.formset_factory(RentalDriverUpdateForm, extra=2, can_delete=True)

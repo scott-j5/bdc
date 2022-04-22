@@ -12,10 +12,13 @@ Before you continue
 Please read and accept our pre-booking information.
 {% endblock subheading %}
 
+{% block rental_nav %}
+{% endblock rental_nav %}
+
 {% block rental_flow_content %}
 	<div class="row">
-		<div class="col-10 m-auto text-center my-6">
-			NOTE: Completing a booking does not necessarily confirm your rental. You will recieve an email to pay a deposit once your booking has been confirmed by one of our team.
+		<div class="col-10 m-auto text-center mt-5">
+			<small>NOTE: Completing a booking does not necessarily confirm your rental. You will recieve an email to pay a deposit once your booking has been confirmed by one of our team.</small>
 		</div>	
 	</div>
 	{% include 'rentals/base_rental_terms.html' %}

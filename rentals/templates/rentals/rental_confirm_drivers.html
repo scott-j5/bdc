@@ -1,0 +1,52 @@
+{% extends 'rentals/base_rental_flow.html' %}
+{% load price_tags %}
+{% block step_number %}7{% endblock step_number %}
+
+{% block title %}
+{{ object.duration_humanize }} stay with {{ object.product.name }}
+{% endblock title %}
+
+{% block subheading %}
+Review driver information
+{% endblock subheading %}
+
+{% block rental_flow_content %}
+<div class="row mt-3">
+	<div class="col-12 col-md-10 m-auto">
+		<p class="text-center text-light text-dark">Driver information can be added up to one month before your rental. Individual details cannot be edited once confirmed with our insurance company.</p>
+
+		<ul class="list-group list-group-flush ps-0">
+			{% if object.rentaldriver_set.all|length > 0 %}
+				{% for driver in object.rentaldriver_set.all %}
+					<li class="list-group-item pe-0">
+						<div class="d-flex justify-content-between">
+							<div class="d-flex align-items-center">
+								<div>
+									<small class="m-0">{{ driver.first_name }} {{ driver.last_name }}</small>
+									{% if driver.note %}
+										<p class="text-light text-dark"><small>{{ driver.note }}</small></p>
+									{% endif %}
+								</div>
+							</div>
+							<div class="d-flex align-items-center justify-content-end py-2">
+								<span class="badge rounded-pill bg-{{ driver.status_class }}"><small>{{ driver.get_status_display }}</small></span>
+								{% if not driver.approved %}<a href="{% url 'rental-fulfilment-driver-update' object.id driver.id %}" title="Edit Driver" class="mx-2"><i class="fa fa-edit text-danger"></i></a>{% endif %}
+							</div>
+						</div>
+					</li>
+				{% endfor %}
+			{% endif %}
+		</ul>
+	</div>
+</div>
+
+<div class="row pb-5">
+	<div class="col-12 col-md-10 m-auto d-grid">
+		<a href="{% url 'rental-fulfilment-driver-add' object.id %}" class="btn btn-link text-danger"><i class="fa fa-plus"></i> Add Driver</a>
+	</div>
+	<div class="col-12 col-md-10 m-auto d-grid">
+		<a href="{% url 'rental-fulfilment-detail' object.id %}" class="btn btn-danger"><i class="fa fa-check"></i> Confirm rental</a>
+	</div>
+</div>
+
+{% endblock rental_flow_content %}

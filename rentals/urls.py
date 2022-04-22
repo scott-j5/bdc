@@ -9,6 +9,8 @@ from .views import (
 	RentalFulfilmentCreateView,
 	RentalFulfilmentConfirmExtras,
 	RentalFulfilmentConfirmDrivers,
+	RentalFulfilmentDriverCreateView,
+	RentalFulfilmentDriverUpdateView,
 	RentalFulfilmentTerms
 )
 
@@ -30,4 +32,6 @@ urlpatterns = [
 	path('rental/add/', RentalFulfilmentCreateView.as_view(), name='rental-fulfilment-add'),
 	path('rental/<int:pk>/extras/', RentalFulfilmentConfirmExtras.as_view(), name='rental-fulfilment-extras'),
 	path('rental/<int:pk>/drivers/', RentalFulfilmentConfirmDrivers.as_view(), name='rental-fulfilment-drivers'),
+	path('rental/<int:rental_pk>/drivers/add/', RentalFulfilmentDriverCreateView.as_view(), name='rental-fulfilment-driver-add'),
+	path('rental/<int:rental_pk>/drivers/<int:pk>/update/', RentalFulfilmentDriverUpdateView.as_view(), name='rental-fulfilment-driver-update'),
 ]

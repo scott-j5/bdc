@@ -1,13 +1,114 @@
-{% extends "core/base.html" %}
+{% extends "rentals/base_rental_flow.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load price_tags %}
 
-{% block banner %}
-{{ block.super }}
-{% endblock banner %}
+{% block step_number %}10{% endblock step_number %}
 
-{% block content %}
+{% block title %}
+{{ object.duration_humanize }} stay with {{ object.product.name }}
+{% endblock title %}
+
+{% block subheading %}
+Review pricing breakdown
+{% endblock subheading %}
+
+{% block rental_flow_content %}
+<div class="row">
+	<div class="col-12 col-md-10 m-auto">
+
+		<!-- Rental Details -->
+		<div class="row p-4">
+			<div class="col-12 text-center pb-4">
+			</div>
+			<div class="col-8">
+				<h6 class="m-0">{{ object.duration_humanize }} rental</h6>
+				<small>{{ object.rental_start|date:"g:ia l jS M." }} - {{ object.rental_end|date:"g:ia l jS M. Y" }}</small>
+				{% if request.is_staff %}<small>Booked at: {{ object.fulfilment_date_time }}</small>{% endif %}
+			</div>
+			<div class="col-4 d-flex align-items-center justify-content-end">
+				{{ object.fulfilled_rental_price|price }}
+			</div>
+
+			<div class="col-12">
+				<hr class="my-3">
+				<div class="d-flex justify-content-between">
+					{% if object.rental_extras.all|length > 0 %}
+						<h6 class="m-0">Extras </h6>
+						<a href="{% url 'rental-fulfilment-extras' object.id %}" title="Update Extras"><i class="fa fa-edit text-danger"></i></a>
+					{% else %}
+						<h6 class="m-0">No Extras </h6>
+						<a href="{% url 'rental-fulfilment-extras' object.id %}" title="Add Extras"><i class="fa fa-plus text-danger"></i></a>
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-12">
+				<ul class="list-group list-group-flush ps-4">
+				{% if object.rental_extras.all|length > 0 %}
+					{% for extra in object.rental_extras.all %}
+						<li class="list-group-item pe-0">
+							<div class="row">
+								<div class="col-8">
+									<small class="m-0">{{ extra.name }}</small>
+								</div>
+								<div class="col-4 d-flex align-items-center justify-content-end">
+									<small>{{ extra.base_price|price }}</small>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				{% endif %}
+				</ul>	
+			</div>	
+
+
+			<div class="col-12">
+				<hr class="my-3">
+				<div class="d-flex justify-content-between">
+					{% if object.rentaldriver_set.all|length > 0 %}
+						<h6 class="m-0">Drivers </h6>
+					{% else %}
+						<h6 class="m-0">No Drivers Listed </h6>
+					{% endif %}
+					<a href="{% url 'rental-fulfilment-driver-add' object.id %}" title="Add Driver"><i class="fa fa-plus text-danger"></i></a>
+				</div>
+			</div>
+			<div class="col-12">
+				<ul class="list-group list-group-flush ps-4">
+				{% if object.rentaldriver_set.all|length > 0 %}
+					{% for driver in object.rentaldriver_set.all %}
+						<li class="list-group-item pe-0">
+							<div class="row">
+								<div class="col-8">
+									<small class="m-0">{{ driver.first_name }} {{ driver.last_name }}</small>{% if not driver.approved %}<a href="{% url 'rental-fulfilment-driver-update' object.id driver.id %}" title="Edit Driver" class="ms-2"><i class="fa fa-edit text-danger"></i></a>{% endif %}
+									<div>
+										<span class="badge rounded-pill bg-{{ driver.status_class }} py-1"><small>{{ driver.get_status_display }}</small></span>
+									</div>
+								</div>
+								<div class="col-4 d-flex align-items-center justify-content-end">
+									<small>{% if forloop.first %}-{% else %}{{ 25|price }}{% endif %}</small>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				{% endif %}
+				</ul>	
+			</div>
+			<div class="col-12">
+				<hr class="my-3">
+			</div>
+			<div class="col-8">
+				<h6>Total:</h6>
+			</div>
+			<div class="col-4 text-end">
+				<h6>{{ object.fulfilment_price|price }}</h6>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock rental_flow_content %}
+
+
 <div class="">
 	<div class="d-flex justify-content-center page-header min-vh-100 relative py-8" style="background-image: url('https://images.unsplash.com/photo-1498475932703-000eb46e6375?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');">
 		<div class="filter"></div>
@@ -41,10 +142,10 @@
 									<div class="d-flex justify-content-between">
 										{% if object.rental_extras.all|length > 0 %}
 											<h6 class="m-0">Extras </h6>
-											<a href="{% url 'rental-fulfilment-extras' object.id %}"><i class="fa fa-edit text-danger"></i></a>
+											<a href="{% url 'rental-fulfilment-extras' object.id %}" title="Update Extras"><i class="fa fa-edit text-danger"></i></a>
 										{% else %}
 											<h6 class="m-0">No Extras </h6>
-											<a href="{% url 'rental-fulfilment-extras' object.id %}"><i class="fa fa-plus text-danger"></i></a>
+											<a href="{% url 'rental-fulfilment-extras' object.id %}" title="Add Extras"><i class="fa fa-plus text-danger"></i></a>
 										{% endif %}
 									</div>
 								</div>
@@ -73,11 +174,10 @@
 									<div class="d-flex justify-content-between">
 										{% if object.rentaldriver_set.all|length > 0 %}
 											<h6 class="m-0">Drivers </h6>
-											<a href="{% url 'rental-fulfilment-drivers' object.id %}"><i class="fa fa-edit text-danger"></i></a>
 										{% else %}
 											<h6 class="m-0">No Drivers Listed </h6>
-											<a href="{% url 'rental-fulfilment-drivers' object.id %}"><i class="fa fa-plus text-danger"></i></a>
 										{% endif %}
+										<a href="{% url 'rental-fulfilment-driver-add' object.id %}" title="Add Driver"><i class="fa fa-plus text-danger"></i></a>
 									</div>
 								</div>
 								<div class="col-12">
@@ -87,7 +187,13 @@
 											<li class="list-group-item pe-0">
 												<div class="row">
 													<div class="col-8">
-														<small class="m-0">{{ driver.first_name }} {{ driver.last_name }}</small>
+														<small class="m-0">{{ driver.first_name }} {{ driver.last_name }}</small>{% if not driver.approved %}<a href="{% url 'rental-fulfilment-driver-update' object.id driver.id %}" title="Edit Driver" class="ms-2"><i class="fa fa-edit text-danger"></i></a>{% endif %}
+														<div>
+															<span class="badge rounded-pill bg-{{ driver.status_class }} py-1"><small>{{ driver.get_status_display }}</small></span>
+															{% if driver.note %}
+																<p class="text-light text-dark"><small>{{ driver.note }}</small></p>
+															{% endif %}
+														</div>
 													</div>
 													<div class="col-4 d-flex align-items-center justify-content-end">
 														<small>{% if forloop.first %}-{% else %}{{ 25|price }}{% endif %}</small>
@@ -115,4 +221,3 @@
 		</div>
 	</div>
 </div>
-{% endblock content %}
