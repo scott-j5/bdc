@@ -20,11 +20,14 @@ def dashboard_view(request):
 		completed_rentals_ytd = RentalFulfilment.objects.filter(Q(rental_start__gt=datetime.datetime.strptime(f'01/01/{datetime.datetime.now().year}', '%d/%m/%Y')), Q(rental_start__lt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
 		pending_rentals_count = RentalFulfilment.objects.filter(rental_start__gt=timezone.now()).count()
 		drivers_requiring_approval_count = RentalDriver.objects.filter(Q(status=RentalDriver.Status.AWAITING_REVIEW) | Q(status=RentalDriver.Status.ACTION_REQUIRED)).count()
+		upcoming_rentals = RentalFulfilment.objects.filter(Q(rental_start__gte=timezone.now()), ~Q(status=RentalDriver.Status.DENIED)).order_by('-rental_start')[:4]
+		
 		ctx = {
 			'users_count': users_count,
 			'completed_rentals_ytd': completed_rentals_ytd,
 			'pending_rentals_count': pending_rentals_count,
 			'drivers_requiring_approval_count': drivers_requiring_approval_count,
+			'upcoming_rentals': upcoming_rentals,
 		}
 		return render(request, 'dashboard/dashboard_index.html', ctx)
 	return PermissionDenied()

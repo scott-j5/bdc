@@ -148,7 +148,7 @@ class RentalFulfilment(ProductFulfilment):
 	_fulfilled_rental_rate = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Fulfilled rate for rental. (rate after adjustments) to be multiplied by duration")
 	_unfulfilled_rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Total cost of the rental before applying rental adjustments")
 	rental_extras = models.ManyToManyField(RentalExtra, blank=True)
-	pickup_location = LocationField(null=True, blank=True, help_text="Leave blank if not required", map_attrs={'center': [55.953480, -3.188512], 'placeholder': 'Search'})
+	pickup_location = LocationField(null=True, blank=True, help_text="Leave blank if not required", map_attrs={'center': [-3.188512, 55.953480], 'placeholder': 'Search'})
 	pickup_address = AddressAutoHiddenField(null=True, blank=True)
 
 	def __str__(self):
@@ -254,6 +254,15 @@ class RentalFulfilment(ProductFulfilment):
 			#Take deductions from additions
 		
 		return round(base_rental_price + adjustment_val, 2)
+
+	@property
+	def status_class(self):
+		return {
+			self.Status.CONFIRMED: 'success',
+			self.Status.PENDING: 'info',
+			self.Status.DENIED: 'danger',
+			self.Status.COMPLETED: 'success',
+		}.get(self.status, 'info')
 
 	# Calculates final fulfilment price of the rental
 	# Applies RentalPriceAdjustments to unfulfilled_rental_price

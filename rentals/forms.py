@@ -158,8 +158,10 @@ class AdminRentalFulfilmentCreateForm(RentalFulfilmentCreateForm):
 	#If staff show field to add rental for someone else set to request.user
 
 	def __init__(self, *args, **kwargs):
-		self.request = kwargs.pop('request', None)
+		request = kwargs.pop('request', None)
 		super().__init__(*args, **kwargs)
+		self.request = request
+		print(self.request.user)
 		self.helper.html5_required = True
 		self.helper.layout = Layout(
             Div(
@@ -270,7 +272,7 @@ class RentalFulfilmentExtrasForm(forms.ModelForm):
 
 
 class RentalDriverAddForm(forms.ModelForm):
-	dob = forms.DateField(widget=DatePicker(attrs={"placeholder": "", "data-flatpickr_args": {"minDate": False}}))
+	dob = forms.DateField(widget=DatePicker(attrs={"placeholder": "", "data-flatpickr_args": {"minDate": False, "maxDate": 'today'}}))
 
 	def __init__(self, *args, **kwargs):
 		self.rental_fulfilment_id = kwargs.pop('rental_fulfilment_id', None)

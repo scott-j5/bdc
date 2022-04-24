@@ -179,8 +179,11 @@ class RentalFulfilmentCreateView(LoginRequiredMixin, CreateView):
 			form.instance.fulfilling_user = self.request.user
 		return super().form_valid(form)
 
+	def form_invalid(self, form):
+		return super().form_invalid(form)
+
 	def get_success_url(self):
-		return reverse_lazy('rental-fulfilment-extra-information', kwargs={'pk': self.object.id,})
+		return reverse_lazy('rental-fulfilment-extra-information', kwargs={'pk': self.object.id})
 
 
 class RentalFulfilmentConfirmExtraInformation(UserPassesTestMixin, UpdateView):
