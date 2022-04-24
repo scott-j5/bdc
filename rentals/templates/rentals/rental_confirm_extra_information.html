@@ -2,6 +2,13 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load price_tags %}
+{% load mapbox_location_field_tags %} 
+
+{% block styles %}
+	{{ block.super }}
+	{% location_field_includes %}
+	{% include_jquery %}
+{% endblock styles %}
 
 {% block step_number %}1{% endblock step_number %}
 

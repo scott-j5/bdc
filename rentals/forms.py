@@ -221,6 +221,10 @@ class RentalFulfilmentExtraInformationForm(forms.ModelForm):
 						css_class="col-12",
 					),
 					Div(
+						'pickup_address',
+						css_class="col-12",
+					),
+					Div(
 						SpinnerSubmit("submit", 'Save & Continue', css_class='crispy-btn btn-danger', icon='<i class="icon-125" data-feather="chevrons-right"></i>'),
 						css_class="d-grid col-12"
 					),
@@ -231,7 +235,7 @@ class RentalFulfilmentExtraInformationForm(forms.ModelForm):
 
 	class Meta: 
 		model = RentalFulfilment
-		fields = ['pickup_location']
+		fields = ['pickup_location', 'pickup_address']
 
 
 class RentalFulfilmentExtrasForm(forms.ModelForm):

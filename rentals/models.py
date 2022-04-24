@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from imageit.models import ScaleItImageField, CropItImageField
+from mapbox_location_field.models import LocationField, AddressAutoHiddenField
 
 from core.models import get_sentinel_user
 from core.templatetags.price_tags import price
@@ -147,7 +148,8 @@ class RentalFulfilment(ProductFulfilment):
 	_fulfilled_rental_rate = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Fulfilled rate for rental. (rate after adjustments) to be multiplied by duration")
 	_unfulfilled_rental_price = models.DecimalField(blank=True, max_digits=10, decimal_places=2, help_text="Total cost of the rental before applying rental adjustments")
 	rental_extras = models.ManyToManyField(RentalExtra, blank=True)
-	pickup_location = models.CharField(max_length=100, null=True, blank=True, help_text="Leave blank if not required")
+	pickup_location = LocationField(null=True, blank=True, help_text="Leave blank if not required", map_attrs={'center': [55.953480, -3.188512], 'placeholder': 'Search'})
+	pickup_address = AddressAutoHiddenField(null=True, blank=True)
 
 	def __str__(self):
 		return f"{self.product.name} - {self.duration_humanize} {format_price(self.fulfilment_price)} ({self.rental_start} - {self.rental_end})"

@@ -54,8 +54,10 @@ INSTALLED_APPS = [
 	'crispy_forms',
 	'crispy_bootstrap5',
     'core',
+	'dashboard',
 	'imageit',
 	'invoicing',
+	'mapbox_location_field',
 	'products',
 	'rentals',
 	'vans',
@@ -280,3 +282,5 @@ DJRICHTEXTFIELD_CONFIG = {
         'relative_urls': False,
     }
 }
+
+MAPBOX_KEY = 'pk.eyJ1Ijoic2NvdHQtajUiLCJhIjoiY2wyYjlpenR2MDBrbjNpb3BxY3BuNjdsaSJ9.loR_ycWP28bIMtm5qiL1pw'

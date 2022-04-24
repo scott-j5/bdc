@@ -13,28 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import handler403, handler404, handler500
 
-from core.views import (
-	error_403,
-	error_404,
-	error_500,
+from .views import(
+	dashboard_view,
+	UsersListView,
+	RentalsListView,
+	DriversListView,
 )
 
 urlpatterns = [
-    path('', include('core.urls')),
-    path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
-	path('accounts/', include('accounts.urls')),
-	path('vans/', include('vans.urls')),
-	path('rentals/', include('rentals.urls')),
-	path('blogs/', include('blogs.urls')),
-	path('dashboard/', include('dashboard.urls')),
-	path('djrichtextfield/', include('djrichtextfield.urls')),
+    path('', dashboard_view, name='dashboard'),
+	path('users/', UsersListView.as_view(), name='dashboard-users'),
+	path('rentals/', RentalsListView.as_view(), name='dashboard-rentals'),
+	path('drivers/', DriversListView.as_view(), name='dashboard-drivers'),
 ]
-
-handler403 = error_403
-handler404 = error_404
-handler500 = error_500
