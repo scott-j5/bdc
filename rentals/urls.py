@@ -34,6 +34,7 @@ urlpatterns = [
 	path('rental/<int:pk>/extra-information/', RentalFulfilmentConfirmExtraInformation.as_view(), name='rental-fulfilment-extra-information'),
 	path('rental/<int:pk>/extras/', RentalFulfilmentConfirmExtras.as_view(), name='rental-fulfilment-extras'),
 	path('rental/<int:pk>/drivers/', RentalFulfilmentConfirmDrivers.as_view(), name='rental-fulfilment-drivers'),
+	path('rental/<int:pk>/drivers/', RentalFulfilmentConfirmDrivers.as_view(), name='rental-fulfilment-report-list'),
 	path('rental/<int:rental_pk>/drivers/add/', RentalFulfilmentDriverCreateView.as_view(), name='rental-fulfilment-driver-add'),
 	path('rental/<int:rental_pk>/drivers/<int:pk>/update/', RentalFulfilmentDriverUpdateView.as_view(), name='rental-fulfilment-driver-update'),
 ]

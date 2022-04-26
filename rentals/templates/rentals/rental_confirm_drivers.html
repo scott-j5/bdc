@@ -30,7 +30,9 @@ Review driver information
 							</div>
 							<div class="d-flex align-items-center justify-content-end py-2">
 								<span class="badge rounded-pill bg-{{ driver.status_class }}"><small>{{ driver.get_status_display }}</small></span>
-								{% if not driver.approved %}<a href="{% url 'rental-fulfilment-driver-update' object.id driver.id %}" title="Edit Driver" class="mx-2"><i class="fa fa-edit text-danger"></i></a>{% endif %}
+								{% if not rental.commenced %}
+									{% if not driver.approved %}<a href="{% url 'rental-fulfilment-driver-update' object.id driver.id %}" title="Edit Driver" class="mx-2"><i class="fa fa-edit text-danger"></i></a>{% endif %}
+								{% endif %}
 							</div>
 						</div>
 					</li>
@@ -42,7 +44,11 @@ Review driver information
 
 <div class="row pb-5">
 	<div class="col-12 col-md-10 m-auto d-grid">
-		<a href="{% url 'rental-fulfilment-driver-add' object.id %}" class="btn btn-link text-danger"><i class="fa fa-plus"></i> Add Driver</a>
+		{% if object.rental_commenced %}
+			<p class="text-danger text-center">Driver Information cannot be added or edited after rental has commenced.</p>
+		{% else %}
+			<a href="{% url 'rental-fulfilment-driver-add' object.id %}" class="btn btn-link text-danger"><i class="fa fa-plus"></i> Add Driver</a>
+		{% endif %}
 	</div>
 	<div class="col-12 col-md-10 m-auto d-grid">
 		<a href="{% url 'rental-fulfilment-detail' object.id %}" class="btn btn-danger"><i class="fa fa-check"></i> View Summary</a>

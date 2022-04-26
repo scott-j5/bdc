@@ -18,14 +18,14 @@ def dashboard_view(request):
 	if request.user.is_staff:
 		users_count = User.objects.all().count()
 		completed_rentals_ytd = RentalFulfilment.objects.filter(Q(rental_start__gt=datetime.datetime.strptime(f'01/01/{datetime.datetime.now().year}', '%d/%m/%Y')), Q(rental_start__lt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
-		pending_rentals_count = RentalFulfilment.objects.filter(rental_start__gt=timezone.now()).count()
+		upcoming_rentals_count = RentalFulfilment.objects.filter(Q(rental_start__gt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
 		drivers_requiring_approval_count = RentalDriver.objects.filter(Q(status=RentalDriver.Status.AWAITING_REVIEW) | Q(status=RentalDriver.Status.ACTION_REQUIRED)).count()
 		upcoming_rentals = RentalFulfilment.objects.filter(Q(rental_start__gte=timezone.now()), ~Q(status=RentalDriver.Status.DENIED)).order_by('-rental_start')[:4]
 		
 		ctx = {
 			'users_count': users_count,
 			'completed_rentals_ytd': completed_rentals_ytd,
-			'pending_rentals_count': pending_rentals_count,
+			'upcoming_rentals_count': upcoming_rentals_count,
 			'drivers_requiring_approval_count': drivers_requiring_approval_count,
 			'upcoming_rentals': upcoming_rentals,
 		}
@@ -61,15 +61,36 @@ class UsersListView(UserPassesTestMixin, ListView):
 		})
 		return ctx
 
+
 class RentalsListView(UserPassesTestMixin, ListView):
+	paginate_by = 50
 	model = RentalFulfilment
 	template_name = 'dashboard/rental_list.html'
 	rasie_exception = True
+	ordering = ['-rental_start']
 
 	def test_func(self):
 		if self.request.user.is_staff:
 			return True
 		return False
+
+	def get_context_data(self, *args, **kwargs):
+		ctx = super().get_context_data(*args, **kwargs)
+		
+		total_rentals_count = RentalFulfilment.objects.all().count()
+		rental_growth = RentalFulfilment.objects.filter(fulfilment_date_time__gte=datetime.datetime.strptime(f'01/{datetime.datetime.now().month}/{datetime.datetime.now().year}', '%d/%m/%Y')).count()
+		completed_rentals_ytd = RentalFulfilment.objects.filter(Q(rental_start__gt=datetime.datetime.strptime(f'01/01/{datetime.datetime.now().year}', '%d/%m/%Y')), Q(rental_start__lt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
+		upcoming_rentals_count = RentalFulfilment.objects.filter(Q(rental_start__gt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
+		unconfirmed_upcoming_rental_count = RentalFulfilment.objects.filter(Q(rental_start__gt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED), ~Q(status=RentalFulfilment.Status.CONFIRMED)).count()
+
+		ctx.update({
+			'total_rentals_count': total_rentals_count,
+			'rental_growth': rental_growth,
+			'completed_rentals_ytd': completed_rentals_ytd,
+			'upcoming_rentals_count': upcoming_rentals_count,
+			'unconfirmed_upcoming_rental_count': unconfirmed_upcoming_rental_count,
+		})
+		return ctx
 
 
 class DriversListView(UserPassesTestMixin, ListView):
@@ -81,3 +102,17 @@ class DriversListView(UserPassesTestMixin, ListView):
 		if self.request.user.is_staff:
 			return True
 		return False
+
+	def get_context_data(self, *args, **kwargs):
+		ctx = super().get_context_data(*args, **kwargs)
+		
+		total_drivers_count = RentalDriver.objects.all().count()
+		drivers_awaiting_review_count = RentalDriver.objects.filter(status=RentalDriver.Status.AWAITING_REVIEW).count()
+		drivers_action_required_count = RentalDriver.objects.filter(status=RentalDriver.Status.ACTION_REQUIRED).count()
+
+		ctx.update({
+			'total_drivers_count': total_drivers_count,
+			'drivers_awaiting_review_count': drivers_awaiting_review_count,
+			'drivers_action_required_count': drivers_action_required_count,
+		})
+		return ctx

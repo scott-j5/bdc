@@ -1,3 +1,5 @@
+{% load static %}
+
 <!-- Navbar -->
 <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
 	<div class="container-fluid py-1 px-3">
@@ -12,103 +14,192 @@
 		<div class="ms-md-auto pe-md-3 d-flex align-items-center">
 		<div class="input-group">
 			<span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-			<input type="text" class="form-control" placeholder="Type here...">
+			<input type="text" class="form-control" placeholder="Search Coming Soon...">
 		</div>
 		</div>
 		<ul class="navbar-nav  justify-content-end">
-		<li class="nav-item d-flex align-items-center">
-			<a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
-			<i class="fa fa-user me-sm-1"></i>
-			<span class="d-sm-inline d-none">Sign In</span>
-			</a>
-		</li>
-		<li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-			<a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-			<div class="sidenav-toggler-inner">
-				<i class="sidenav-toggler-line"></i>
-				<i class="sidenav-toggler-line"></i>
-				<i class="sidenav-toggler-line"></i>
-			</div>
-			</a>
-		</li>
-		<li class="nav-item px-3 d-flex align-items-center">
-			<a href="javascript:;" class="nav-link text-body p-0">
-			<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-			</a>
-		</li>
-		<li class="nav-item dropdown pe-2 d-flex align-items-center">
-			<a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-			<i class="fa fa-bell cursor-pointer"></i>
-			</a>
-			<ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-			<li class="mb-2">
-				<a class="dropdown-item border-radius-md" href="javascript:;">
-				<div class="d-flex py-1">
-					<div class="my-auto">
-					<img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+		
+			<li class="d-flex justify-content-around">
+				<a class="nav-link nav-link" href="https://www.facebook.com/bigdogcampervans" target="_blank"><i class="icon-125" data-feather="facebook"></i></a>
+				<a class="nav-link nav-link" href="https://www.instagram.com/bigdogcampervans/" target="_blank"><i class="icon-125" data-feather="instagram"></i></a>
+			</li>
+			<li class="nav-item dropdown dropdown-hover mx-2">
+				<div class="d-lg-none px-3">
+					<hr class="my-2">
+				</div>
+				<a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
+					<div>
+						{% if user.profile.avatar_url %}
+							<img class="avatar-sm rounded-circle" alt="Profile Image" src="{{ user.profile.avatar_url }}">
+						{% else %}
+							<span class="text-dark badge rounded-pill bg-transparent border border-light">{{ user.profile.initial }}</span>
+						{% endif %}
+						<span class="ps-2 d-lg-none text-black-50">{{ user.profile.display_name }}</span>
 					</div>
-					<div class="d-flex flex-column justify-content-center">
-					<h6 class="text-sm font-weight-normal mb-1">
-						<span class="font-weight-bold">New message</span> from Laur
-					</h6>
-					<p class="text-xs text-secondary mb-0 ">
-						<i class="fa fa-clock me-1"></i>
-						13 minutes ago
-					</p>
+											<svg height="7" viewBox="0 0 10 7" width="10" xmlns="http://www.w3.org/2000/svg" alt="down-arrow" class="arrow primary-arrow ms-1 d-lg-block d-none"><path d="m7.91769231.99461539-3.30230769 3.30230769-3.3023077-3.30230769c-.30182991-.29151709-.78160367-.28734798-1.07832198.00937032-.2967183.29671831-.30088741.77649207-.00937032 1.07832198l3.84615384 3.84615385c.3003845.3002938.78730781.3002938 1.08769231 0l3.84615385-3.84615385c.1999666-.19313421.28016353-.47913684.20976704-.74808255-.07039649-.26894572-.28043108-.47898031-.5493768-.5493768-.26894571-.07039649-.55494834.00980044-.74808255.20976705z"/></svg>
+					<img src="{% static 'img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1 d-lg-none d-block">
+				</a>
+
+				<div class="dropdown-menu dropdown-menu-end dropdown-menu-md-start dropdown-menu-animation border-radius-xl p-3 mt-0 mt-lg-3" aria-labelledby="dropdownMenuAccount">
+					
+					<div class="row d-none d-lg-flex">
+						<div class="col p-0 d-flex justify-content-center flex-column">
+							<ul class="list-group">
+								<li class="list-group-item text-end border-0 p-0 pe-3 d-block">
+									<span class="text-end ps-3">{{ user.profile.display_name }}</span>
+								</li>
+								<li class="px-3 d-block">
+									<hr class="my-2">
+								</li>
+								{% if user.is_staff %}
+								<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+									<a class="border-radius-md pe-3 d-block" href="{% url 'dashboard' %}">
+										<span>Dashboard</span>
+									</a>
+								</li>
+								<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+									<a class="border-radius-md pe-3 d-block" href="{% url 'admin:index' %}">
+										<span>Admin</span>
+									</a>
+								</li>
+								{% endif %}
+								<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+									<a class="border-radius-md pe-3 d-block" href="{% url 'my-rentals' %}">
+										<span>My Rentals</span>
+									</a>
+								</li>
+								<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+									<a class="border-radius-md pe-3 d-block" href="{% url 'profile' %}">
+										<span>Profile</span>
+									</a>
+								</li>
+								<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+									<a class="border-radius-md pe-3 d-block" href="{% url 'account_reset_password' %}">
+										<span>Change Password</span>
+									</a>
+								</li>
+								<li class="nav-item text-end list-group-item border-0 p-0 my-1">
+									<a class="border-radius-md pe-3 d-block" href="{% url 'account_logout' %}">
+										<span>Sign Out</span>
+									</a>
+								</li>
+							</ul>
+						</div>
 					</div>
+
+					<!-- MOBILE SUB MENU -->
+					<div class="row d-lg-none mt-1">
+						<div class="col-12 d-flex justify-content-center flex-column">
+							{% if user.is_staff %}
+							<a href="{% url 'admin:index' %}" class="dropdown-item p-2 ps-0 border-bottom">
+								Admin
+							</a>
+							{% endif %}
+							<a href="{% url 'my-rentals' %}" class="dropdown-item p-2 ps-0 border-bottom">
+								My Rentals
+							</a>
+							<a href="{% url 'profile' %}" class="dropdown-item p-2 ps-0 border-bottom">
+								Profile
+							</a>
+							<a href="{% url 'account_reset_password' %}" class="dropdown-item p-2 ps-0 border-bottom">
+								Change Password
+							</a>
+							<a href="{% url 'account_logout' %}" class="dropdown-item p-2 ps-0">
+								Sign Out
+							</a>
+						</div>
+					</div>
+					<!-- END MOBILE SUB MENU -->
+				</div>
+			</li>
+
+			<li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+				<a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+				<div class="sidenav-toggler-inner">
+					<i class="sidenav-toggler-line"></i>
+					<i class="sidenav-toggler-line"></i>
+					<i class="sidenav-toggler-line"></i>
 				</div>
 				</a>
 			</li>
-			<li class="mb-2">
-				<a class="dropdown-item border-radius-md" href="javascript:;">
-				<div class="d-flex py-1">
-					<div class="my-auto">
-					<img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
-					</div>
-					<div class="d-flex flex-column justify-content-center">
-					<h6 class="text-sm font-weight-normal mb-1">
-						<span class="font-weight-bold">New album</span> by Travis Scott
-					</h6>
-					<p class="text-xs text-secondary mb-0 ">
-						<i class="fa fa-clock me-1"></i>
-						1 day
-					</p>
-					</div>
-				</div>
+			<li class="nav-item px-3 d-flex align-items-center">
+				<a href="javascript:;" class="nav-link text-body p-0">
+				<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
 				</a>
 			</li>
-			<li>
-				<a class="dropdown-item border-radius-md" href="javascript:;">
-				<div class="d-flex py-1">
-					<div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-					<svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-						<title>credit-card</title>
-						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-							<g transform="translate(1716.000000, 291.000000)">
-							<g transform="translate(453.000000, 454.000000)">
-								<path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
-								<path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-							</g>
-							</g>
-						</g>
-						</g>
-					</svg>
-					</div>
-					<div class="d-flex flex-column justify-content-center">
-					<h6 class="text-sm font-weight-normal mb-1">
-						Payment successfully completed
-					</h6>
-					<p class="text-xs text-secondary mb-0 ">
-						<i class="fa fa-clock me-1"></i>
-						2 days
-					</p>
-					</div>
-				</div>
+			<li class="nav-item dropdown pe-2 d-flex align-items-center">
+				<a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+				<i class="fa fa-bell cursor-pointer"></i>
 				</a>
+				<ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+					<li class="mb-2">
+						<a class="dropdown-item border-radius-md" href="javascript:;">
+						<div class="d-flex py-1">
+							<div class="my-auto">
+							<img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+							</div>
+							<div class="d-flex flex-column justify-content-center">
+							<h6 class="text-sm font-weight-normal mb-1">
+								<span class="font-weight-bold">New message</span> from Laur
+							</h6>
+							<p class="text-xs text-secondary mb-0 ">
+								<i class="fa fa-clock me-1"></i>
+								13 minutes ago
+							</p>
+							</div>
+						</div>
+						</a>
+					</li>
+					<li class="mb-2">
+						<a class="dropdown-item border-radius-md" href="javascript:;">
+						<div class="d-flex py-1">
+							<div class="my-auto">
+							<img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+							</div>
+							<div class="d-flex flex-column justify-content-center">
+							<h6 class="text-sm font-weight-normal mb-1">
+								<span class="font-weight-bold">New album</span> by Travis Scott
+							</h6>
+							<p class="text-xs text-secondary mb-0 ">
+								<i class="fa fa-clock me-1"></i>
+								1 day
+							</p>
+							</div>
+						</div>
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item border-radius-md" href="javascript:;">
+							<div class="d-flex py-1">
+								<div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
+									<svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+										<title>credit-card</title>
+										<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+										<g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+											<g transform="translate(1716.000000, 291.000000)">
+											<g transform="translate(453.000000, 454.000000)">
+												<path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+												<path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+											</g>
+											</g>
+										</g>
+										</g>
+									</svg>
+								</div>
+								<div class="d-flex flex-column justify-content-center">
+									<h6 class="text-sm font-weight-normal mb-1">
+										Payment successfully completed
+									</h6>
+									<p class="text-xs text-secondary mb-0 ">
+										<i class="fa fa-clock me-1"></i>
+										2 days
+									</p>
+								</div>
+							</div>
+						</a>
+					</li>
+				</ul>
 			</li>
-			</ul>
-		</li>
 		</ul>
 	</div>
 	</div>

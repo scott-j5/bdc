@@ -212,6 +212,12 @@ class RentalFulfilment(ProductFulfilment):
 			return f"{self.duration_days} Night{pluralize}"
 
 	@property
+	def rental_commenced(self):
+		if self.rental_start < timezone.now():
+			return True
+		return False
+
+	@property
 	def drivers(self):
 		return self.rental_driver_set.all().count()
 
@@ -328,7 +334,7 @@ class RentalDriver(models.Model):
 	status = models.CharField(max_length=3, choices=Status.choices, default=Status.AWAITING_REVIEW)
 	first_name = models.CharField(max_length=150, null=False, blank=False)
 	last_name = models.CharField(max_length=150, null=False, blank=False)
-	dob = models.DateField(blank=True)
+	dob = models.DateField(null=False, blank=False)
 	licence_check_code = models.CharField(max_length=20, blank=True, null=True, verbose_name='DVLA Check code', help_text=mark_safe('Click <a href="https://www.gov.uk/view-driving-licence" target="_blank"><u>HERE</u></a> for more information'))
 	licence_front = CropItImageField(blank=True)
 	licence_back = CropItImageField(blank=True)
@@ -338,7 +344,14 @@ class RentalDriver(models.Model):
 
 	@property
 	def approved(self):
-		self.status in {self.Status.APPROVED}
+		if self.status == self.Status.APPROVED:
+			return True
+		return False
+
+	@property
+	def age(self):
+		today = timezone.now()
+		return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
 
 	@property
 	def status_class(self):
@@ -350,6 +363,18 @@ class RentalDriver(models.Model):
 			self.Status.INCOMPLETE: 'secondary',
 		}.get(self.status, 'info')
 	
+	def clean_fields(self, *args, **kwargs):
+		if self.age < 21:
+			raise ValidationError({'dob': [_("Drivers must be over 21 years of age.")]})
+		return super().clean_fields(*args, **kwargs)
+
+	# Raise error if tying to change driver information after rental
+	def clean(self, *args, **kwargs):
+		if hasattr(self, 'rental_fulfilment'):
+			if timezone.now() > self.rental_fulfilment.rental_start:
+				raise ValidationError(_("Drivers cannot be edited after rental has commenced!"))
+		return super().clean(*args, **kwargs)
+
 	def save(self, *args, **kwargs):
 		# Change status to incomplete if any fields are missing
 		if (self.first_name is None
@@ -362,7 +387,8 @@ class RentalDriver(models.Model):
 			or not self.proof_of_address_2.name):
 				self.status = self.Status.INCOMPLETE
 		else:
-			self.status = self.Status.AWAITING_REVIEW
+			if self.status not in {self.Status.APPROVED, self.Status.DENIED}:
+				self.status = self.Status.AWAITING_REVIEW
 		super().save(*args, **kwargs)
 
 class RentalRules(models.Model):

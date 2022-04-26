@@ -269,10 +269,6 @@ class RentalFulfilmentDriverCreateView(UserPassesTestMixin, CreateView):
 		})
 		return ctx
 
-	def form_invalid(self, form):
-		print(form)
-		return super().form_invalid(form)
-
 	def form_valid(self, form):
 		form.instance.rental_fulfilment = self.rental
 		return super().form_valid(form)
