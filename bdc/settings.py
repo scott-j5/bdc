@@ -102,13 +102,8 @@ WSGI_APPLICATION = 'bdc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if 'test' in sys.argv:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase'
-    }
-else:
-	DATABASES = {
+
+DATABASES = {
 		'default': {
 			'ENGINE': 'django.db.backends.postgresql',
 			'NAME': os.environ.get('DATABASE_NAME'),
@@ -118,6 +113,12 @@ else:
 			'PORT': '5432'
 		}
 	}
+	
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
 DATABASE_SIZE = "40GB"
 
 #Auth backends
