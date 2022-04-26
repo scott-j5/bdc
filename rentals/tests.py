@@ -15,6 +15,7 @@ from .settings import RENTAL_CHECK_IN_TIME, RENTAL_CHECK_OUT_TIME
 # Test inserting overlapping rental inc min_turnaround
 @override_settings(CHARGE_RENTAL_DAILY=True)
 class RentalTestCase(TestCase):
+	@classmethod
 	def setUpTestData(cls):
 		cls.user1 = User.objects.create_user(username="test-user-1")
 		cls.rp1 = RentalProduct.objects.create(
