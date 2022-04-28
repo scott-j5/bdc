@@ -3,7 +3,6 @@ from django.urls import path, include, register_converter
 from .views import (
 	contact_view,
 	about_us_view,
-	faqs_view,
 	home_view,
 	pre_booking_info_view,
 	pre_trip_checklist_view,
@@ -41,7 +40,6 @@ urlpatterns = [
     path('home/', home_view, name='home'),
 	path('home/#contact-us', home_view, name='contact-us'),
 	#path('/about-us', home_view, name='about-us'),
-	path('faqs/', faqs_view, name='faqs'),
 	path('pricing/', pricing_view, name='pricing'),
 	path('pre-booking-information/', pre_booking_info_view, name='pre-booking-info'),
 	path('pre-trip-checklist/', pre_trip_checklist_view, name='pre-trip-checklist'),

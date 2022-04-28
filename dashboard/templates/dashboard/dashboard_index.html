@@ -104,23 +104,27 @@
 			<div class="col-lg-6">
 				<div class="d-flex flex-column h-100">
 				<p class="mb-1 pt-2 text-bold">Next Rental</p>
-				<h5 class="font-weight-bolder mb-2">{{ upcoming_rentals.0.product.name }}</h5>
-				<div class="mb-2">
-					<span class="badge bg-{{ upcoming_rentals.0.status_class }} rounded-pill" title="Rental Status"><small class="text-normal">{{ upcoming_rentals.0.get_status_display }}</small></span>
-					{% if upcoming_rentals.0.rentaldriver_set.all|length > 0 %}
-						{% for driver in upcoming_rentals.0.rentaldriver_set.all %}
-							<a href="{% url 'rental-fulfilment-driver-update' upcoming_rentals.0.id driver.id %}"><span class="badge bg-{{ driver.status_class }} rounded-pill" title="Drivers Status"><small class="text-normal">d{{ forloop.counter }}: {{ driver.get_status_display }}</small></span></a>
-						{% endfor %}
-					{% else %}
-					<a href="{% url 'rental-fulfilment-driver-add' upcoming_rentals.0.id %}"><span class="badge bg-danger rounded-pill" title="Drivers Status"><small class="text-normal">No Drivers</small></span></a>
-					{% endif %}
-				</div>
-				<p class="mb-0">{{ upcoming_rentals.0.rental_start }} - {{ upcoming_rentals.0.rental_end }}</p>
-				<p class="mb-5 text-sm"><small>Pickup: {{ upcoming_rentals.0.pickup_address }}</small></p>
-				<a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{% url 'rental-fulfilment-detail' upcoming_rentals.0.id %}">
-					See details
-					<i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-				</a>
+				{% if upcoming_rentals|length > 0 %}
+					<h5 class="font-weight-bolder mb-2">{{ upcoming_rentals.0.product.name }}</h5>
+					<div class="mb-2">
+						<span class="badge bg-{{ upcoming_rentals.0.status_class }} rounded-pill" title="Rental Status"><small class="text-normal">{{ upcoming_rentals.0.get_status_display }}</small></span>
+						{% if upcoming_rentals.0.rentaldriver_set.all|length > 0 %}
+							{% for driver in upcoming_rentals.0.rentaldriver_set.all %}
+								<a href="{% url 'rental-fulfilment-driver-update' upcoming_rentals.0.id driver.id %}"><span class="badge bg-{{ driver.status_class }} rounded-pill" title="Drivers Status"><small class="text-normal">d{{ forloop.counter }}: {{ driver.get_status_display }}</small></span></a>
+							{% endfor %}
+						{% else %}
+						<a href="{% url 'rental-fulfilment-driver-add' upcoming_rentals.0.id %}"><span class="badge bg-danger rounded-pill" title="Drivers Status"><small class="text-normal">No Drivers</small></span></a>
+						{% endif %}
+					</div>
+					<p class="mb-0">{{ upcoming_rentals.0.rental_start }} - {{ upcoming_rentals.0.rental_end }}</p>
+					<p class="mb-5 text-sm"><small>Pickup: {{ upcoming_rentals.0.pickup_address }}</small></p>
+					<a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{% url 'rental-fulfilment-detail' upcoming_rentals.0.id %}">
+						See details
+						<i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+					</a>
+				{% else %}
+					<h5 class="font-weight-bolder mb-2">No Upcoming Rentals</h5>
+				{% endif %}
 				</div>
 			</div>
 			<div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
@@ -654,17 +658,21 @@
 	{{ block.super }}
 	<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
 	<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
-	<script>
-		mapboxgl.accessToken = 'pk.eyJ1Ijoic2NvdHQtajUiLCJhIjoiY2wyYjlpenR2MDBrbjNpb3BxY3BuNjdsaSJ9.loR_ycWP28bIMtm5qiL1pw';
-		const map = new mapboxgl.Map({
-			container: 'map', // container ID
-			style: 'mapbox://styles/mapbox/streets-v11', // style URL
-			center: {{ upcoming_rentals.0.pickup_location| tuple_to_array }}, // starting position [lng, lat]
-			zoom: 9 // starting zoom
-		});
-		// Create a default Marker and add it to the map.
-		const marker1 = new mapboxgl.Marker()
-		.setLngLat({{ upcoming_rentals.0.pickup_location| tuple_to_array }})
-		.addTo(map);
-	</script>
+	{% if upcoming_rentals|length > 0 %}
+		{% if upcoming_rentals.0.pickup_location is not None %}
+		<script>
+			mapboxgl.accessToken = 'pk.eyJ1Ijoic2NvdHQtajUiLCJhIjoiY2wyYjlpenR2MDBrbjNpb3BxY3BuNjdsaSJ9.loR_ycWP28bIMtm5qiL1pw';
+			const map = new mapboxgl.Map({
+				container: 'map', // container ID
+				style: 'mapbox://styles/mapbox/streets-v11', // style URL
+				center: {{ upcoming_rentals.0.pickup_location| tuple_to_array }}, // starting position [lng, lat]
+				zoom: 9 // starting zoom
+			});
+			// Create a default Marker and add it to the map.
+			const marker1 = new mapboxgl.Marker()
+			.setLngLat({{ upcoming_rentals.0.pickup_location| tuple_to_array }})
+			.addTo(map);
+		</script>
+		{% endif %}
+	{% endif %}
 {% endblock scripts %}

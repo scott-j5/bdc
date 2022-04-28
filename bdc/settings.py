@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 	'crispy_bootstrap5',
     'core',
 	'dashboard',
+	'faq',
 	'imageit',
 	'invoicing',
 	'mapbox_location_field',
@@ -113,7 +114,7 @@ DATABASES = {
 			'PORT': '5432'
 		}
 	}
-	
+
 if 'test' in sys.argv:
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',

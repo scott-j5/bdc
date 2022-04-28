@@ -28,11 +28,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
 	path('accounts/', include('accounts.urls')),
-	path('vans/', include('vans.urls')),
-	path('rentals/', include('rentals.urls')),
 	path('blogs/', include('blogs.urls')),
 	path('dashboard/', include('dashboard.urls')),
 	path('djrichtextfield/', include('djrichtextfield.urls')),
+	path('faqs/', include('faq.urls')),
+	path('rentals/', include('rentals.urls')),
+	path('vans/', include('vans.urls')),
 ]
 
 handler403 = error_403

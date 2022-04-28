@@ -1,0 +1,31 @@
+{% extends 'bootstrap_modal/modal.html' %}
+{% load crispy_forms_tags %}
+
+{% block modal_content %}
+<div class="modal-dialog modal-lg">
+	<div class="modal-content">
+	  <div class="modal-header position-relative d-block">
+		  <div class="text-center">
+			<h1><i class="fa fa-trash modal-icon"></i></h1>
+			<h4 class="modal-title">Are you sure you want to delete?</h4>
+			<h4 class="text-normal text-secondary"><small>{{ object.title }}</small></h4>
+		  </div>
+		<button type="button" class="btn-close position-absolute top-0 end-0 mt-2 mx-2" data-bs-dismiss="modal" aria-label="Close"></button>
+	  </div>
+		<div class="modal-body">
+			
+			<form method="POST" action="{% url 'faq-delete' object.id %}">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-6 d-grid">
+						<button type="button" class="btn btn-block btn-white" data-dismiss="modal">Cancel</button>
+					</div>
+					<div class="col-6 d-grid">
+						<button type="submit" class="btn btn-block btn-danger">Delete</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock modal_content %}

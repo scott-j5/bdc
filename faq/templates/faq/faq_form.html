@@ -1,0 +1,24 @@
+{% extends 'bootstrap_modal/modal.html' %}
+{% load crispy_forms_tags %}
+
+{% block modal_content %}
+<div class="modal-dialog modal-lg">
+	<div class="modal-content">
+	  <div class="modal-header position-relative d-block">
+		  <div class="text-center">
+			{% if form.instance.pk is not None %}
+				<h1 class="py-4 text-secondary"><i class="fa fa-edit modal-icon"></i></h1>
+				<h4 class="modal-title">Update {{ object.title }}</h4>
+			{% else %}
+				<h1 class="py-4 text-secondary"><i class="fa fa-plus modal-icon"></i></h1>
+				<h4 class="py-3 modal-title">Create FAQ</h4>
+			{% endif %}
+		  </div>
+		<button type="button" class="btn-close position-absolute top-0 end-0 mt-2 mx-2" data-bs-dismiss="modal" aria-label="Close"></button>
+	  </div>
+	  <div class="modal-body">
+			{% crispy form %}
+	  </div>
+	</div>
+</div>
+{% endblock modal_content %}

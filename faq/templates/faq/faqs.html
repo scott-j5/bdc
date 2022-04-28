@@ -15,8 +15,8 @@
 			<div class="col text-center py-5">
 				<h1 class="title text-white text-light mt-1">Frequently Asked Questions</h1>
 				<h5 class="description text-white text-light">You have questions. We have answers! Choose a category below to find out more.</h5>
-				{% if perms.core.add_faq %}
-					<a href=""><h5 class="text-primary"><i class="fa fa-plus"></i> Add</h5></a>
+				{% if perms.faq.add_faq %}
+					<a href="{% url 'faq-add' %}"><h5 class="text-primary"><i class="fa fa-plus"></i> Add FAQ</h5></a>
 				{% endif %}
 			</div>
 		</div>
@@ -36,26 +36,16 @@
 						</button>
 					</li>
 				{% endfor %}
-
-				
-				<li class="nav-item" role="presentation">
-					<button class="nav-link text-reset p-4" id="pills-vans-tab" data-bs-toggle="pill" data-bs-target="#pills-vans" type="button" role="tab" aria-controls="pills-vans" aria-selected="false">
-						<h3><i class="bi bi-signpost-2"></i></h3>
-						<p class="m-0">Planning a trip</p>
-					</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link text-reset p-4" id="pills-rules-tab" data-bs-toggle="pill" data-bs-target="#pills-rules" type="button" role="tab" aria-controls="pills-rules" aria-selected="false">
-						<h3><i class="bi bi-list-check"></i></h3>
-						<p class="m-0">Rules</p>
-					</button>
-				</li>
-				<li class="nav-item pe-4" role="presentation">
-					<button class="nav-link text-reset p-4" id="pills-pricing-tab" data-bs-toggle="pill" data-bs-target="#pills-pricing" type="button" role="tab" aria-controls="pills-pricing" aria-selected="false">
-						<h3><i data-feather="dollar-sign"></i></h3>
-						<p class="m-0">Pricing</p>
-					</button>
-				</li>
+				{% if perms.faq.add_faqcategory %}
+					<li class="nav-item" role="presentation">
+						<a href="{% url 'faq-category-add' %}" class="text-muted">
+							<button href="#" class="nav-link text-reset p-4" id="pills-{{ faq_grouped.grouper.slug }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ faq_grouped.grouper.slug }}" type="button" role="tab" aria-controls="pills-{{ faq_grouped.grouper.name }}" aria-selected="true">
+								<h3><i class="fa fa-plus"></i></h3>
+								<p class="m-0">Add Category</p>
+							</button>
+						</a>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>
@@ -75,6 +65,9 @@
 										<div class="col-md-8 mx-auto text-center">
 										<h2>{{ faq_grouped.grouper.name }}</h2>
 										<p>{{ faq_grouped.grouper.description }}</p>
+										{% if perms.faq.add_faq %}
+											<a href="{% url 'faq-add' faq_grouped.grouper.id %}"><h5 class="text-primary"><i class="fa fa-plus"></i> Add {{ faq_grouped.grouper.name }} FAQ</h5></a>
+										{% endif %}
 										</div>
 									</div>
 
@@ -94,11 +87,11 @@
 														<div id="collapse-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}" data-bs-parent="#accordion-{{ faq_grouped.grouper.slug }}-{{ forloop.counter }}">
 															<div class="accordion-body text-sm opacity-8">
 																{{ faq.description }}
-																{% if perms.core.edit_faq %}
-																	<a href="" class="text-primary p-2"><i class="fa fa-edit"></i></a>
+																{% if perms.faq.change_faq %}
+																	<a href="{% url 'faq-update' faq.id %}" class="text-primary p-2"><i class="fa fa-edit"></i></a>
 																{% endif %}
-																{% if perms.core.delete_faq %}
-																	<a href="" class="text-danger p-2"><i class="fa fa-trash"></i></a>
+																{% if perms.faq.delete_faq %}
+																	<a href="{% url 'faq-delete' faq.id %}" class="text-danger p-2"><i class="fa fa-trash"></i></a>
 																{% endif %}
 															</div>
 														</div>
