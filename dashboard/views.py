@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import CreateView, ListView, DetailView
 
-
+from rentals.forms import RentalFulfilmentFilterForm, RentalDateRangeForm
 from rentals.models import RentalFulfilment, RentalDriver
 
 # Create your views here.
@@ -74,6 +74,10 @@ class RentalsListView(UserPassesTestMixin, ListView):
 			return True
 		return False
 
+	def get_queryset(self, *args, **kwargs):
+		qs = RentalFulfilment.objects.query_string_filter(self.request.GET).order_by('-rental_start')
+		return qs
+
 	def get_context_data(self, *args, **kwargs):
 		ctx = super().get_context_data(*args, **kwargs)
 		
@@ -82,6 +86,7 @@ class RentalsListView(UserPassesTestMixin, ListView):
 		completed_rentals_ytd = RentalFulfilment.objects.filter(Q(rental_start__gt=datetime.datetime.strptime(f'01/01/{datetime.datetime.now().year}', '%d/%m/%Y')), Q(rental_start__lt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
 		upcoming_rentals_count = RentalFulfilment.objects.filter(Q(rental_start__gt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED)).count()
 		unconfirmed_upcoming_rental_count = RentalFulfilment.objects.filter(Q(rental_start__gt=timezone.now()), ~Q(status=RentalFulfilment.Status.DENIED), ~Q(status=RentalFulfilment.Status.CONFIRMED)).count()
+		filter_form = RentalFulfilmentFilterForm(self.request.GET or None, form_action_name='dashboard-rentals')
 
 		ctx.update({
 			'total_rentals_count': total_rentals_count,
@@ -89,6 +94,7 @@ class RentalsListView(UserPassesTestMixin, ListView):
 			'completed_rentals_ytd': completed_rentals_ytd,
 			'upcoming_rentals_count': upcoming_rentals_count,
 			'unconfirmed_upcoming_rental_count': unconfirmed_upcoming_rental_count,
+			'filter_form': filter_form,
 		})
 		return ctx
 

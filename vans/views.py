@@ -62,11 +62,11 @@ class VanDetailView(DetailView):
 		return context
 
 
-class VanUpdateView(PermissionRequiredMixin, CompleteProductUpdateView):
+class VanUpdateView(CompleteProductUpdateView):
 	permission_required = 'vans.change_van'
 	raise_exception = True
 
 
-class VanDeleteView(PermissionRequiredMixin, ProductDeleteView):
+class VanDeleteView(ProductDeleteView):
 	permission_required = 'vans.delete_van'
 	raise_exception = True

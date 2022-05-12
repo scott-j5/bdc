@@ -131,15 +131,15 @@ class DateRangeForm(forms.Form):
 	def clean(self):
 		cleaned_data = super().clean()
 		stay = cleaned_data.get('stay')
-
-		if stay and len(stay.split(" to ")) != 2:
+		range_list = parse_date_range(stay)
+		
+		if stay and len(range_list) != 2:
 			raise ValidationError(_("Please provide a check out date."))
 		else:
-			range_list = parse_date_range(stay)
 			cleaned_data['check_in'] = range_list[0]
 			cleaned_data['check_out'] = range_list[1]
 		if (cleaned_data['check_out'] - cleaned_data['check_in']).total_seconds() <= 0:
-			raise ValidationError(_("Check out must not be before Check in."))
+			raise ValidationError(_("Rental must have a duration greater than zero."))
 		return cleaned_data
 
 

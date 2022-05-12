@@ -11,8 +11,9 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
 from core.forms import DateRangeFormMulti, DateRangeForm
-from core.widgets import DatePicker
 from core.layout import SpinnerSubmit, SpinnerSubmitBlock
+from core.utils import parse_date_range
+from core.widgets import DatePicker, DateRangePicker
 
 from .settings import RENTAL_CHECK_IN_TIME, RENTAL_CHECK_OUT_TIME
 from .models import RentalDriver, RentalExtra, RentalFulfilment, RentalProduct
@@ -269,6 +270,76 @@ class RentalFulfilmentExtrasForm(forms.ModelForm):
 	class Meta: 
 		model = RentalFulfilment
 		fields = ['rental_extras']
+
+
+class RentalFulfilmentFilterForm(forms.ModelForm):
+	status_choices = [(None,'---------')] + RentalFulfilment.Status.choices
+	product = forms.ModelChoiceField(queryset=RentalProduct.objects.all(), required=False)
+	status = forms.ChoiceField(choices=status_choices, required=False)
+	fulfilment_date_range = forms.CharField(label='Purchase Date' , widget=DateRangePicker(attrs={"placeholder": "Select Range", 'data-flatpickr_args': {'minDate': False}}), required=False)
+	rental_start_range = forms.CharField(label='Check in Range', widget=DateRangePicker(attrs={"placeholder": "Select Range", 'data-flatpickr_args': {'minDate': False}}), required=False)
+	rental_end_range = forms.CharField(label='Check out Range', widget=DateRangePicker(attrs={"placeholder": "Select Range", 'data-flatpickr_args': {'minDate': False}}), required=False)
+
+	def __init__(self, *args, **kwargs):
+		form_action_name = kwargs.pop('form_action_name', None)
+		super().__init__(*args, **kwargs)
+		self.fields['fulfilling_user'].required = False
+
+		self.helper = FormHelper()
+		if form_action_name is not None:
+			self.helper.form_action = reverse_lazy(form_action_name)
+		self.helper.form_method = 'GET'
+		self.helper.form_id = 'rental-fulfilment-filter-form'
+		self.helper.html5_required = True
+		self.helper.layout = Layout(
+            Div(
+				Div(
+					Div(
+						'product',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'fulfilling_user',
+						css_class="col-12 col-md-4",
+					),
+					Div(
+						'status',
+						css_class="col-12 col-md-4",
+					),
+					css_class="row"
+				),
+				Div(
+					Div(
+						'fulfilment_date_range',
+						css_class="col-12 col-md-4"
+					),
+					Div(
+						'rental_start_range',
+						css_class="col-12 col-md-4"
+					),
+					Div(
+						'rental_end_range',
+						css_class="col-12 col-md-4"
+					),
+					css_class="row"
+				),
+				Div(
+					Div(
+						HTML('<a class="btn btn-default" href="{%% url \'%s\' %%}">Clear Filters</a>' % (form_action_name)),
+						css_class="d-grid col-12 col-md-6"
+					),
+					Div(
+						SpinnerSubmit("submit", 'Update', css_class='crispy-btn btn-danger', icon='<i class="fa fa-search"></i>'),
+						css_class="d-grid col-12 col-md-6"
+					),
+					css_class="row"
+				),
+			)
+		)
+
+	class Meta:
+		model = RentalFulfilment
+		fields = ['fulfilling_user', 'product', 'status']
 
 
 class RentalDriverAddForm(forms.ModelForm):

@@ -14,9 +14,9 @@ from mapbox_location_field.models import LocationField, AddressAutoHiddenField
 
 from core.models import get_sentinel_user
 from core.templatetags.price_tags import price
+from core.utils import parse_date_range_day_inclusive, datediff_days, datediff_hours, get_date_overlap,format_price
 from invoicing.models import PriceAdjustment
-from products.models import Product, ProductFulfilment, get_sentinel_product
-from core.utils import datediff_days, datediff_hours, get_date_overlap,format_price
+from products.models import Product, ProductFulfilment, ProductFulfilmentManager, get_sentinel_product
 
 from .settings import CHARGE_RENTAL_DAILY, RENTAL_CHECK_IN_TIME
 
@@ -63,7 +63,7 @@ class RentalProduct(Product):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.qty = 1;
+		self.qty = 1
 
 	# Returns a list of datetimes where the rental product is available
 	# Returns list of dicts: [{"start": dt, "end", dt},{"start": dt, "end", dt}]
@@ -134,6 +134,28 @@ class RentalExtra(Product):
 		return f'{self.name} - {price(self.base_price)}'
 
 
+class RentalFulfilmentManager(ProductFulfilmentManager):
+	def q_from_query_dict(self, query_dict=None):
+		fields = [f.name for f in RentalFulfilment._meta.get_fields(include_parents=False)]
+		filters = super().q_from_query_dict(query_dict)
+
+		## Generate standard filters from field names
+		new_filters = {field_name: value for field_name, value in query_dict.items()
+              if value and field_name in fields}
+		if query_dict.get('rental_start_range'):
+			dates = parse_date_range_day_inclusive(query_dict.get('rental_start_range'))
+			new_filters['rental_start__range'] = [dates[0], dates[1]]
+		if query_dict.get('rental_end_range'):
+			dates = parse_date_range_day_inclusive(query_dict.get('rental_end_range'))
+			new_filters['rental_end__range'] = [dates[0], dates[1]]
+		filters.update(new_filters)
+		return filters if filters is not None else {}
+
+	def query_string_filter(self, query_string=None):
+		qs = self.get_queryset().filter(**self.q_from_query_dict(query_string.dict()))
+		return qs
+
+
 class RentalFulfilment(ProductFulfilment):
 	class Status(models.TextChoices):
 		CONFIRMED = 'CNF', _('Confirmed')
@@ -150,6 +172,8 @@ class RentalFulfilment(ProductFulfilment):
 	rental_extras = models.ManyToManyField(RentalExtra, blank=True)
 	pickup_location = LocationField(null=True, blank=True, help_text="Leave blank if not required", map_attrs={'center': [-3.188512, 55.953480], 'placeholder': 'Search'})
 	pickup_address = AddressAutoHiddenField(null=True, blank=True)
+
+	objects = RentalFulfilmentManager()
 
 	def __str__(self):
 		return f"{self.product.name} - {self.duration_humanize} {format_price(self.fulfilment_price)} ({self.rental_start} - {self.rental_end})"

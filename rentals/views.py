@@ -34,9 +34,34 @@ class RentalFulfilmentListView(UserPassesTestMixin, ListView):
 	def test_func(self):
 		return self.request.user.is_staff
 
-	def get_queryset(self):
-		user_id = self.kwargs.get('pk', self.request.user.id)
-		return RentalFulfilment.objects.filter(fulfilling_user__id=user_id)
+	def get_queryset(self, *args, **kwargs):
+		query_string = self.request.GET.dict()
+		return RentalFulfilment.objects.query_string_filter(**query_string)
+
+
+class RentalFulfilmentProductListView(RentalFulfilmentListView):
+
+	def test_func(self):
+		return self.request.user.is_staff
+
+	def get_queryset(self, *args, **kwargs):
+		qs = super().get_queryset(*args, **kwargs)
+		qs = qs.objects.filter(product__slug=self.kwargs.get('slug'))
+		return qs
+
+
+class RentalFulfilmentUserListView(RentalFulfilmentListView):
+
+	def test_func(self):
+		return self.request.user.is_staff or self.request.user == self.kwargs.get('pk')
+
+	def get_queryset(self, *args, **kwargs):
+		qs = super().get_queryset(*args, **kwargs)
+		qs = qs.objects.filter(fulfilling_user__pk=self.kwargs.get('pk'))
+		return qs
+
+
+
 
 
 class RentalFulfilmentPriceCheckView(UserPassesTestMixin, DetailView):

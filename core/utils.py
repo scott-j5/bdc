@@ -31,7 +31,15 @@ def parse_date(date):
 	return make_aware(strp_ambiguous_date(date)) if date else False
 
 def parse_date_range(range):
-	return [make_aware(strp_ambiguous_date(x)) for x in range.split(' to ')] if range else [False, False]
+	date_list = range.split(' to ') if len(range.split(' to ')) > 1 else [range.split(' to ')[0], range.split(' to ')[0]]
+	return [make_aware(strp_ambiguous_date(x)) for x in date_list] if range else [False, False]
+
+def parse_date_range_day_inclusive(range):
+	dt_range = parse_date_range(range)
+	if dt_range[0] == dt_range[1]:
+		dt_range[0] = make_aware(datetime.datetime.combine(dt_range[0].date(), datetime.datetime.strptime('00:00', '%H:%M').time()))
+		dt_range[1] = make_aware(datetime.datetime.combine(dt_range[1].date(), datetime.datetime.strptime('23:59', '%H:%M').time()))
+	return dt_range
 
 def get_sentinel_date():
 	return make_aware(datetime.datetime.strptime('9999-12-31', '%Y-%m-%d'))

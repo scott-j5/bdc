@@ -1,9 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
+
 
 from .forms import ProductForm, ProductFeatureFormSet, ProductImageFormSet, ProductFeatureFormHelper, ProductImageFormHelper
-from .models import Product, ProductFeature, ProductImage
+from .models import Product, ProductFeature, ProductImage, Review
 
 # Create your views here.
 class ProductImageDetailView(DetailView):
@@ -16,7 +18,9 @@ class ProductImageDetailView(DetailView):
 		return context
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(PermissionRequiredMixin, UpdateView):
+	permission_required = 'products.change_product'
+	raise_exception = True
 	model = Product
 	form_class = ProductForm
 	template_name = 'products/product_form.html'
@@ -25,7 +29,9 @@ class ProductUpdateView(UpdateView):
 		return reverse('product-detail', kwargs={'slug': self.slug})
 
 
-class CompleteProductUpdateView(UpdateView):
+class CompleteProductUpdateView(PermissionRequiredMixin, UpdateView):
+	permission_required = 'products.change_product'
+	raise_exception = True
 	model = Product
 	form_class = ProductForm
 	image_form_class = ProductImageFormSet
@@ -45,9 +51,38 @@ class CompleteProductUpdateView(UpdateView):
 		return context
 
 
-class ProductDeleteView(DeleteView):
-	permission_required = 'product.delete_product'
+class ProductDeleteView(PermissionRequiredMixin, DeleteView):
+	permission_required = 'products.delete_product'
 	raise_exception = True
 	model = Product
 	template_name = 'products/product_confirm_delete.html'
 	success_url = reverse_lazy('home')
+
+
+class ReviewDetailView(DetailView):
+	model = Review
+	template_name = ''
+
+
+class ReviewListView(ListView):
+	model = Review
+	template_name = ''
+	#get_queryset options for by_product, by_product_fulfilment, by_user
+
+class ReviewCreateView(CreateView):
+	model = Review
+	template_name = ''
+	#only available to fulfilling user
+
+
+class ReviewUpdateView(UpdateView):
+	model = Review
+	template_name = ''
+	# Only available to staff or fulfilling users if not published
+
+
+class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
+	premission_required = 'products.delete_review'
+	raise_exception = True
+	model = Review
+	template_name = ''

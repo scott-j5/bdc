@@ -1,6 +1,6 @@
 {
-    "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true,
+	"python.linting.enabled": true,
+	"python.linting.pylintEnabled": true,
     "python.autoComplete.extraPaths": [
         "../lib/Python3.8/site-packages/",
     ],
@@ -10,3 +10,7 @@
     "editor.insertSpaces": false,
     "editor.tabSize": 4,
 }
+
+//	"python.linting.pylintArgs": [
+//	"--load-plugins=pylint_django",
+//],

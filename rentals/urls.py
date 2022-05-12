@@ -3,6 +3,8 @@ from django.urls import path, include
 from .views import (
 	MyRentals,
 	RentalFulfilmentListView,
+	RentalFulfilmentProductListView,
+	RentalFulfilmentUserListView,
 	RentalFulfilmentDetailView,
 	RentalFulfilmentPriceCheckView,
 
@@ -16,8 +18,8 @@ from .views import (
 )
 
 urlpatterns = [
-	path('list/product/<slug:slug>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
-	path('list/user/<int:pk>/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
+	path('list/product/<slug:slug>/', RentalFulfilmentProductListView.as_view(), name='rental-fulfilment-list'),
+	path('list/user/<int:pk>/', RentalFulfilmentUserListView.as_view(), name='rental-fulfilment-list'),
 	path('list/', RentalFulfilmentListView.as_view(), name='rental-fulfilment-list'),
 	
 	path('my-rentals/user/<int:pk>/', MyRentals.as_view(), name='my-rentals'),

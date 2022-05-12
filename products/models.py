@@ -3,8 +3,9 @@ import random
 import datetime
 
 from core.models import get_sentinel_user
-from core.utils import get_sentinel_date, daterange, format_price
+from core.utils import get_sentinel_date, daterange, format_price, parse_date_range_day_inclusive
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -131,6 +132,21 @@ class ProductFulfilmentManager(models.Manager):
 		obj.save()
 		return obj
 
+	def q_from_query_dict(self, query_dict=None):
+		fields = [f.name for f in ProductFulfilment._meta.get_fields(include_parents=False)]
+		
+		## Generate standard filters from field names
+		filters = {field_name: value for field_name, value in query_dict.items()
+              if value and field_name in fields}
+		if query_dict.get('fulfilment_date_range'):
+			dates = parse_date_range_day_inclusive(query_dict.get('fulfilment_date_range'))
+			filters['fulfilment_date_time__range'] = [dates[0], dates[1]]
+		return filters if filters is not None else {}
+
+	def query_string_filter(self, query_string=None):
+		qs = self.get_queryset().filter(**self.q_from_query_dict(query_string.dict()))
+		return qs
+
 
 class ProductFulfilment(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.SET(get_sentinel_product))
@@ -195,6 +211,13 @@ class ProductFulfilment(models.Model):
 		return super().save(*args, **kwargs)
 
 
+class Review(models.Model):
+	product_fulfillment = models.ForeignKey(ProductFulfilment, null=False, on_delete=models.CASCADE)
+	rating = models.IntegerField(default=5, null=False, blank=False, validators=[MaxValueValidator(5), MinValueValidator(1)])
+	description = models.TextField(null=False, blank=False)
+	published = models.BooleanField(default=False, null=False, blank=False)
+
+ 
 class ProductPriceAdjustment(PriceAdjustment):
 	products = models.ManyToManyField(Product, blank=True)
 	display_to_user = models.BooleanField(default=False)

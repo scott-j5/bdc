@@ -150,10 +150,10 @@
 				<p class="text-white">Jump back in.</p>
 				<div class="row">
 					<div class="col-12 col-md-6">
-						<a href="{% url 'dashboard-rentals' %}" class="text-white text-sm font-weight-bold icon-move-right py-2"><i class="fa fa-chevron-right me-2"></i> Upcoming Rentals</a>
+						<a href="{% url 'dashboard-rentals' %}?rental_start_range={% now 'Y-m-d' %}+to+2199-12-31" class="text-white text-sm font-weight-bold icon-move-right py-2"><i class="fa fa-chevron-right me-2"></i> Upcoming Rentals</a>
 					</div>
 					<div class="col-12 col-md-6">
-						<a href="{% url 'dashboard-rentals' %}" class="text-white text-sm font-weight-bold icon-move-right py-2"><i class="fa fa-chevron-right me-2"></i> Unapproved Drivers</a>
+						<a href="{% url 'dashboard-rentals' %}?status=ARV" class="text-white text-sm font-weight-bold icon-move-right py-2"><i class="fa fa-chevron-right me-2"></i> Unapproved Drivers</a>
 					</div>
 				</div>
 			</div>
