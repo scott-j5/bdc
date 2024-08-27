@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import BaseFormView
 
 
@@ -24,10 +24,21 @@ class BlogDetail(DetailView):
 		return obj
 
 
-class BlogDelete(PermissionRequiredMixin, DeleteView):
-	permission_required = 'blogs.delete_blog'
+class BlogCreate(PermissionRequiredMixin, CreateView):
+	permission_required = 'blogs.create_blog'
+	raise_exception = True
 	model = Blog
-	success_url = reverse_lazy('blog-list')
+	form_class = BlogForm
+	
+	def get_form_kwargs(self, *args, **kwargs):
+		kwargs = super().get_form_kwargs(*args, **kwargs)
+		kwargs.update({
+			"form_action": reverse_lazy('blog-create')
+		})
+		return kwargs
+
+	def get_success_url(self):
+		return reverse_lazy('blog-detail', kwargs={'slug', self.object.slug})
 
 
 class BlogUpdate(PermissionRequiredMixin, UpdateView):
@@ -35,6 +46,19 @@ class BlogUpdate(PermissionRequiredMixin, UpdateView):
 	raise_exception = True
 	model = Blog
 	form_class = BlogForm
+	success_url = reverse_lazy('blog-list')
+
+	def get_form_kwargs(self, *args, **kwargs):
+		kwargs = super().get_form_kwargs(*args, **kwargs)
+		kwargs.update({
+			"form_action": reverse_lazy('blog-update', kwargs={'slug', self.object.slug})
+		})
+		return kwargs
+
+
+class BlogDelete(PermissionRequiredMixin, DeleteView):
+	permission_required = 'blogs.delete_blog'
+	model = Blog
 	success_url = reverse_lazy('blog-list')
 
 

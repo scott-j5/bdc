@@ -38,10 +38,11 @@ class BlogImageForm(forms.ModelForm):
 # Start Sitting Request forms
 class BlogForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
+		form_action = kwargs.pop('form_action', False)
 		super(BlogForm, self).__init__(*args, **kwargs)
 		self.fields['tags'].required = False
 		self.helper = FormHelper()
-		self.helper.form_action = reverse_lazy('blog-update', kwargs={'slug': self.instance.slug})
+		self.helper.form_action = form_action
 		self.helper.form_method = 'POST'
 		self.helper.form_id = 'blog-form'
 		self.helper.layout = Layout(

@@ -20,6 +20,13 @@
 				<h4 class="text-light text-dark">
 					Get inspired with road trip ideas, help prepare yourself for your very own rental or just keep up to date with new builds and news from the big dogs!
 				</h4>
+				{% if perms.blogs.add_blog %}
+				<div class="row">
+					<div class="col my-4">
+						<a href="{% url 'blog-create' %}" class="link-danger">Add Post <i class="fa fa-plus"></i></a>
+					</div>
+				</div>
+				{% endif %}
 				<div class="row">
 					<div class="col-11 col-md-7 m-auto d-flex justify-content-around align-items-center flex-wrap">
 						<div class="input-group mb-3">
