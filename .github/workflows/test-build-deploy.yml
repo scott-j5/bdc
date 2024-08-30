@@ -121,13 +121,13 @@ jobs:
       # Retreive private key from secrets and save as file deployment.key
       - name: Key management for deployment
         env:
-          DEPLOYMENT_SSH_KEY: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-          DEPLOYMENT_PUB_KEY_FINGERPRINT: ${{ secrets.DEPLOYMENT_PUB_KEY_FINGERPRINT }}
-          GITHUB_PUB_KEY_FINGERPRINT: ${{ secrets.GH_PUB_KEY_FINGERPRINT }}
+          DEPLOYMENT_SSH_KEY: "${{ secrets.DEPLOYMENT_SSH_KEY }}"
+          DEPLOYMENT_PUB_KEY_FINGERPRINT: "${{ secrets.DEPLOYMENT_PUB_KEY_FINGERPRINT }}"
+          GITHUB_PUB_KEY_FINGERPRINT: "${{ secrets.GH_PUB_KEY_FINGERPRINT }}"
         run: |
           mkdir ~/.ssh
-          echo "${{ DEPLOYMENT_PUB_KEY_FINGERPRINT }}" >> ~/.ssh/known_hosts
-          echo "${{ DEPLOYMENT_SSH_KEY }}" >> deployment.key
+          echo "$DEPLOYMENT_PUB_KEY_FINGERPRINT" >> ~/.ssh/known_hosts
+          echo "$DEPLOYMENT_SSH_KEY" >> deployment.key
           chmod 400 deployment.key
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! ssh-keygen -F github.com; then echo '"${GITHUB_PUB_KEY_FINGERPRINT}"' >> /home/deploy/.ssh/known_hosts; fi'
         # add github public key to known_hosts on deployment server if using ssh protocol
