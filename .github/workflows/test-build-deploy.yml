@@ -140,12 +140,12 @@ jobs:
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src checkout "${GITHUB_SHA}"
 
         - name: Push application code to server
-        run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
+          run: |
+            ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
 
         - name: Push application code to server
-        run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
+          run: |
+            ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
 
       - name: Update application code permissions
         run: |
