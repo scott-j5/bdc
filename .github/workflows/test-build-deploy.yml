@@ -136,10 +136,16 @@ jobs:
       - name: Push application code to server
         run: |
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C '"${DEPLOYMENT_PATH}"'src remote add origin git@github.com:scott-j5/bdc.git &>/dev/null
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src clone git@github.com-bdc:scott-j5/bdc.git .
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src checkout "${GITHUB_SHA}"
+
+        - name: Push application code to server
+        run: |
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
+
+        - name: Push application code to server
+        run: |
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
 
       - name: Update application code permissions
         run: |
