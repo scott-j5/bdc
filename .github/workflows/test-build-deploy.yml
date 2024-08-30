@@ -138,8 +138,13 @@ jobs:
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C '"${DEPLOYMENT_PATH}"'src remote add origin git@github.com:scott-j5/bdc.git &>/dev/null
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src clone git@github.com-bdc:scott-j5/bdc.git .
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src checkout "${GITHUB_SHA}"
+
+      # Run update scripts on remote server
+      - name: Push application code to serve
         run: |
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
+      # Run update scripts on remote server
+      - name: Push application code to serv
         run: |
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
 
