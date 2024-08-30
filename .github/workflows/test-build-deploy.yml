@@ -135,7 +135,7 @@ jobs:
       # Run update scripts on remote server
       - name: Push application code to server
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C '"${DEPLOYMENT_PATH}"'src ls-remote origin &>/dev/null; then git -C '"${DEPLOYMENT_PATH}"'src remote add origin git@github.com:scott-j5/bdc.git; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C '"${DEPLOYMENT_PATH}"'src remote add origin git@github.com:scott-j5/bdc.git &>/dev/null
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src clone git@github.com-bdc:scott-j5/bdc.git .
