@@ -129,13 +129,17 @@ jobs:
           echo "$DEPLOYMENT_PUB_KEY_FINGERPRINT" >> ~/.ssh/known_hosts
           echo "$DEPLOYMENT_SSH_KEY" >> deployment.key
           chmod 400 deployment.key
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! ssh-keygen -F github.com; then echo -e "'$GITHUB_PUB_KEY_FINGERPRINT'" >> /home/deploy/.ssh/known_hosts; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} "if ! ssh-keygen -F github.com; then echo -e ${GITHUB_PUB_KEY_FINGERPRINT} >> /home/deploy/.ssh/known_hosts; fi"
+        #WONT ACCEPT MULTILINE CONTENT
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} "cat ${GITHUB_PUB_KEY_FINGERPRINT} > /home/deploy/ghfp.txt"
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! ssh-keygen -F github.com; then cat /home/deploy/ghfp.txt >> /home/deploy/.ssh/known_hosts; fi'
+        # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} rm /home/deploy/ghfp.txt
         # add github public key to known_hosts on deployment server if using ssh protocol
 
       # Run update scripts on remote server
       - name: Push application code to server
         run: |
-          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} 'if ! git -C "'${DEPLOYMENT_PATH}'"src ls-remote origin &>/dev/null; then git -C "'${DEPLOYMENT_PATH}'"src remote add origin git@github.com:scott-j5/bdc.git; fi'
+          ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} "if ! git -C ${DEPLOYMENT_PATH}src ls-remote origin &>/dev/null; then git -C ${DEPLOYMENT_PATH}src remote add origin git@github.com:scott-j5/bdc.git; fi"
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src fetch --all
           ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src reset --hard "${GITHUB_SHA}"
         # ssh -i deployment.key deploy@${{ secrets.SERVER_IP }} git -C "${DEPLOYMENT_PATH}"src clone git@github.com-bdc:scott-j5/bdc.git .
